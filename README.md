@@ -1,11 +1,13 @@
 # OpenACCV-V
-This repository will be updated with OpenACC test codes validating and verifying implementations of features and its conformance to the OpenACC specification. Currently work is under progress to make the suite publicly available, please check by around early September, 2017. For any further questions, please feel free to contact Sunita Chandrasekaran, University of Delaware @ schandra@udel.edu. 
+This repository is updated with OpenACC test codes validating and verifying implementations of features and its conformance to the OpenACC specification. We will continue to add more tests. 
 
-Meanwhile here is a link to the project presentation "OpenACC 2.5 Validation Testsuite targeting multiple architectures" http://www.csm.ornl.gov/workshops/p3ma2017/documents/Chandrasekaran_OpenACCV_V2.5.pdf at the 2nd International Workshop on Performance Portable Programming Models for Accelerators (P^3MA) co-located with ISC, Germany, 2017. The paper will be published within the Springer LNCS series in a few months time as post workshop proceedings. 
+Here is a link to the project presentation "OpenACC 2.5 Validation Testsuite targeting multiple architectures" http://www.csm.ornl.gov/workshops/p3ma2017/documents/Chandrasekaran_OpenACCV_V2.5.pdf at the 2nd International Workshop on Performance Portable Programming Models for Accelerators (P^3MA) co-located with ISC, Germany, 2017. The paper will be published within the Springer LNCS series in a few months time as post workshop proceedings. 
 
 This testsuite is meant to test the functionality of the OpenACC language features.  The tests are decomposed to
 test each small segment of the functionality of the language as described in the OpenACC specification
-V2.5.  In order to run the suite, we have provided some assisting scripts that compile, run, and report
+V2.5.  
+
+In order to run the suite, we will soon provide some assisting scripts that compile, run, and report
 on each of the tests or a specific test if one is provided.  These are intended to assist you, but they
 are not built to work comprehensively every situation and platform.  If these scripts don't provide the
 needed functionality or fail to work on your system, the test suite can run independently. You would simply need to compile
@@ -16,9 +18,10 @@ While not implemented in this version, an update is planned for release by the e
 to have thorough documentation, including both OpenACC specifications to test mapping and test to
 OpenACC specifications mapping.  Also, detailed descriptions of each of the tests will be outlined within each of the tests in the suite. 
 For the reverse mapping, we plan on hyperlinking paragraphs of the specifications to a self-generating
-html page that shows the list of related tests.  The test-to-OpenACC-specifications mapping will look
-at least similar to this example of the acc_copyin.c test's documentation:
+html page that shows the list of related tests.  
 
+The test-to-OpenACC-specifications mapping will look
+at least similar to this example of the acc_copyin.c test's documentation:
 
 /*
 This tests the following functionality of acc_copyin runtime routine:
@@ -63,3 +66,6 @@ exit data copyout
 parallel present
 loop
 */
+
+For any further questions, please feel free to contact us Sunita Chandrasekaran - schandra@udel.edu and Kyle Friedline - utimatu@udel.edu
+
