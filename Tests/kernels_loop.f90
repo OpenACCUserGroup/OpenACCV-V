@@ -1,7 +1,7 @@
       INTEGER FUNCTION test()
         IMPLICIT NONE
         INCLUDE "acc_testsuite.f90"
-        INTEGER :: x, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9 !Iterators
+        INTEGER :: x, v_0, v_1, v_2, v_3, v_4, v_5, v_6, v_7, v_8, v_9 !Iterators
         REAL(8),DIMENSION(1024):: a, b !Data
         INTEGER :: errors = 0
 
@@ -13,26 +13,31 @@
         !$acc data copyin(a(1:1024)) copyout(b(1:1024))
           !$acc kernels
             !$acc loop
-            DO _0 = 0, 1
+            DO v_0 = 0, 1
               !$acc loop
-              DO _1 = 0, 1
+              DO v_1 = 0, 1
                 !$acc loop
-                DO _2 = 0, 1
+                DO v_2 = 0, 1
                   !$acc loop
-                  DO _3 = 0, 1
+                  DO v_3 = 0, 1
                     !$acc loop
-                    DO _4 = 0, 1
+                    DO v_4 = 0, 1
                       !$acc loop
-                      DO _5 = 0, 1
+                      DO v_5 = 0, 1
                         !$acc loop
-                        DO _6 = 0, 1
+                        DO v_6 = 0, 1
                           !$acc loop
-                          DO _7 = 0, 1
+                          DO v_7 = 0, 1
                             !$acc loop
-                            DO _8 = 0, 1
+                            DO v_8 = 0, 1
                               !$acc loop
-                              DO _9 = 1, 2
-                                b(_0*512+_1*256+_2*128+_3*64+_4*32+_5*16+_6*8+_7*4+_8*2+_9)=a(_0*512+_1*256+_2*128+_3*64+_4*32+_5*16+_6*8+_7*4+_8*2+_9)
+                              DO v_9 = 1, 2
+                                b(v_0 * 512 + v_1 * 256 + v_2 * 128 + v_3 * &
+                                    64 + v_4 * 32 + v_5 * 16 + v_6 * 8 + v_7 &
+                                    * 4 + v_8 * 2 + v_9) = a(v_0 * 512 + v_1 &
+                                    * 256 + v_2 * 128 + v_3 * 64 + v_4 * 32 + &
+                                    v_5 * 16 + v_6 * 8 + v_7 * 4 + v_8 * 2 + &
+                                    v_9)
                               END DO
                             END DO
                           END DO
