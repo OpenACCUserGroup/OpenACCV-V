@@ -12,7 +12,7 @@
 
         !$acc data copyin(a(1:LOOPCOUNT))
           !$acc parallel reduction(+:results)
-            !$acc loop
+            !$acc loop gang
             DO x = 1, LOOPCOUNT
               results = results + a(x)
             END DO

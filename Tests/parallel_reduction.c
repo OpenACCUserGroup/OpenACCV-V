@@ -12,7 +12,7 @@ int test(){
    
     #pragma acc parallel copyin(a[0:n]) reduction(+:reduction)
     {
-        #pragma acc loop
+        #pragma acc loop gang
         for (int x = 0; x < n; ++x){
             reduction = reduction + a[x];
         }
