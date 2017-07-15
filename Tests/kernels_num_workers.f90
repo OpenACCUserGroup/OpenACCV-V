@@ -15,7 +15,7 @@
           DO x = 1, LOOPCOUNT
             b(x) = a(x)
           END DO
-          !$acc end kernels
+          !$acc end kernels loop
         !$acc end data
 
         DO x = 1, LOOPCOUNT
