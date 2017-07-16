@@ -44,7 +44,7 @@ int main()
   int failed=0;                 /* Number of failed tests */
   int success=0;                /* number of succeeded tests */
   static FILE * logFile;        /* pointer onto the logfile */
-  static const char * logFileName = "test_acc_lib_acc_wait.log";        /* name of the logfile */
+  static const char * logFileName = "OpenACC_testsuite.log";        /* name of the logfile */
 
 
   /* Open a new Logfile or overwrite the existing one. */

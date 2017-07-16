@@ -47,7 +47,7 @@
       failed = 0
 
       !Open a new logfile or overwrite the existing one.
-      logfilename = "test.log"
+      logfilename = "OpenACC_testsuite.log"
 !      WRITE (*,*) "Enter logFilename:"
 !      READ  (*,*) logfilename
 
