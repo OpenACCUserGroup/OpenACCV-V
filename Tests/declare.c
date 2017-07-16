@@ -37,17 +37,12 @@ int test(real_t * b){
 
 int main()
 {
-  int i;			/* Loop index */
-  int result;		/* return value of the program */
-  int failed=0; 		/* Number of failed tests */
-  int success=0;		/* number of succeeded tests */
-  static FILE * logFile;	/* pointer onto the logfile */
-  static const char * logFileName = "test_acc_lib_acc_wait.log";	/* name of the logfile */
-  real_t * b = (real_t *)malloc(n * sizeof(real_t));
-  for (int x = 0; x < n; ++x){
-    b[x] = rand() / (real_t)(RAND_MAX / 10);
-  }
-  #pragma acc declare copyin(b[0:n])
+  int i;                        /* Loop index */
+  int result;           /* return value of the program */
+  int failed=0;                 /* Number of failed tests */
+  int success=0;                /* number of succeeded tests */
+  static FILE * logFile;        /* pointer onto the logfile */
+  static const char * logFileName = "test_acc_lib_acc_wait.log";        /* name of the logfile */
 
 
   /* Open a new Logfile or overwrite the existing one. */
@@ -57,17 +52,17 @@ int main()
   printf("## Repetitions: %3d                       ####\n",REPETITIONS);
   printf("## Array Size : %.2f MB                 ####\n",ARRAYSIZE * ARRAYSIZE/1e6);
   printf("##############################################\n");
-  printf("Testing test_acc_lib_acc_wait\n\n");
+  printf("Testing declare\n\n");
 
   fprintf(logFile,"######## OpenACC Validation Suite V %s #####\n", ACCTS_VERSION );
   fprintf(logFile,"## Repetitions: %3d                       ####\n",REPETITIONS);
   fprintf(logFile,"## Array Size : %.2f MB                 ####\n",ARRAYSIZE * ARRAYSIZE/1e6);
   fprintf(logFile,"##############################################\n");
-  fprintf(logFile,"Testing test_acc_lib_acc_wait\n\n");
+  fprintf(logFile,"Testing declare\n\n");
 
   for ( i = 0; i < REPETITIONS; i++ ) {
-    fprintf (logFile, "\n\n%d. run of test_acc_lib_acc_wait out of %d\n\n",i+1,REPETITIONS);
-    if (test(b) == 0) {
+    fprintf (logFile, "\n\n%d. run of declare out of %d\n\n",i+1,REPETITIONS);
+    if (test() == 0) {
       fprintf(logFile,"Test successful.\n");
       success++;
     } else {
@@ -89,3 +84,4 @@ int main()
   printf ("Result: %i\n", result);
   return result;
 }
+

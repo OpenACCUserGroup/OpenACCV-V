@@ -63,12 +63,12 @@ int test(){
 
 int main()
 {
-  int i;			/* Loop index */
-  int result;		/* return value of the program */
-  int failed=0; 		/* Number of failed tests */
-  int success=0;		/* number of succeeded tests */
-  static FILE * logFile;	/* pointer onto the logfile */
-  static const char * logFileName = "test_acc_lib_acc_wait.log";	/* name of the logfile */
+  int i;                        /* Loop index */
+  int result;           /* return value of the program */
+  int failed=0;                 /* Number of failed tests */
+  int success=0;                /* number of succeeded tests */
+  static FILE * logFile;        /* pointer onto the logfile */
+  static const char * logFileName = "test_acc_lib_acc_wait.log";        /* name of the logfile */
 
 
   /* Open a new Logfile or overwrite the existing one. */
@@ -78,16 +78,16 @@ int main()
   printf("## Repetitions: %3d                       ####\n",REPETITIONS);
   printf("## Array Size : %.2f MB                 ####\n",ARRAYSIZE * ARRAYSIZE/1e6);
   printf("##############################################\n");
-  printf("Testing test_acc_lib_acc_wait\n\n");
+  printf("Testing parallel_copyin\n\n");
 
   fprintf(logFile,"######## OpenACC Validation Suite V %s #####\n", ACCTS_VERSION );
   fprintf(logFile,"## Repetitions: %3d                       ####\n",REPETITIONS);
   fprintf(logFile,"## Array Size : %.2f MB                 ####\n",ARRAYSIZE * ARRAYSIZE/1e6);
   fprintf(logFile,"##############################################\n");
-  fprintf(logFile,"Testing test_acc_lib_acc_wait\n\n");
+  fprintf(logFile,"Testing parallel_copyin\n\n");
 
   for ( i = 0; i < REPETITIONS; i++ ) {
-    fprintf (logFile, "\n\n%d. run of test_acc_lib_acc_wait out of %d\n\n",i+1,REPETITIONS);
+    fprintf (logFile, "\n\n%d. run of parallel_copyin out of %d\n\n",i+1,REPETITIONS);
     if (test() == 0) {
       fprintf(logFile,"Test successful.\n");
       success++;
@@ -110,3 +110,4 @@ int main()
   printf ("Result: %i\n", result);
   return result;
 }
+

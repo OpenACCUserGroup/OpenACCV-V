@@ -61,25 +61,22 @@
 
       OPEN (1, FILE = logfilename)
 
-      WRITE (*,*) "######## OpenACC Validation Suite V 1.0a ######"
+      WRITE (*,*) "######## OpenACC Validation Suite V 2.5 ######"
       WRITE (*,*) "## Repetitions:", N
       WRITE (*,*) "## Loop Count :", LOOPCOUNT
       WRITE (*,*) "##############################################"
       WRITE (*,*)
 
       WRITE (*,*) "--------------------------------------------------"
-      !WRITE (*,*) "Testing acc_kernels_async"
-      WRITE (*,*) "Testing test_kernels_async"
+      WRITE (*,*) "Test of parallel_scalar_default_firstprivate"
       WRITE (*,*) "--------------------------------------------------"
 
       crossfailed=0
       result=1
       WRITE (1,*) "--------------------------------------------------"
-      !WRITE (1,*) "Testing acc_kernels_async"
-      WRITE (1,*) "Testing test_kernels_async"
+      WRITE (1,*) "Test of parallel_scalar_default_firstprivate"
       WRITE (1,*) "--------------------------------------------------"
       WRITE (1,*)
-      WRITE (1,*) "testname: test_kernels_async"
       WRITE (1,*) "(Crosstests should fail)"
       WRITE (1,*)
 
@@ -108,3 +105,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
+                                             
+

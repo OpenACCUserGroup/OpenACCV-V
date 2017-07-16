@@ -30,22 +30,15 @@
       
       PROGRAM test_kernels_async_main
       IMPLICIT NONE
-      INCLUDE "acc_testsuite.f90"
-      REAL*8,DIMENSION(LOOPCOUNT) :: declare_array
-      REAL*8 :: RAND
       INTEGER :: failed, success !Number of failed/succeeded tests
       INTEGER :: num_tests,crosschecked, crossfailed, j
       INTEGER :: temp,temp1
+      INCLUDE "acc_testsuite.f90"
       INTEGER test
-      !$acc declare create(declare_array)
+
 
       CHARACTER*50:: logfilename !Pointer to logfile
       INTEGER :: result
-
-      DO j = 1, LOOPCOUNT
-        declare_array(j) = RAND(0)
-      END DO
-      !$acc update device(declare_array(1:LOOPCOUNT))
 
       num_tests = 0
       crosschecked = 0
@@ -60,30 +53,27 @@
 
       OPEN (1, FILE = logfilename)
 
-      WRITE (*,*) "######## OpenACC Validation Suite V 1.0a ######"
+      WRITE (*,*) "######## OpenACC Validation Suite V 2.5 ######"
       WRITE (*,*) "## Repetitions:", N
       WRITE (*,*) "## Loop Count :", LOOPCOUNT
       WRITE (*,*) "##############################################"
       WRITE (*,*)
 
       WRITE (*,*) "--------------------------------------------------"
-      !WRITE (*,*) "Testing acc_kernels_async"
-      WRITE (*,*) "Testing test_kernels_async"
+      WRITE (*,*) "Test of declare"
       WRITE (*,*) "--------------------------------------------------"
 
       crossfailed=0
       result=1
       WRITE (1,*) "--------------------------------------------------"
-      !WRITE (1,*) "Testing acc_kernels_async"
-      WRITE (1,*) "Testing test_kernels_async"
+      WRITE (1,*) "Test of declare"
       WRITE (1,*) "--------------------------------------------------"
       WRITE (1,*)
-      WRITE (1,*) "testname: test_kernels_async"
       WRITE (1,*) "(Crosstests should fail)"
       WRITE (1,*)
 
       DO j = 1, N
-        temp =  test(declare_array)
+        temp =  test()
         IF (temp .EQ. 0) THEN
           WRITE (1,*)  j, ". test successfull."
           success = success + 1
@@ -107,3 +97,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
+                                             
+
