@@ -1,6 +1,6 @@
       INTEGER FUNCTION test(declare_array)
         IMPLICIT NONE
-        INCLUDE "acc_testsuite.f90"
+        INCLUDE "acc_testsuite.fh"
         REAL(8),DIMENSION(LOOPCOUNT):: declare_array
         INTEGER :: x !Iterators
         REAL(8),DIMENSION(LOOPCOUNT):: a, b !Data
@@ -33,7 +33,7 @@
       INTEGER :: failed, success !Number of failed/succeeded tests
       INTEGER :: num_tests,crosschecked, crossfailed, j
       INTEGER :: temp,temp1
-      INCLUDE "acc_testsuite.f90"
+      INCLUDE "acc_testsuite.fh"
       INTEGER test
 
 

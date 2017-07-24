@@ -1,6 +1,6 @@
       INTEGER FUNCTION test()
         IMPLICIT NONE
-        INCLUDE "acc_testsuite.f90"
+        INCLUDE "acc_testsuite.fh"
         INTEGER :: x, v_0, v_1, v_2, v_3, v_4, v_5, v_6, v_7, v_8, v_9 !Iterators
         REAL(8),DIMENSION(1024):: a, b !Data
         INTEGER :: errors = 0
@@ -65,7 +65,7 @@
       INTEGER :: failed, success !Number of failed/succeeded tests
       INTEGER :: num_tests,crosschecked, crossfailed, j
       INTEGER :: temp,temp1
-      INCLUDE "acc_testsuite.f90"
+      INCLUDE "acc_testsuite.fh"
       INTEGER test
 
 
