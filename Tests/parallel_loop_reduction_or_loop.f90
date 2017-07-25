@@ -55,13 +55,13 @@
           END IF
           DO y = 1, LOOPCOUNT
             IF (temp .eqv. .FALSE.) THEN
-                IF (a(x * LOOPCOUNT + y) .neqv. a_copy(x * LOOPCOUNT &
-                    + y)) THEN
+               IF (a(x * LOOPCOUNT + y) .neqv. a_copy(x * LOOPCOUNT + &
+                   y)) THEN
                 errors = errors + 1
               END IF
             ELSE
-                IF (a(x * LOOPCOUNT + y) .eqv. a_copy(x * LOOPCOUNT + &
-                    y)) THEN
+               IF (a(x * LOOPCOUNT + y) .eqv. a_copy(x * LOOPCOUNT + &
+                   y)) THEN
                 errors = errors + 1
               END IF
             END IF

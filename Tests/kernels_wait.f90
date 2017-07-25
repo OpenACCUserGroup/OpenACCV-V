@@ -11,7 +11,7 @@
         CALL RANDOM_NUMBER(b)
         c = 0
 
-        !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), !$acc &
+        !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), &
             !$acc c(1:LOOPCOUNT)) async(1)
         !$acc kernels wait(1)
           !$acc loop
@@ -19,7 +19,7 @@
             c(x) = a(x) + b(x)
           END DO
         !$acc end kernels
-        !$acc exit data copyout(c(1:LOOPCOUNT)) !$acc &
+        !$acc exit data copyout(c(1:LOOPCOUNT)) &
             !$acc delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
 
         DO x = 1, LOOPCOUNT

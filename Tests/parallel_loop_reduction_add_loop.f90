@@ -11,8 +11,8 @@
         CALL RANDOM_NUMBER(a)
         CALL RANDOM_NUMBER(b)
         avg = 0
-        !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT)) !$acc &
-            !$acc create(c(1:10*LOOPCOUNT)) !$acc &
+        !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT)) &
+            !$acc create(c(1:10*LOOPCOUNT)) &
             !$acc copyout(d(1:10*LOOPCOUNT))
           !$acc parallel loop gang private(avg)
           DO x = 0, 9
@@ -20,8 +20,8 @@
             !$acc loop worker reduction(+:avg)
             DO y = 1, LOOPCOUNT
               avg = avg + a(x * LOOPCOUNT + y) + b(x * LOOPCOUNT + y)
-                c(x * LOOPCOUNT + y) = a(x * LOOPCOUNT + y) + b(x * &
-                    LOOPCOUNT + y)
+               c(x * LOOPCOUNT + y) = a(x * LOOPCOUNT + y) + b(x * &
+                   LOOPCOUNT + y)
             END DO
             avg = avg / LOOPCOUNT
             !$acc loop worker
@@ -37,8 +37,8 @@
           END DO
           avg = avg / LOOPCOUNT
           DO y = 1, LOOPCOUNT
-              IF (abs(d(x * LOOPCOUNT + y) - ((a(x * LOOPCOUNT + y) + &
-                  b(x * LOOPCOUNT + y)) / avg)) .gt. PRECISION) THEN
+             IF (abs(d(x * LOOPCOUNT + y) - ((a(x * LOOPCOUNT + y) + &
+                 b(x * LOOPCOUNT + y)) / avg)) .gt. PRECISION) THEN
               errors = errors + 1
             END IF
           END DO

@@ -12,7 +12,7 @@
         CALL RANDOM_NUMBER(a)
         CALL RANDOM_NUMBER(b)
 
-        !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT)) !$acc &
+        !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT)) &
             !$acc copyout(c(1:10))
           !$acc parallel loop private(temp)
           DO x = 0, 9

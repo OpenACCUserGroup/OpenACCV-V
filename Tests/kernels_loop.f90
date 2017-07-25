@@ -1,8 +1,8 @@
       INTEGER FUNCTION test()
         IMPLICIT NONE
         INCLUDE "acc_testsuite.fh"
-          INTEGER :: x, v_0, v_1, v_2, v_3, v_4, v_5, v_6, v_7, v_8, &
-              v_9 !Iterators
+         INTEGER :: x, v_0, v_1, v_2, v_3, v_4, v_5, v_6, v_7, v_8, &
+             v_9 !Iterators
         REAL(8),DIMENSION(1024):: a, b !Data
         INTEGER :: errors = 0
 
@@ -33,13 +33,13 @@
                             DO v_8 = 0, 1
                               !$acc loop
                               DO v_9 = 1, 2
-                                  b(v_0 * 512 + v_1 * 256 + v_2 * 128 &
-                                      + v_3 * 64 + v_4 * 32 + v_5 * &
-                                      16 + v_6 * 8 + v_7 * 4 + v_8 * &
-                                      2 + v_9) = a(v_0 * 512 + v_1 * &
-                                      256 + v_2 * 128 + v_3 * 64 + &
-                                      v_4 * 32 + v_5 * 16 + v_6 * 8 + &
-                                      v_7 * 4 + v_8 * 2 + v_9)
+                                 b(v_0 * 512 + v_1 * 256 + v_2 * 128 &
+                                     + v_3 * 64 + v_4 * 32 + v_5 * 16 &
+                                     + v_6 * 8 + v_7 * 4 + v_8 * 2 + &
+                                     v_9) = a(v_0 * 512 + v_1 * 256 + &
+                                     v_2 * 128 + v_3 * 64 + v_4 * 32 &
+                                     + v_5 * 16 + v_6 * 8 + v_7 * 4 + &
+                                     v_8 * 2 + v_9)
                               END DO
                             END DO
                           END DO

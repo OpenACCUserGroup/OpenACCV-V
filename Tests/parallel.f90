@@ -1,8 +1,8 @@
       INTEGER FUNCTION test()
         IMPLICIT NONE
         INCLUDE "acc_testsuite.fh"
-          INTEGER :: x, i_a, i_b, i_c, i_d, i_e, i_f, i_g, i_h, i_i, &
-              i_j !Iterators
+         INTEGER :: x, i_a, i_b, i_c, i_d, i_e, i_f, i_g, i_h, i_i, &
+             i_j !Iterators
         INTEGER, PARAMETER :: PRIVATE_LOOPCOUNT = 1024
         REAL(8),DIMENSION(PRIVATE_LOOPCOUNT):: a, b, c !Data
         INTEGER :: errors
@@ -14,8 +14,8 @@
         CALL RANDOM_NUMBER(b)
         c = 0
 
-        !$acc data copyin(a(1:PRIVATE_LOOPCOUNT), !$acc &
-            !$acc b(1:PRIVATE_LOOPCOUNT)) !$acc &
+        !$acc data copyin(a(1:PRIVATE_LOOPCOUNT), &
+            !$acc b(1:PRIVATE_LOOPCOUNT)) &
             !$acc copy(c(1:PRIVATE_LOOPCOUNT))
           !$acc parallel
             !$acc loop
@@ -38,16 +38,15 @@
                             DO i_i = 0, 1
                               !$acc loop
                               DO i_j = 0, 1
-                                  c(i_a*512 + i_b*256 + i_c*128 + &
-                                      i_d*64 + i_e*32 + i_f*16 + &
-                                      i_g*8 + i_h*4 + i_i*2 + i_j + &
-                                      1) = a(i_a*512 + i_b*256 + &
-                                      i_c*128 + i_d*64 + i_e*32 + &
-                                      i_f*16 + i_g*8 + i_h*4 + i_i*2 &
-                                      + i_j + 1) + b(i_a*512 + &
-                                      i_b*256 + i_c*128 + i_d*64 + &
-                                      i_e*32 + i_f*16 + i_g*8 + i_h*4 &
-                                      + i_i*2 + i_j + 1)
+                                 c(i_a*512 + i_b*256 + i_c*128 + &
+                                     i_d*64 + i_e*32 + i_f*16 + i_g*8 &
+                                     + i_h*4 + i_i*2 + i_j + 1) = &
+                                     a(i_a*512 + i_b*256 + i_c*128 + &
+                                     i_d*64 + i_e*32 + i_f*16 + i_g*8 &
+                                     + i_h*4 + i_i*2 + i_j + 1) + &
+                                     b(i_a*512 + i_b*256 + i_c*128 + &
+                                     i_d*64 + i_e*32 + i_f*16 + i_g*8 &
+                                     + i_h*4 + i_i*2 + i_j + 1)
                               END DO
                             END DO
                           END DO

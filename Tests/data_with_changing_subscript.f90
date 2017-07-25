@@ -12,7 +12,7 @@
         CALL RANDOM_NUMBER(b)
         c = 0
 
-        !$acc data copyin(a(1:indexer), b(1:indexer)) !$acc &
+        !$acc data copyin(a(1:indexer), b(1:indexer)) &
             !$acc copyout(c(1:indexer))
           !$acc parallel
             !$acc loop

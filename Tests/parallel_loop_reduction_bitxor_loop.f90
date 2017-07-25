@@ -44,8 +44,8 @@
             errors = errors + 1
           END IF
           DO y = 1, LOOPCOUNT
-              IF (b(x * LOOPCOUNT + y) .ne. b_copy(x * LOOPCOUNT + y) &
-                  + c(x + 1)) THEN
+             IF (b(x * LOOPCOUNT + y) .ne. b_copy(x * LOOPCOUNT + y) &
+                 + c(x + 1)) THEN
               errors = errors + 1
             END IF
           END DO

@@ -76,7 +76,7 @@
           a = 0
           b = 0
 
-          !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) !$acc &
+          !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
               !$acc copyout(c(1:LOOPCOUNT))
             !$acc parallel
               !$acc loop

@@ -11,7 +11,7 @@
         CALL RANDOM_NUMBER(b)
         c = 0
 
-        !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) !$acc &
+        !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
             !$acc copy(c(:LOOPCOUNT))
           !$acc parallel
             !$acc loop

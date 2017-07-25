@@ -36,7 +36,7 @@
         IF (dev_test(1) .eq. 0) THEN
           !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), &
               !$acc c(1:LOOPCOUNT))
-          !$acc parallel if(host) present(a(1:LOOPCOUNT), !$acc &
+          !$acc parallel if(host) present(a(1:LOOPCOUNT), &
               !$acc b(1:LOOPCOUNT), c(1:LOOPCOUNT))
             !$acc loop
             DO x = 1, LOOPCOUNT
@@ -54,16 +54,16 @@
           END IF
         END DO
 
-        !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), !$acc &
+        !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), &
             !$acc c(1:LOOPCOUNT))
-        !$acc parallel if(device) present(a(1:LOOPCOUNT), !$acc &
+        !$acc parallel if(device) present(a(1:LOOPCOUNT), &
             !$acc b(1:LOOPCOUNT), c(1:LOOPCOUNT))
           !$acc loop
           DO x = 1, LOOPCOUNT
             c(x) = c(x) + a(x) + b(x)
           END DO
         !$acc end parallel
-        !$acc exit data delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT)), !$acc &
+        !$acc exit data delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT)), &
             !$acc copyout(c(1:LOOPCOUNT))
 
         DO x = 1, LOOPCOUNT

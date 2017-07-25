@@ -56,7 +56,7 @@
           CALL RANDOM_NUMBER(a)
           b = 0
 
-          !$acc enter data copyin(a(1:LOOPCOUNT)) !$acc &
+          !$acc enter data copyin(a(1:LOOPCOUNT)) &
               !$acc create(b(1:LOOPCOUNT))
           DO x = 1, LOOPCOUNT
             a(x) = -1

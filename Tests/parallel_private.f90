@@ -22,8 +22,8 @@
           DO x = 1, 10
             !$acc loop worker
             DO y = 1, LOOPCOUNT
-                c(y) = a((x - 1) * LOOPCOUNT + y) + b((x - 1) * &
-                    LOOPCOUNT + y)
+               c(y) = a((x - 1) * LOOPCOUNT + y) + b((x - 1) * &
+                   LOOPCOUNT + y)
             END DO
             !$acc loop seq
             DO y = 1, LOOPCOUNT

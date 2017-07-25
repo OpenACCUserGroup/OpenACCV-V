@@ -13,15 +13,15 @@
         CALL RANDOM_NUMBER(b)
         maximum = 0
 
-        !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT)) !$acc &
+        !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT)) &
             !$acc copy(maximum(1:10))
           !$acc parallel loop private(temp)
           DO x = 0, 9
             temp = 0
             !$acc loop vector reduction(max:temp)
             DO y = 1, LOOPCOUNT
-                temp = max(temp, a(x * LOOPCOUNT + y) * b(x * &
-                    LOOPCOUNT + y))
+               temp = max(temp, a(x * LOOPCOUNT + y) * b(x * &
+                   LOOPCOUNT + y))
             END DO
             maximum(x + 1) = temp
           END DO
@@ -30,8 +30,8 @@
         DO x = 0, 9
           temp = 0
           DO y = 1, LOOPCOUNT
-              temp = max(temp, a(x * LOOPCOUNT + y) * b(x * LOOPCOUNT &
-                  + y))
+             temp = max(temp, a(x * LOOPCOUNT + y) * b(x * LOOPCOUNT &
+                 + y))
           END DO
           IF (abs(temp - maximum(x + 1)) .gt. PRECISION) THEN
             errors = errors + 1

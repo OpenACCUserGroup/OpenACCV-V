@@ -65,8 +65,10 @@ int test(){
         dev_test[0] = 0;
     }
 
-    /*Basic test of acc_copyin, paired with acc_copyout*/
     for (int x = 0; x < n; ++x){
+        if (x == 0){
+            printf("%d\n", rand());
+        }
         a[x] = rand() / (real_t)(RAND_MAX / 10);
         b[x] = rand() / (real_t)(RAND_MAX / 10);
         c[x] = 0.0;
@@ -95,7 +97,6 @@ int test(){
         }
     }
 
-    /*Basic test of acc_copyin, paired with acc copyout directive*/
     for (int x = 0; x < n; ++x){
         a[x] = rand() / (real_t)(RAND_MAX / 10);
         b[x] = rand() / (real_t)(RAND_MAX / 10);
@@ -124,19 +125,7 @@ int test(){
         }
     }
 
-    /*Begin separate-memory dependent tests*/
     if (dev_test[0] == 1){
-        /*
-        Data arrays a and b are copied into the device with the acc_copyin 
-        runtime call. These data arrays are updated on the host and then 
-        they are passed into a copyin clause on a data directive.  However 
-        since they are already on device, they should not be updated.  Data
-        array c is initialized via the copyout clause on the same data
-        directive.  The values of c are set from the initial values of a and b
-        and c is copied out at the exit of the data region.  The values in c
-        are compared with copies of the initial a and b arrays on the host to
-        verify that the process occured properly.
-        */
         for (int x = 0; x < n; ++x){
             a[x] = rand() / (real_t)(RAND_MAX / 10);
             a_copy[x] = a[x];

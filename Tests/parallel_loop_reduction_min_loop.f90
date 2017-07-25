@@ -15,21 +15,21 @@
         a = a + 1
         b = b + 1
 
-        !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT)) !$acc &
+        !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT)) &
             !$acc copy(c(1:10*LOOPCOUNT), minimum(1:10))
           !$acc parallel loop gang private(temp)
           DO x = 0, 9
             temp = 1000
             !$acc loop worker reduction(min:temp)
             DO y = 1, LOOPCOUNT
-                temp = min(temp, a(x * LOOPCOUNT + y) * b(x * &
-                    LOOPCOUNT + y))
+               temp = min(temp, a(x * LOOPCOUNT + y) * b(x * &
+                   LOOPCOUNT + y))
             END DO
             minimum(x + 1) = temp
             !$acc loop
             DO y = 1, LOOPCOUNT
-                c(x * LOOPCOUNT + y) = (a(x * LOOPCOUNT + y) * b(x * &
-                    LOOPCOUNT + y)) / minimum(x + 1)
+               c(x * LOOPCOUNT + y) = (a(x * LOOPCOUNT + y) * b(x * &
+                   LOOPCOUNT + y)) / minimum(x + 1)
             END DO
           END DO
         !$acc end data
@@ -37,15 +37,15 @@
         DO x = 0, 9
           temp = 1000
           DO y = 1, LOOPCOUNT
-              temp = min(temp, a(x * LOOPCOUNT + y) * b(x * LOOPCOUNT &
-                  + y))
+             temp = min(temp, a(x * LOOPCOUNT + y) * b(x * LOOPCOUNT &
+                 + y))
           END DO
           IF (abs(temp - minimum(x + 1)) .gt. PRECISION) THEN
             errors = errors + 1
           END IF
           DO y = 1, LOOPCOUNT
-              IF (abs(c(x * LOOPCOUNT + y) - (a(x * LOOPCOUNT + y) * &
-                  b(x * LOOPCOUNT + y) / temp)) .gt. PRECISION) THEN
+             IF (abs(c(x * LOOPCOUNT + y) - (a(x * LOOPCOUNT + y) * &
+                 b(x * LOOPCOUNT + y) / temp)) .gt. PRECISION) THEN
               errors = errors + 1
             END IF
           END DO

@@ -21,7 +21,7 @@
         c = 0
 
         !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) if(dev)
-        !$acc data create(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) !$acc &
+        !$acc data create(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
             !$acc copyout(c(1:LOOPCOUNT))
           !$acc parallel
             !$acc loop
@@ -42,7 +42,7 @@
         c = 0
 
         !$acc enter data create(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) if(cpu)
-        !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) !$acc &
+        !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
             !$acc copyout(c(1:LOOPCOUNT))
           !$acc parallel
             !$acc loop
@@ -72,7 +72,7 @@
           a = 0
           b = 0
 
-          !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) !$acc &
+          !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
               !$acc copyout(c(1:LOOPCOUNT))
             !$acc parallel
               !$acc loop
@@ -85,8 +85,8 @@
               !$acc if(dev)
 
           DO x = 1, LOOPCOUNT
-              IF (abs(c(x) - (a_copy(x) + b_copy(x))) .gt. PRECISION) &
-                  THEN
+             IF (abs(c(x) - (a_copy(x) + b_copy(x))) .gt. PRECISION) &
+                 THEN
               errors = errors + 1
             END IF
           END DO
@@ -102,7 +102,7 @@
           CALL RANDOM_NUMBER(b)
           b_copy = b
 
-          !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) !$acc &
+          !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
               !$acc copyout(c(1:LOOPCOUNT))
             !$acc parallel
               !$acc loop
@@ -115,8 +115,8 @@
               !$acc if(cpu)
 
           DO x = 1, LOOPCOUNT
-              IF (abs(c(x) - (a_copy(x) + b_copy(x))) .gt. PRECISION) &
-                  THEN
+             IF (abs(c(x) - (a_copy(x) + b_copy(x))) .gt. PRECISION) &
+                 THEN
               errors = errors + 1
             END IF
           END DO
@@ -127,7 +127,7 @@
 
           !$acc enter data create(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
               !$acc if(cpu)
-          !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) !$acc &
+          !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
               !$acc copyout(c(1:LOOPCOUNT))
             !$acc parallel
               !$acc loop

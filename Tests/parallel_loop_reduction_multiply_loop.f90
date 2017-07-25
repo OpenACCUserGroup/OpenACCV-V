@@ -22,14 +22,14 @@
             temp = 1
             !$acc loop worker reduction(*:temp)
             DO y = 1, LOOPCOUNT
-                temp = temp * (a(x * LOOPCOUNT + y) + b(x * LOOPCOUNT &
-                    + y))
+               temp = temp * (a(x * LOOPCOUNT + y) + b(x * LOOPCOUNT &
+                   + y))
             END DO
             totals(x + 1) = temp
             !$acc loop worker
             DO y = 1, LOOPCOUNT
-                c(x * LOOPCOUNT + y) = (a(x * LOOPCOUNT + y) + b(x * &
-                    LOOPCOUNT + y)) / totals(x + 1)
+               c(x * LOOPCOUNT + y) = (a(x * LOOPCOUNT + y) + b(x * &
+                   LOOPCOUNT + y)) / totals(x + 1)
             END DO
           END DO
         !$acc end data
@@ -39,17 +39,17 @@
           DO y = 1, LOOPCOUNT
             temp = temp * (a(x * LOOPCOUNT + y) + b(x * LOOPCOUNT + y))
           END DO
-            IF (abs(temp - totals(x + 1)) .gt. ((temp / 2) + &
-                (totals(x + 1) / 2)) * PRECISION) THEN
+           IF (abs(temp - totals(x + 1)) .gt. ((temp / 2) + (totals(x &
+               + 1) / 2)) * PRECISION) THEN
             errors = errors + 1
             WRITE(*, *) temp
             WRITE(*, *) totals(x + 1)
             WRITE(*, *) " "
           END IF
           DO y = 1, LOOPCOUNT
-              IF (abs(c(x * LOOPCOUNT + y) - ((a(x * LOOPCOUNT + y) + &
-                  b(x * LOOPCOUNT + y)) / totals(x + 1))) .gt. c(x * &
-                  LOOPCOUNT + y) * PRECISION) THEN
+             IF (abs(c(x * LOOPCOUNT + y) - ((a(x * LOOPCOUNT + y) + &
+                 b(x * LOOPCOUNT + y)) / totals(x + 1))) .gt. c(x * &
+                 LOOPCOUNT + y) * PRECISION) THEN
               errors = errors + 1
               WRITE(*, *) c(x * LOOPCOUNT + y)
               WRITE(*, *) a(x * LOOPCOUNT + y) + b(x * LOOPCOUNT + y)

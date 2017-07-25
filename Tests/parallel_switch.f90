@@ -13,9 +13,9 @@
         CALL RANDOM_NUMBER(randoms)
         a = floor(randoms * 3)
 
-        !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), !$acc &
+        !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), &
             !$acc c(1:LOOPCOUNT))
-        !$acc parallel present(a(1:LOOPCOUNT), b(1:LOOPCOUNT), !$acc &
+        !$acc parallel present(a(1:LOOPCOUNT), b(1:LOOPCOUNT), &
             !$acc c(1:LOOPCOUNT))
           !$acc loop
           DO x = 1, LOOPCOUNT
@@ -29,7 +29,7 @@
             END SELECT
           END DO
         !$acc end parallel
-        !$acc exit data delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) !$acc &
+        !$acc exit data delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
             !$acc copyout(c(1:LOOPCOUNT))
 
         DO x = 1, LOOPCOUNT

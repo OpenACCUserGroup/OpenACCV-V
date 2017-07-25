@@ -17,14 +17,14 @@
           DO x = 0, 9
             !$acc parallel loop async(x)
             DO y = 1, LOOPCOUNT
-                c(x * LOOPCOUNT + y) = a(x * LOOPCOUNT + y) + b(x * &
-                    LOOPCOUNT + y)
+               c(x * LOOPCOUNT + y) = a(x * LOOPCOUNT + y) + b(x * &
+                   LOOPCOUNT + y)
             END DO
             !$acc parallel loop async(x) reduction(+:errors)
             DO y = 1, LOOPCOUNT
-                IF (c(x * LOOPCOUNT + y) - d(x * LOOPCOUNT + y) .gt. &
-                    PRECISION .OR. d(x * LOOPCOUNT + y) - c(x * &
-                    LOOPCOUNT + y) .gt. PRECISION) THEN
+               IF (c(x * LOOPCOUNT + y) - d(x * LOOPCOUNT + y) .gt. &
+                   PRECISION .OR. d(x * LOOPCOUNT + y) - c(x * &
+                   LOOPCOUNT + y) .gt. PRECISION) THEN
                 errors = errors + 1
               END IF
             END DO

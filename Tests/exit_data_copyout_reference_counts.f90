@@ -44,7 +44,7 @@
           c = 0
         END IF
 
-        !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), !$acc &
+        !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), &
             !$acc c(1:LOOPCOUNT))
         !$acc data copyin(c(1:LOOPCOUNT))
           !$acc parallel
@@ -54,7 +54,7 @@
             END DO
           !$acc end parallel
         !$acc end data
-        !$acc exit data copyout(c(1:LOOPCOUNT)) !$acc &
+        !$acc exit data copyout(c(1:LOOPCOUNT)) &
             !$acc delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
 
         DO x = 1, LOOPCOUNT
@@ -68,7 +68,7 @@
         CALL RANDOM_NUMBER(b)
         c = 0
 
-        !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), !$acc &
+        !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), &
             !$acc c(1:LOOPCOUNT))
         !$acc enter data copyin(c(1:LOOPCOUNT))
         !$acc parallel
@@ -78,7 +78,7 @@
           END DO
         !$acc end parallel
         !$acc exit data delete(c(1:LOOPCOUNT))
-        !$acc exit data delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) !$acc &
+        !$acc exit data delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
             !$acc copyout(c(1:LOOPCOUNT))
 
         DO x = 1, LOOPCOUNT

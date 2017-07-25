@@ -13,29 +13,29 @@
         CALL RANDOM_NUMBER(b)
         c = 0
 
-        !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT)) !$acc &
+        !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT)) &
             !$acc copy(c(1:10*LOOPCOUNT))
           !$acc parallel loop gang private(temp)
           DO x = 0, 9
             temp = 0
             !$acc loop worker reduction(max:temp)
             DO y = 1, LOOPCOUNT
-                temp = max(temp, a(x * LOOPCOUNT + y) * b(x * &
-                    LOOPCOUNT + y))
+               temp = max(temp, a(x * LOOPCOUNT + y) * b(x * &
+                   LOOPCOUNT + y))
             END DO
             maximum(x + 1) = temp
             !$acc loop worker
             DO y = 1, LOOPCOUNT
-                c(x * LOOPCOUNT + y) = (a(x * LOOPCOUNT + y) * b(x * &
-                    LOOPCOUNT + y)) / maximum(x + 1)
+               c(x * LOOPCOUNT + y) = (a(x * LOOPCOUNT + y) * b(x * &
+                   LOOPCOUNT + y)) / maximum(x + 1)
             END DO
           END DO
         !$acc end data
 
         DO x = 0, 9
           DO y = 1, LOOPCOUNT
-              IF (a(x * LOOPCOUNT + y) * b(x * LOOPCOUNT + y) - &
-                  maximum(x + 1) .gt. PRECISION) THEN
+             IF (a(x * LOOPCOUNT + y) * b(x * LOOPCOUNT + y) - &
+                 maximum(x + 1) .gt. PRECISION) THEN
               errors = errors + 1
             ELSE IF ((c(x * LOOPCOUNT + y) - 1) .gt. PRECISION) THEN
               errors = errors + 1
