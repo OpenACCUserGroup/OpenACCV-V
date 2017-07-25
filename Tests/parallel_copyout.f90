@@ -16,7 +16,7 @@
         CALL RANDOM_SEED()
         CALL RANDOM_NUMBER(a)
         b = 0
-        
+
         !$acc data copyin(a(1:LOOPCOUNT))
           !$acc parallel copyout(b(1:LOOPCOUNT))
             !$acc loop
@@ -31,7 +31,7 @@
             errors = errors + 1
           END IF
         END DO
-        
+
         IF (hasDevice(1) .eq. 1) THEN
           !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
             !$acc parallel copyout(b(1:LOOPCOUNT))
@@ -41,7 +41,7 @@
               END DO
             !$acc end parallel
           !$acc end data
-        END IF        
+        END IF
 
         DO x = 1, LOOPCOUNT
           IF (abs(a(x) - b(x)) .gt. PRECISION) THEN
@@ -137,5 +137,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

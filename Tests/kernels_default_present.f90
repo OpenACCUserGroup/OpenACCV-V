@@ -17,7 +17,7 @@
             b(x) = a(x)
           END DO
         !$acc end kernels
-        !$acc exit data delete(a(1:LOOPCOUNT)) copyout(b(1:LOOPCOUNT)) 
+        !$acc exit data delete(a(1:LOOPCOUNT)) copyout(b(1:LOOPCOUNT))
         DO x = 1, LOOPCOUNT
           IF (abs(a(x) - b(x)) .gt. PRECISION) THEN
             errors = errors + 1
@@ -96,5 +96,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

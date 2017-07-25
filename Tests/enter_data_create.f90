@@ -14,7 +14,7 @@
         !$acc enter data create(b(1:LOOPCOUNT))
         !$acc data copyin(a(1:LOOPCOUNT))
           !$acc parallel present(b(1:LOOPCOUNT))
-            !$acc loop 
+            !$acc loop
             DO x = 1, LOOPCOUNT
               b(x) = a(x)
             END DO
@@ -36,7 +36,7 @@
             EXIT
           END IF
         END DO
- 
+
         CALL RANDOM_NUMBER(a)
         b = 0
         c = 0
@@ -69,7 +69,7 @@
         CALL RANDOM_NUMBER(a)
         b = 0
         c = 0
- 
+
         !$acc enter data pcreate(b(1:LOOPCOUNT))
         !$acc data copyin(a(1:LOOPCOUNT))
           !$acc parallel present(b(1:LOOPCOUNT))
@@ -168,5 +168,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

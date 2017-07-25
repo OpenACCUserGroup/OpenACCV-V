@@ -10,9 +10,10 @@
         CALL RANDOM_NUMBER(a)
         CALL RANDOM_NUMBER(b)
         c = 0
- 
+
         !$acc enter data copyin(c(1:LOOPCOUNT))
-        !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) present(c(:LOOPCOUNT))
+        !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) !$acc &
+            !$acc present(c(:LOOPCOUNT))
           !$acc parallel
             !$acc loop
             DO x = 1, LOOPCOUNT
@@ -99,5 +100,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

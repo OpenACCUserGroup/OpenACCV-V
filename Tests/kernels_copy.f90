@@ -35,10 +35,11 @@
 
         IF (devtest(1) .eq. 1) THEN
           CALL RANDOM_NUMBER(a)
-          CALL RANDOM_NUMBER(b)    
+          CALL RANDOM_NUMBER(b)
           c = 1
- 
-          !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), c(1:LOOPCOUNT))
+
+          !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), !$acc &
+              !$acc c(1:LOOPCOUNT))
             !$acc kernels copy(c(1:LOOPCOUNT))
               !$acc loop
               DO x = 1, LOOPCOUNT
@@ -58,13 +59,14 @@
           CALL RANDOM_NUMBER(a)
           CALL RANDOM_NUMBER(b)
           c = 1
-       
-          !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) copy(c(1:LOOPCOUNT))
+
+          !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) !$acc &
+              !$acc copy(c(1:LOOPCOUNT))
             DO x = 1, LOOPCOUNT
               c(x) = 0
             END DO
             !$acc kernels copy(c(1:LOOPCOUNT))
-              !$acc loop 
+              !$acc loop
               DO x = 1, LOOPCOUNT
                 c(x) = c(x) + a(x) + b(x)
               END DO
@@ -75,7 +77,7 @@
               END IF
             END DO
           !$acc end data
-          
+
           DO x = 1, LOOPCOUNT
             IF (abs(c(x) - (1 + a(x) + b(x))) .gt. PRECISION) THEN
               errors = errors + 1
@@ -155,5 +157,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

@@ -98,5 +98,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

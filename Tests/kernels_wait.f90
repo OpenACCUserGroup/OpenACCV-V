@@ -11,14 +11,16 @@
         CALL RANDOM_NUMBER(b)
         c = 0
 
-        !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), c(1:LOOPCOUNT)) async(1)
+        !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), !$acc &
+            !$acc c(1:LOOPCOUNT)) async(1)
         !$acc kernels wait(1)
           !$acc loop
           DO x = 1, LOOPCOUNT
             c(x) = a(x) + b(x)
           END DO
         !$acc end kernels
-        !$acc exit data copyout(c(1:LOOPCOUNT)) delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
+        !$acc exit data copyout(c(1:LOOPCOUNT)) !$acc &
+            !$acc delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
 
         DO x = 1, LOOPCOUNT
           IF (abs(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN
@@ -98,5 +100,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

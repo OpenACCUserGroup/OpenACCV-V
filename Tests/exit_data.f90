@@ -15,7 +15,7 @@
         CALL RANDOM_SEED()
         CALL RANDOM_NUMBER(a)
         a_copy = a
-         
+
         IF (devtest(1) .eq. 1) THEN
           !$acc enter data copyin(a(1:LOOPCOUNT))
           !$acc parallel present(a(1:LOOPCOUNT))
@@ -25,7 +25,7 @@
             END DO
           !$acc end parallel
           !$acc exit data delete(a(1:LOOPCOUNT))
-      
+
           DO x = 1, LOOPCOUNT
             IF (abs(a(x) - a_copy(x)) .gt. PRECISION) THEN
               errors = errors + 1
@@ -35,7 +35,7 @@
           CALL RANDOM_NUMBER(a)
           a_copy = a
         END IF
- 
+
         !$acc enter data copyin(a(1:LOOPCOUNT))
         !$acc parallel present(a(1:LOOPCOUNT))
           !$acc loop
@@ -124,5 +124,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

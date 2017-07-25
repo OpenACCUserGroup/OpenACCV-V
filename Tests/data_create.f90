@@ -9,7 +9,7 @@
         CALL RANDOM_SEED()
         CALL RANDOM_NUMBER(a)
         b = 0
-        c = 0 
+        c = 0
 
         !$acc data create(b(1:LOOPCOUNT))
           !$acc data copyin(a(1:LOOPCOUNT))
@@ -36,11 +36,11 @@
             EXIT
           END IF
         END DO
- 
+
         CALL RANDOM_NUMBER(a)
         b = 0
         c = 0
- 
+
         !$acc data present_or_create(b(1:LOOPCOUNT))
           !$acc data copyin(a(1:LOOPCOUNT))
             !$acc parallel
@@ -59,7 +59,7 @@
             !$acc end parallel
           !$acc end data
         !$acc end data
- 
+
         DO x = 1, LOOPCOUNT
           IF (abs(a(x) - c(x)) .gt. PRECISION) THEN
             errors = errors + 2
@@ -70,7 +70,7 @@
         CALL RANDOM_NUMBER(a)
         b = 0
         c = 0
- 
+
         !$acc data pcreate(b(1:LOOPCOUNT))
           !$acc data copyin(a(1:LOOPCOUNT))
             !$acc parallel
@@ -89,7 +89,7 @@
             !$acc end parallel
           !$acc end data
         !$acc end data
-     
+
         DO x = 1, LOOPCOUNT
           IF (abs(a(x) - c(x)) .gt. PRECISION) THEN
             errors = errors + 4
@@ -169,5 +169,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

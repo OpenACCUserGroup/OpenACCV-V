@@ -11,7 +11,8 @@
         CALL RANDOM_NUMBER(b)
         c = 0
 
-        !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) copy(c(1:LOOPCOUNT))
+        !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) !$acc &
+            !$acc copy(c(1:LOOPCOUNT))
           !$acc parallel loop gang
           DO x = 1, LOOPCOUNT
             c(x) = a(x) + b(x)
@@ -96,5 +97,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

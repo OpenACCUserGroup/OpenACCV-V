@@ -15,7 +15,8 @@
         false_margin = exp(log(.5) / n)
         DO x = 1, 10 * LOOPCOUNT
           DO y = 1, 16
-            IF (randoms(y * 10 * LOOPCOUNT + y - 1) .gt. false_margin) THEN
+              IF (randoms(y * 10 * LOOPCOUNT + y - 1) .gt. &
+                  false_margin) THEN
               temp = 1
               DO z = 1, y
                 temp = temp * 2
@@ -46,7 +47,7 @@
             errors = errors + 1
           END IF
         END DO
-        
+
         test = errors
       END
 
@@ -120,5 +121,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

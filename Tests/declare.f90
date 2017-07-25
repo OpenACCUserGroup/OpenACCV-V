@@ -20,14 +20,15 @@
           !$acc end parallel
         !$acc end data
         DO x = 1, LOOPCOUNT
-          IF (abs(b(x) - (a(x) + declare_array(x))) .gt. PRECISION) THEN
+            IF (abs(b(x) - (a(x) + declare_array(x))) .gt. PRECISION) &
+                THEN
             errors = errors + 1
           END IF
         END DO
         test = errors
       END
 
-      
+
       PROGRAM test_kernels_async_main
       IMPLICIT NONE
       INTEGER :: failed, success !Number of failed/succeeded tests
@@ -97,5 +98,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

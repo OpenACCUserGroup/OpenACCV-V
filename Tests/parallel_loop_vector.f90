@@ -11,13 +11,14 @@
         CALL RANDOM_NUMBER(b)
         c = 0
 
-        !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) copy(c(1:LOOPCOUNT))
+        !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) !$acc &
+            !$acc copy(c(1:LOOPCOUNT))
           !$acc parallel loop vector
           DO x = 1, LOOPCOUNT
             c(x) = a(x) + b(x)
           END DO
         !$acc end data
-        
+
         DO x = 1, LOOPCOUNT
           IF (abs(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN
             errors = errors + 1
@@ -96,5 +97,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

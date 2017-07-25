@@ -13,10 +13,11 @@
         CALL RANDOM_NUMBER(b)
         CALL RANDOM_NUMBER(c)
 
-        !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), c(1:LOOPCOUNT)) copyout(d(1:LOOPCOUNT,1:LOOPCOUNT))
+        !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), !$acc &
+            !$acc c(1:LOOPCOUNT)) copyout(d(1:LOOPCOUNT,1:LOOPCOUNT))
           !$acc parallel loop tile(*, *) reduction(+:temp)
           DO x = 1, LOOPCOUNT
-            DO y = 1, LOOPCOUNT 
+            DO y = 1, LOOPCOUNT
               temp = 0
               DO z = 1, LOOPCOUNT
                 temp = temp + a(z) + b(z) + c(z)
@@ -25,12 +26,12 @@
             END DO
           END DO
         !$acc end data
-        
-        DO x = 1, LOOPCOUNT 
-          DO y = 1, LOOPCOUNT 
+
+        DO x = 1, LOOPCOUNT
+          DO y = 1, LOOPCOUNT
             temp = 0
             DO z = 1, LOOPCOUNT
-              temp = temp + a(z) + b(z) + c(z) 
+              temp = temp + a(z) + b(z) + c(z)
             END DO
             IF (abs(d(x,y) - temp) .gt. PRECISION) THEN
               errors = errors + 1
@@ -110,5 +111,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

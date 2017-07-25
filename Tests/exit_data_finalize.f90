@@ -18,15 +18,19 @@
         CALL RANDOM_NUMBER(b)
         c = 0
 
-        !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), c(1:LOOPCOUNT))
-        !$acc enter data create(a(1:LOOPCOUNT), b(1:LOOPCOUNT), c(1:LOOPCOUNT))
-        !$acc parallel present(a(1:LOOPCOUNT), b(1:LOOPCOUNT), c(1:LOOPCOUNT))
+        !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), !$acc &
+            !$acc c(1:LOOPCOUNT))
+        !$acc enter data create(a(1:LOOPCOUNT), b(1:LOOPCOUNT), !$acc &
+            !$acc c(1:LOOPCOUNT))
+        !$acc parallel present(a(1:LOOPCOUNT), b(1:LOOPCOUNT), !$acc &
+            !$acc c(1:LOOPCOUNT))
           !$acc loop
           DO x = 1, LOOPCOUNT
             c(x) = a(x) + b(x)
           END DO
         !$acc end parallel
-        !$acc exit data copyout(a(1:LOOPCOUNT), b(1:LOOPCOUNT), c(1:LOOPCOUNT))
+        !$acc exit data copyout(a(1:LOOPCOUNT), b(1:LOOPCOUNT), !$acc &
+            !$acc c(1:LOOPCOUNT))
         IF (devtest(1) .eq. 1) THEN
           DO x = 1, LOOPCOUNT
             IF (abs(c(x)) .gt. PRECISION) THEN
@@ -34,25 +38,30 @@
             END IF
           END DO
         END IF
-        !$acc exit data copyout(a(1:LOOPCOUNT), b(1:LOOPCOUNT), c(1:LOOPCOUNT))
+        !$acc exit data copyout(a(1:LOOPCOUNT), b(1:LOOPCOUNT), !$acc &
+            !$acc c(1:LOOPCOUNT))
         DO x = 1, LOOPCOUNT
           IF (abs(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN
             errors = errors + 1
           END IF
         END DO
-     
+
         CALL RANDOM_NUMBER(a)
         CALL RANDOM_NUMBER(b)
         c = 0
-        !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), c(1:LOOPCOUNT))
-        !$acc enter data create(a(1:LOOPCOUNT), b(1:LOOPCOUNT), c(1:LOOPCOUNT))
-        !$acc parallel present(a(1:LOOPCOUNT), b(1:LOOPCOUNT), c(1:LOOPCOUNT))
+        !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), !$acc &
+            !$acc c(1:LOOPCOUNT))
+        !$acc enter data create(a(1:LOOPCOUNT), b(1:LOOPCOUNT), !$acc &
+            !$acc c(1:LOOPCOUNT))
+        !$acc parallel present(a(1:LOOPCOUNT), b(1:LOOPCOUNT), !$acc &
+            !$acc c(1:LOOPCOUNT))
           !$acc loop
           DO x = 1, LOOPCOUNT
             c(x) = a(x) + b(x)
           END DO
         !$acc end parallel
-        !$acc exit data copyout(c(1:LOOPCOUNT)) delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) finalize
+        !$acc exit data copyout(c(1:LOOPCOUNT)) !$acc &
+            !$acc delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) finalize
         DO x = 1, LOOPCOUNT
           IF (abs(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN
             errors = errors + 1
@@ -131,5 +140,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

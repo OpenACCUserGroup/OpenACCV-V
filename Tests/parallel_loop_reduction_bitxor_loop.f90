@@ -18,7 +18,8 @@
         b_copy = b
         c = 0
 
-        !$acc data copyin(a(1:10*LOOPCOUNT)) copy(b(1:10*LOOPCOUNT), c(1:10))
+        !$acc data copyin(a(1:10*LOOPCOUNT)) copy(b(1:10*LOOPCOUNT), &
+            !$acc c(1:10))
           !$acc parallel loop gang private(temp)
           DO x = 0, 9
             temp = 0
@@ -43,7 +44,8 @@
             errors = errors + 1
           END IF
           DO y = 1, LOOPCOUNT
-            IF (b(x * LOOPCOUNT + y) .ne. b_copy(x * LOOPCOUNT + y) + c(x + 1)) THEN
+              IF (b(x * LOOPCOUNT + y) .ne. b_copy(x * LOOPCOUNT + y) &
+                  + c(x + 1)) THEN
               errors = errors + 1
             END IF
           END DO
@@ -121,5 +123,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

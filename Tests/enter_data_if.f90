@@ -8,7 +8,7 @@
         LOGICAL :: dev = .TRUE.
         LOGICAL :: cpu = .FALSE.
         devtest(1) = 1
-     
+
         !$acc enter data copyin(devtest(1:1))
         !$acc parallel
           devtest(1) = 0
@@ -21,7 +21,8 @@
         c = 0
 
         !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) if(dev)
-        !$acc data create(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) copyout(c(1:LOOPCOUNT))
+        !$acc data create(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) !$acc &
+            !$acc copyout(c(1:LOOPCOUNT))
           !$acc parallel
             !$acc loop
             DO x = 1, LOOPCOUNT
@@ -39,9 +40,10 @@
         CALL RANDOM_NUMBER(a)
         CALL RANDOM_NUMBER(b)
         c = 0
- 
+
         !$acc enter data create(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) if(cpu)
-        !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) copyout(c(1:LOOPCOUNT))
+        !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) !$acc &
+            !$acc copyout(c(1:LOOPCOUNT))
           !$acc parallel
             !$acc loop
             DO x = 1, LOOPCOUNT
@@ -64,12 +66,14 @@
           b_copy = b
           c = 0
 
-          !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) if(dev)
-         
+          !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
+              !$acc if(dev)
+
           a = 0
           b = 0
 
-          !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) copyout(c(1:LOOPCOUNT))
+          !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) !$acc &
+              !$acc copyout(c(1:LOOPCOUNT))
             !$acc parallel
               !$acc loop
               DO x = 1, LOOPCOUNT
@@ -77,36 +81,42 @@
               END DO
             !$acc end parallel
           !$acc end data
-          !$acc exit data delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) if(dev)
- 
+          !$acc exit data delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
+              !$acc if(dev)
+
           DO x = 1, LOOPCOUNT
-            IF (abs(c(x) - (a_copy(x) + b_copy(x))) .gt. PRECISION) THEN
+              IF (abs(c(x) - (a_copy(x) + b_copy(x))) .gt. PRECISION) &
+                  THEN
               errors = errors + 1
             END IF
           END DO
- 
+
           CALL RANDOM_NUMBER(a)
           CALL RANDOM_NUMBER(b)
           c = 0
 
-          !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) if(cpu)
+          !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
+              !$acc if(cpu)
           CALL RANDOM_NUMBER(a)
           a_copy = a
           CALL RANDOM_NUMBER(b)
           b_copy = b
- 
-          !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) copyout(c(1:LOOPCOUNT))
+
+          !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) !$acc &
+              !$acc copyout(c(1:LOOPCOUNT))
             !$acc parallel
               !$acc loop
               DO x = 1, LOOPCOUNT
                 c(x) = a(x) + b(x)
               END DO
-            !$acc end parallel 
+            !$acc end parallel
           !$acc end data
-          !$acc exit data copyout(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) if(cpu)
+          !$acc exit data copyout(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
+              !$acc if(cpu)
 
           DO x = 1, LOOPCOUNT
-            IF (abs(c(x) - (a_copy(x) + b_copy(x))) .gt. PRECISION) THEN
+              IF (abs(c(x) - (a_copy(x) + b_copy(x))) .gt. PRECISION) &
+                  THEN
               errors = errors + 1
             END IF
           END DO
@@ -114,9 +124,11 @@
           CALL RANDOM_NUMBER(a)
           CALL RANDOM_NUMBER(b)
           c = 0
-   
-          !$acc enter data create(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) if(cpu)
-          !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) copyout(c(1:LOOPCOUNT))
+
+          !$acc enter data create(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
+              !$acc if(cpu)
+          !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) !$acc &
+              !$acc copyout(c(1:LOOPCOUNT))
             !$acc parallel
               !$acc loop
               DO x = 1, LOOPCOUNT
@@ -131,7 +143,7 @@
             END IF
           END DO
         END IF
-   
+
         test = errors
       END
 
@@ -205,5 +217,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

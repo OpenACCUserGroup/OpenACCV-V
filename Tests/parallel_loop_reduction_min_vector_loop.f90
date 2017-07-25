@@ -12,22 +12,25 @@
         CALL RANDOM_NUMBER(a)
         CALL RANDOM_NUMBER(b)
 
-        !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT)) copy(minimum(1:10))
+        !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT)) !$acc &
+            !$acc copy(minimum(1:10))
           !$acc parallel loop gang private(temp)
           DO x = 0, 9
             temp = 1000
             !$acc loop vector reduction(min:temp)
             DO y = 1, LOOPCOUNT
-              temp = min(temp, a(x * LOOPCOUNT + y) * b(x * LOOPCOUNT + y))
+                temp = min(temp, a(x * LOOPCOUNT + y) * b(x * &
+                    LOOPCOUNT + y))
             END DO
             minimum(x + 1) = temp
           END DO
         !$acc end data
-        
+
         DO x = 0, 9
           temp = 1000
           DO y = 1, LOOPCOUNT
-            temp = min(temp, a(x * LOOPCOUNT + y) * b(x * LOOPCOUNT + y))
+              temp = min(temp, a(x * LOOPCOUNT + y) * b(x * LOOPCOUNT &
+                  + y))
           END DO
           IF (abs(temp - minimum(x + 1)) .gt. PRECISION) THEN
             errors = errors + 1
@@ -106,5 +109,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

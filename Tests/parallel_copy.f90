@@ -14,9 +14,9 @@
           !$acc loop
           DO x = 1, LOOPCOUNT
             a(x) = 2 * a(x)
-          END DO 
+          END DO
         !$acc end parallel
-    
+
 
         DO x = 1, LOOPCOUNT
           IF (abs(a_host(x) - (a(x) / 2)) .gt. PRECISION) THEN
@@ -96,5 +96,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

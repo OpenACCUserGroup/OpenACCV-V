@@ -76,7 +76,8 @@
           a = 0
           b = 0
 
-          !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) copyout(c(1:LOOPCOUNT))
+          !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) !$acc &
+              !$acc copyout(c(1:LOOPCOUNT))
             !$acc parallel
               !$acc loop
               DO x = 1, LOOPCOUNT
@@ -173,5 +174,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

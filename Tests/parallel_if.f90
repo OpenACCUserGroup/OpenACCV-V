@@ -32,33 +32,39 @@
             errors = errors + 1
           END IF
         END DO
- 
+
         IF (dev_test(1) .eq. 0) THEN
-          !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), c(1:LOOPCOUNT))
-          !$acc parallel if(host) present(a(1:LOOPCOUNT), b(1:LOOPCOUNT), c(1:LOOPCOUNT))
+          !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), &
+              !$acc c(1:LOOPCOUNT))
+          !$acc parallel if(host) present(a(1:LOOPCOUNT), !$acc &
+              !$acc b(1:LOOPCOUNT), c(1:LOOPCOUNT))
             !$acc loop
             DO x = 1, LOOPCOUNT
               c(x) = c(x) + a(x) + b(x)
             END DO
           !$acc end parallel
-          !$acc exit data delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) copyout(c(1:LOOPCOUNT))
+          !$acc exit data delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
+              !$acc copyout(c(1:LOOPCOUNT))
         END IF
         !$acc exit data delete(dev_test(1:1))
-        
+
         DO x = 1, LOOPCOUNT
           IF (abs(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN
             errors = errors + 1
           END IF
         END DO
 
-        !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), c(1:LOOPCOUNT))
-        !$acc parallel if(device) present(a(1:LOOPCOUNT), b(1:LOOPCOUNT), c(1:LOOPCOUNT))
+        !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), !$acc &
+            !$acc c(1:LOOPCOUNT))
+        !$acc parallel if(device) present(a(1:LOOPCOUNT), !$acc &
+            !$acc b(1:LOOPCOUNT), c(1:LOOPCOUNT))
           !$acc loop
           DO x = 1, LOOPCOUNT
             c(x) = c(x) + a(x) + b(x)
           END DO
         !$acc end parallel
-        !$acc exit data delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT)), copyout(c(1:LOOPCOUNT))
+        !$acc exit data delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT)), !$acc &
+            !$acc copyout(c(1:LOOPCOUNT))
 
         DO x = 1, LOOPCOUNT
           IF (abs(c(x) - (2 * (a(x) + b(x)))) .gt. 2 * PRECISION) THEN
@@ -138,5 +144,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

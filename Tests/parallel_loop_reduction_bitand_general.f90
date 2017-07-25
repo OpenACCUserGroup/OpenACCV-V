@@ -24,7 +24,7 @@
             END IF
           END DO
         END DO
-        
+
         b = a(1)
 
         !$acc data copyin(a(1:LOOPCOUNT))
@@ -33,7 +33,7 @@
             b = iand(b, a(x))
           END DO
         !$acc end data
- 
+
         temp = a(1)
         DO x = 2, LOOPCOUNT
           temp = iand(a(x), temp)
@@ -116,5 +116,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

@@ -32,11 +32,11 @@
               errors = errors + 1
             END IF
           END DO
-          
+
           CALL RANDOM_NUMBER(a)
           b = 0
         END IF
-        
+
         !$acc data copyin(a(1:LOOPCOUNT)) copyout(b(1:LOOPCOUNT))
           !$acc kernels create(b(1:LOOPCOUNT))
             !$acc loop
@@ -53,7 +53,7 @@
 
         CALL RANDOM_NUMBER(a)
         b = 0
-     
+
         !$acc data copyin(a(1:LOOPCOUNT)) copyout(c(1:LOOPCOUNT))
           !$acc kernels create(b(1:LOOPCOUNT))
             !$acc loop
@@ -66,7 +66,7 @@
             END DO
           !$acc end kernels
         !$acc end data
-      
+
         DO x = 1, LOOPCOUNT
           IF (abs(c(x) - a(x)) .gt. PRECISION) THEN
             errors = errors + 1
@@ -146,5 +146,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

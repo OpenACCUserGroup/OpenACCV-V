@@ -56,17 +56,17 @@
               errors = errors + 1
             END IF
           END DO
-          
+
           CALL RANDOM_NUMBER(a)
           b = 0
-          
+
           !$acc kernels copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
             !$acc loop
             DO x = 1, LOOPCOUNT
               b(x) = a(x)
             END DO
           !$acc end kernels
-        
+
           DO x = 1, LOOPCOUNT
             IF (abs(b(x)) .gt. PRECISION) THEN
               errors = errors + 1
@@ -146,5 +146,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

@@ -16,7 +16,7 @@
             b(x) = b(x - 1) + a(x)
           END DO
         !$acc end data
-        
+
         DO x = 2, LOOPCOUNT
           IF (abs(b(x) - (b(x - 1) + a(x))) .gt. PRECISION) THEN
             errors = errors + 1
@@ -95,5 +95,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

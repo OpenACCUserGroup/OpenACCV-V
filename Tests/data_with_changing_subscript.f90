@@ -12,7 +12,8 @@
         CALL RANDOM_NUMBER(b)
         c = 0
 
-        !$acc data copyin(a(1:indexer), b(1:indexer)) copyout(c(1:indexer))
+        !$acc data copyin(a(1:indexer), b(1:indexer)) !$acc &
+            !$acc copyout(c(1:indexer))
           !$acc parallel
             !$acc loop
             DO x = 1, indexer
@@ -99,5 +100,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

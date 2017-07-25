@@ -24,7 +24,7 @@
             b(x + 1) = temp
           END DO
         !$acc end data
-        
+
         DO x = 0, 9
           temp = 0
           DO y = 1, LOOPCOUNT
@@ -107,5 +107,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

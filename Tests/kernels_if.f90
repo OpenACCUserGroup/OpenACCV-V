@@ -18,7 +18,8 @@
         CALL RANDOM_NUMBER(a)
         b = 0
 
-        !$acc kernels if(data_on_device) present(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
+        !$acc kernels if(data_on_device) present(a(1:LOOPCOUNT), &
+            !$acc b(1:LOOPCOUNT))
           !$acc loop
           DO x = 1, LOOPCOUNT
             b(x) = a(x)
@@ -36,14 +37,15 @@
 
         data_on_device = .TRUE.
         !$acc enter data copyin(a(1:LOOPCOUNT)) create(b(1:LOOPCOUNT))
-        !$acc kernels if(data_on_device) present(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
+        !$acc kernels if(data_on_device) present(a(1:LOOPCOUNT), &
+            !$acc b(1:LOOPCOUNT))
           !$acc loop
           DO x = 1, LOOPCOUNT
             b(x) = a(x)
           END DO
         !$acc end kernels
         !$acc exit data copyout(b(1:LOOPCOUNT)) delete(a(1:LOOPCOUNT))
-        
+
         DO x = 1, LOOPCOUNT
           IF (abs(b(x) - a(x)) .gt. PRECISION) THEN
             errors = errors + 1
@@ -53,19 +55,21 @@
         IF (devtest(1) .eqv. .TRUE.) THEN
           CALL RANDOM_NUMBER(a)
           b = 0
- 
-          !$acc enter data copyin(a(1:LOOPCOUNT)) create(b(1:LOOPCOUNT))
+
+          !$acc enter data copyin(a(1:LOOPCOUNT)) !$acc &
+              !$acc create(b(1:LOOPCOUNT))
           DO x = 1, LOOPCOUNT
             a(x) = -1
           END DO
-          
-          !$acc kernels if(data_on_device) present(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
+
+          !$acc kernels if(data_on_device) present(a(1:LOOPCOUNT), &
+              !$acc b(1:LOOPCOUNT))
             !$acc loop
             DO x = 1, LOOPCOUNT
               b(x) = a(x)
             END DO
           !$acc end kernels
- 
+
           DO x = 1, LOOPCOUNT
             IF (abs(a(x) + 1) .gt. PRECISION) THEN
               errors = errors + 1
@@ -74,7 +78,7 @@
               errors = errors + 1
             END IF
           END DO
- 
+
           !$acc exit data copyout(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
           data_on_device = .FALSE.
 
@@ -88,7 +92,8 @@
           b = 0
 
           !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
-          !$acc kernels if(data_on_device) present(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
+          !$acc kernels if(data_on_device) present(a(1:LOOPCOUNT), &
+              !$acc b(1:LOOPCOUNT))
             !$acc loop
             DO x = 1, LOOPCOUNT
               b(x) = a(x)
@@ -102,7 +107,7 @@
           END DO
 
           !$acc exit data copyout(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
-          
+
           DO x = 1, LOOPCOUNT
             IF (abs(b(x)) .gt. PRECISION) THEN
               IF (abs(b(x) - a(x)) .gt. PRECISION) THEN
@@ -185,5 +190,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

@@ -17,7 +17,8 @@
         DO x = 0, 9
           DO y = 1, LOOPCOUNT
             DO z = 1, 16
-              IF (random(x * 16 * LOOPCOUNT + (y - 1) * 16 + z - 1) < false_margin) THEN
+                IF (random(x * 16 * LOOPCOUNT + (y - 1) * 16 + z - 1) &
+                    < false_margin) THEN
                 temp = 1
                 DO i = 1, z
                   temp = temp * 2
@@ -27,7 +28,7 @@
             END DO
           END DO
         END DO
-                
+
         !$acc data copyin(a(1:10*LOOPCOUNT)), copy(b(1:10))
           !$acc parallel loop private(c)
           DO x = 0, 9
@@ -48,7 +49,7 @@
           IF (b(x + 1) .ne. temp) THEN
             errors = errors + 1
           END IF
-        END DO       
+        END DO
 
         test = errors
       END
@@ -123,5 +124,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

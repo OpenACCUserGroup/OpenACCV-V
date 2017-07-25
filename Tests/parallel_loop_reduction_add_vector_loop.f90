@@ -12,7 +12,8 @@
         CALL RANDOM_NUMBER(a)
         CALL RANDOM_NUMBER(b)
 
-        !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT)) copyout(c(1:10))
+        !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT)) !$acc &
+            !$acc copyout(c(1:10))
           !$acc parallel loop private(temp)
           DO x = 0, 9
             temp = 0.0
@@ -106,5 +107,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

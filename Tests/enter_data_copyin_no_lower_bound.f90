@@ -12,7 +12,8 @@
         c = 0
 
         !$acc enter data copyin(a(:LOOPCOUNT), b(:LOOPCOUNT))
-        !$acc data copyout(c(1:LOOPCOUNT)) present(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
+        !$acc data copyout(c(1:LOOPCOUNT)) present(a(1:LOOPCOUNT), &
+            !$acc b(1:LOOPCOUNT))
           !$acc parallel
             !$acc loop
             DO x = 1, LOOPCOUNT
@@ -100,5 +101,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

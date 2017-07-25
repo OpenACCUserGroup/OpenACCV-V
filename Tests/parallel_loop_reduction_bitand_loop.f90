@@ -19,7 +19,8 @@
         false_margin = exp(log(.5)/LOOPCOUNT)
         DO x = 1, 10 * LOOPCOUNT
           DO y = 1, 16
-            IF (randoms((y - 1) * 10 * LOOPCOUNT + x) < false_margin) THEN
+              IF (randoms((y - 1) * 10 * LOOPCOUNT + x) < &
+                  false_margin) THEN
               temp = 1
               DO z = 1, y
                 temp = temp * 2
@@ -28,14 +29,15 @@
             END IF
           END DO
         END DO
-        
+
         DO x = 1, 10
          c(x) = a((x - 1) * LOOPCOUNT + x)
         END DO
-        
-        
 
-        !$acc data copyin(a(1:10*LOOPCOUNT)) copy(b(1:10*LOOPCOUNT), c(1:10))
+
+
+        !$acc data copyin(a(1:10*LOOPCOUNT)) copy(b(1:10*LOOPCOUNT), &
+            !$acc c(1:10))
           !$acc parallel loop gang private(temp)
           DO x = 1, 10
             temp = a((x - 1) * LOOPCOUNT + 1)
@@ -46,7 +48,8 @@
             c(x) = temp
             !$acc loop worker
             DO y = 1, LOOPCOUNT
-              b((x - 1) * LOOPCOUNT + y) = b((x - 1) * LOOPCOUNT + y) + c(x)
+                b((x - 1) * LOOPCOUNT + y) = b((x - 1) * LOOPCOUNT + &
+                    y) + c(x)
             END DO
           END DO
         !$acc end data
@@ -60,13 +63,14 @@
            errors = errors + 1
          END IF
          DO y = 1, LOOPCOUNT
-           IF (b((x - 1) * LOOPCOUNT + y) .ne. b_copy((x - 1) * LOOPCOUNT + y) + temp) THEN
+             IF (b((x - 1) * LOOPCOUNT + y) .ne. b_copy((x - 1) * &
+                 LOOPCOUNT + y) + temp) THEN
              errors = errors + 1
            END IF
          END DO
        END DO
-       
-       test = errors 
+
+       test = errors
       END
 
 
@@ -139,5 +143,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

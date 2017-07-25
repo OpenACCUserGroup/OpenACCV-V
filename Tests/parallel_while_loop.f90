@@ -9,7 +9,7 @@
         !Initilization
         CALL RANDOM_SEED()
         CALL RANDOM_NUMBER(a)
- 
+
         !$acc data copy(a(1:10, 1:LOOPCOUNT))
           !$acc parallel
             !$acc loop
@@ -112,5 +112,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 

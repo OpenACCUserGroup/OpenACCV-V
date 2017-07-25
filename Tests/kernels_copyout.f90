@@ -35,7 +35,7 @@
         IF (devtest(1) .eq. 1) THEN
           CALL RANDOM_NUMBER(a)
           b = 0
-          
+
           !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
             !$acc kernels copyout(b(1:LOOPCOUNT))
               !$acc loop
@@ -44,7 +44,7 @@
               END DO
             !$acc end kernels
           !$acc end data
-          
+
           DO x = 1, LOOPCOUNT
             IF (abs(b(x)) .gt. PRECISION) THEN
               errors = errors + 1
@@ -124,5 +124,5 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-                                             
+
 
