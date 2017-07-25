@@ -18,7 +18,7 @@
           DO y = 1, LOOPCOUNT
             DO z = 1, 16
                IF (random(x * 16 * LOOPCOUNT + (y - 1) * 16 + z - 1) &
-                   < false_margin) THEN
+                  < false_margin) THEN
                 temp = 1
                 DO i = 1, z
                   temp = temp * 2

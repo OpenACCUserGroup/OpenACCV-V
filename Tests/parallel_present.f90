@@ -13,7 +13,7 @@
 
         !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
         !$acc parallel present(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
-            !$acc copy(c(1:LOOPCOUNT))
+           !$acc copy(c(1:LOOPCOUNT))
           !$acc loop
           DO x = 1, LOOPCOUNT
             c(x) = a(x) + b(x)

@@ -16,20 +16,20 @@
         b = (999.4 + b) / 2000
 
         !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT)) !$acc &
-            !$acc copy(c(1:10*LOOPCOUNT), totals(1:10))
+           !$acc copy(c(1:10*LOOPCOUNT), totals(1:10))
           !$acc parallel loop gang private(temp)
           DO x = 0, 9
             temp = 1
             !$acc loop worker reduction(*:temp)
             DO y = 1, LOOPCOUNT
                temp = temp * (a(x * LOOPCOUNT + y) + b(x * LOOPCOUNT &
-                   + y))
+                  + y))
             END DO
             totals(x + 1) = temp
             !$acc loop worker
             DO y = 1, LOOPCOUNT
                c(x * LOOPCOUNT + y) = (a(x * LOOPCOUNT + y) + b(x * &
-                   LOOPCOUNT + y)) / totals(x + 1)
+                  LOOPCOUNT + y)) / totals(x + 1)
             END DO
           END DO
         !$acc end data
@@ -40,7 +40,7 @@
             temp = temp * (a(x * LOOPCOUNT + y) + b(x * LOOPCOUNT + y))
           END DO
            IF (abs(temp - totals(x + 1)) .gt. ((temp / 2) + (totals(x &
-               + 1) / 2)) * PRECISION) THEN
+              + 1) / 2)) * PRECISION) THEN
             errors = errors + 1
             WRITE(*, *) temp
             WRITE(*, *) totals(x + 1)
@@ -48,8 +48,8 @@
           END IF
           DO y = 1, LOOPCOUNT
              IF (abs(c(x * LOOPCOUNT + y) - ((a(x * LOOPCOUNT + y) + &
-                 b(x * LOOPCOUNT + y)) / totals(x + 1))) .gt. c(x * &
-                 LOOPCOUNT + y) * PRECISION) THEN
+                b(x * LOOPCOUNT + y)) / totals(x + 1))) .gt. c(x * &
+                LOOPCOUNT + y) * PRECISION) THEN
               errors = errors + 1
               WRITE(*, *) c(x * LOOPCOUNT + y)
               WRITE(*, *) a(x * LOOPCOUNT + y) + b(x * LOOPCOUNT + y)

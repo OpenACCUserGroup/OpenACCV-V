@@ -59,12 +59,12 @@
           DO y = 1, LOOPCOUNT
             IF (temp .eqv. .TRUE.) THEN
                IF (a(x * LOOPCOUNT + y) .eqv. a_copy(x * LOOPCOUNT + &
-                   y)) THEN
+                  y)) THEN
                 errors = errors + 1
               END IF
             ELSE
                IF (a(x * LOOPCOUNT + y) .neqv. a_copy(x * LOOPCOUNT + &
-                   y)) THEN
+                  y)) THEN
                 errors = errors + 1
               END IF
             END IF

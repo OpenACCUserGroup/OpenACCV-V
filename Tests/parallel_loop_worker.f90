@@ -12,7 +12,7 @@
         c = 0
 
         !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
-            !$acc copyout(c(1:LOOPCOUNT))
+           !$acc copyout(c(1:LOOPCOUNT))
           !$acc parallel loop worker
           DO x = 1, LOOPCOUNT
             c(x) = a(x) + b(x)

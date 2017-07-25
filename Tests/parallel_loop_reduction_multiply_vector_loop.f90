@@ -15,14 +15,14 @@
         b = (999.4 + b) / 1000
 
         !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT)) &
-            !$acc copyout(c(1:10))
+           !$acc copyout(c(1:10))
           !$acc parallel loop private(temp)
           DO x = 0, 9
             temp = 1
             !$acc loop vector reduction(*:temp)
             DO y = 1, LOOPCOUNT
                temp = temp * (a(x * LOOPCOUNT + y) + b(x * LOOPCOUNT &
-                   + y))
+                  + y))
             END DO
             c(x + 1) = temp
           END DO
@@ -34,7 +34,7 @@
             temp = temp * (a(x * LOOPCOUNT + y) + b(x * LOOPCOUNT + y))
           END DO
            IF (abs(temp - c(x + 1)) .gt. ((temp / 2) + (c(x + 1) / &
-               2)) * PRECISION) THEN
+              2)) * PRECISION) THEN
             errors = errors + 1
           END IF
         END DO
@@ -76,14 +76,14 @@
 
       WRITE (*,*) "--------------------------------------------------"
        WRITE (*,*) "Test of &
-           parallel_loop_reduction_multiply_vector_loop"
+          parallel_loop_reduction_multiply_vector_loop"
       WRITE (*,*) "--------------------------------------------------"
 
       crossfailed=0
       result=1
       WRITE (1,*) "--------------------------------------------------"
        WRITE (1,*) "Test of &
-           parallel_loop_reduction_multiply_vector_loop"
+          parallel_loop_reduction_multiply_vector_loop"
       WRITE (1,*) "--------------------------------------------------"
       WRITE (1,*)
       WRITE (1,*) "(Crosstests should fail)"

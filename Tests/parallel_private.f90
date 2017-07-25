@@ -16,14 +16,14 @@
         d = 0
 
         !$acc enter data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT), &
-            !$acc d(1:10))
+           !$acc d(1:10))
         !$acc parallel num_gangs(10) private(c(1:LOOPCOUNT))
           !$acc loop gang
           DO x = 1, 10
             !$acc loop worker
             DO y = 1, LOOPCOUNT
                c(y) = a((x - 1) * LOOPCOUNT + y) + b((x - 1) * &
-                   LOOPCOUNT + y)
+                  LOOPCOUNT + y)
             END DO
             !$acc loop seq
             DO y = 1, LOOPCOUNT
@@ -32,7 +32,7 @@
           END DO
         !$acc end parallel
         !$acc exit data copyout(d(1:10)) delete(a(1:10*LOOPCOUNT), &
-            !$acc b(1:10*LOOPCOUNT))
+           !$acc b(1:10*LOOPCOUNT))
 
         DO x = 0, 9
           temp = 0

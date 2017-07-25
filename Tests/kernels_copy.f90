@@ -39,7 +39,7 @@
           c = 1
 
           !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), &
-              !$acc c(1:LOOPCOUNT))
+             !$acc c(1:LOOPCOUNT))
             !$acc kernels copy(c(1:LOOPCOUNT))
               !$acc loop
               DO x = 1, LOOPCOUNT
@@ -61,7 +61,7 @@
           c = 1
 
           !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
-              !$acc copy(c(1:LOOPCOUNT))
+             !$acc copy(c(1:LOOPCOUNT))
             DO x = 1, LOOPCOUNT
               c(x) = 0
             END DO

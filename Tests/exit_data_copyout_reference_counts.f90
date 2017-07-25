@@ -20,7 +20,7 @@
 
         IF (devtest(1) .eq. 1) THEN
           !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), &
-              !$acc c(1:LOOPCOUNT))
+             !$acc c(1:LOOPCOUNT))
           !$acc data copyin(c(1:LOOPCOUNT))
             !$acc parallel
               !$acc loop
@@ -29,7 +29,7 @@
               END DO
             !$acc end parallel
             !$acc exit data delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
-                !$acc copyout(c(1:LOOPCOUNT))
+               !$acc copyout(c(1:LOOPCOUNT))
           !$acc end data
 
           DO x = 1, LOOPCOUNT
@@ -45,7 +45,7 @@
         END IF
 
         !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), &
-            !$acc c(1:LOOPCOUNT))
+           !$acc c(1:LOOPCOUNT))
         !$acc data copyin(c(1:LOOPCOUNT))
           !$acc parallel
             !$acc loop
@@ -55,7 +55,7 @@
           !$acc end parallel
         !$acc end data
         !$acc exit data copyout(c(1:LOOPCOUNT)) &
-            !$acc delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
+           !$acc delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
 
         DO x = 1, LOOPCOUNT
           IF (abs(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN
@@ -69,7 +69,7 @@
         c = 0
 
         !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), &
-            !$acc c(1:LOOPCOUNT))
+           !$acc c(1:LOOPCOUNT))
         !$acc enter data copyin(c(1:LOOPCOUNT))
         !$acc parallel
           !$acc loop
@@ -79,7 +79,7 @@
         !$acc end parallel
         !$acc exit data delete(c(1:LOOPCOUNT))
         !$acc exit data delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
-            !$acc copyout(c(1:LOOPCOUNT))
+           !$acc copyout(c(1:LOOPCOUNT))
 
         DO x = 1, LOOPCOUNT
           IF (abs(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN

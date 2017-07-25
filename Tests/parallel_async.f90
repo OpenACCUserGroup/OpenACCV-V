@@ -16,9 +16,9 @@
         g = 0
 
         !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), &
-            !$acc d(1:LOOPCOUNT), !$acc e(1:LOOPCOUNT)) &
-            !$acc copy(c(1:LOOPCOUNT), f(1:LOOPCOUNT), !$acc &
-            !$acc g(1:LOOPCOUNT))
+           !$acc d(1:LOOPCOUNT), !$acc e(1:LOOPCOUNT)) &
+           !$acc copy(c(1:LOOPCOUNT), f(1:LOOPCOUNT), !$acc &
+           !$acc g(1:LOOPCOUNT))
           !$acc parallel async(1)
             !$acc loop
             DO x = 1, LOOPCOUNT

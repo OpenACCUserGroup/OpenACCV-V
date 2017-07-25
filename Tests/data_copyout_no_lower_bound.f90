@@ -12,7 +12,7 @@
         c = 0
 
         !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
-            !$acc copyout(c(:LOOPCOUNT))
+           !$acc copyout(c(:LOOPCOUNT))
           !$acc parallel
             !$acc loop
             DO x = 1, LOOPCOUNT

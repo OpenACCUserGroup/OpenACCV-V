@@ -29,8 +29,8 @@
 
         DO x = 1, LOOPCOUNT
            IF ((abs(a(x) - a_copy(x)) > PRECISION .AND. hasDevice(1) &
-               .eq. 1) .OR. (hasDevice(1) .eq. 0 .AND. abs(a(x)) > &
-               PRECISION)) THEN
+              .eq. 1) .OR. (hasDevice(1) .eq. 0 .AND. abs(a(x)) > &
+              PRECISION)) THEN
             errors = errors + 1
           END IF
         END DO

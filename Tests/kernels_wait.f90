@@ -12,7 +12,7 @@
         c = 0
 
         !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), &
-            !$acc c(1:LOOPCOUNT)) async(1)
+           !$acc c(1:LOOPCOUNT)) async(1)
         !$acc kernels wait(1)
           !$acc loop
           DO x = 1, LOOPCOUNT
@@ -20,7 +20,7 @@
           END DO
         !$acc end kernels
         !$acc exit data copyout(c(1:LOOPCOUNT)) &
-            !$acc delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
+           !$acc delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
 
         DO x = 1, LOOPCOUNT
           IF (abs(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN

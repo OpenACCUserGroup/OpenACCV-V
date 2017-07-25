@@ -21,7 +21,7 @@
           DO y = 1, LOOPCOUNT
             DO z = 1, 16
                IF (randoms(x * 16 * LOOPCOUNT + y * 16 + z - 1) .gt. &
-                   false_margin) THEN
+                  false_margin) THEN
                 temp = 1
                 DO i = 1, z
                   temp = temp * 2
@@ -33,7 +33,7 @@
         END DO
 
         !$acc data copyin(a(1:10*LOOPCOUNT)) copy(b(1:10*LOOPCOUNT), &
-            !$acc c(1:10))
+           !$acc c(1:10))
           !$acc parallel loop gang private(temp)
           DO x = 0, 9
             temp = 0
@@ -59,7 +59,7 @@
           END IF
           DO y = 1, LOOPCOUNT
              IF (b(x * LOOPCOUNT + y) .ne. b_copy(x * LOOPCOUNT + y) &
-                 + c(x + 1)) THEN
+                + c(x + 1)) THEN
               errors = errors + 1
             END IF
           END DO

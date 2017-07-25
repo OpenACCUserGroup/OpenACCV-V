@@ -21,7 +21,7 @@
         !$acc end data
         DO x = 1, LOOPCOUNT
            IF (abs(b(x) - (a(x) + declare_array(x))) .gt. PRECISION) &
-               THEN
+              THEN
             errors = errors + 1
           END IF
         END DO

@@ -25,7 +25,7 @@
           temp = temp * (a(x) + b(x))
         END DO
          IF (abs(temp - multiplied_total) .gt. ((temp / 2) + &
-             (multiplied_total / 2)) * PRECISION) THEN
+            (multiplied_total / 2)) * PRECISION) THEN
           WRITE(*, *) temp
           WRITE(*, *) multiplied_total
           errors = errors + 1

@@ -14,8 +14,8 @@
         e = 0
 
         !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), &
-            !$acc d(1:LOOPCOUNT)) create(c(:LOOPCOUNT)) &
-            !$acc copyout(e(1:LOOPCOUNT))
+           !$acc d(1:LOOPCOUNT)) create(c(:LOOPCOUNT)) &
+           !$acc copyout(e(1:LOOPCOUNT))
           !$acc parallel
             !$acc loop
             DO x = 1, LOOPCOUNT

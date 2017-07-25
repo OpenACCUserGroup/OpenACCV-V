@@ -21,7 +21,7 @@
         IF (devtest(1) .eq. 1) THEN
           !$acc data copyin(c(1:LOOPCOUNT))
             !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
-                !$acc copyout(c(1:LOOPCOUNT))
+               !$acc copyout(c(1:LOOPCOUNT))
               !$acc parallel
                 !$acc loop
                 DO x = 1, LOOPCOUNT
@@ -45,7 +45,7 @@
 
         !$acc enter data copyin(c(1:LOOPCOUNT))
         !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
-            !$acc copyout(c(1:LOOPCOUNT))
+           !$acc copyout(c(1:LOOPCOUNT))
           !$acc parallel
             !$acc loop
             DO x = 1, LOOPCOUNT
@@ -75,7 +75,7 @@
 
         !$acc enter data copyin(c(1:LOOPCOUNT))
         !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) &
-            !$acc copyout(c(1:LOOPCOUNT))
+           !$acc copyout(c(1:LOOPCOUNT))
           !$acc parallel
             !$acc loop
             DO x = 1, LOOPCOUNT

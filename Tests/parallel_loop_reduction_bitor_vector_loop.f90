@@ -16,7 +16,7 @@
         DO x = 1, 10 * LOOPCOUNT
           DO y = 1, 16
              IF (randoms(y * 10 * LOOPCOUNT + y - 1) .gt. &
-                 false_margin) THEN
+                false_margin) THEN
               temp = 1
               DO z = 1, y
                 temp = temp * 2

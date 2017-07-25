@@ -19,7 +19,7 @@
         b = 0
 
         !$acc kernels if(data_on_device) present(a(1:LOOPCOUNT), &
-            !$acc b(1:LOOPCOUNT))
+           !$acc b(1:LOOPCOUNT))
           !$acc loop
           DO x = 1, LOOPCOUNT
             b(x) = a(x)
@@ -38,7 +38,7 @@
         data_on_device = .TRUE.
         !$acc enter data copyin(a(1:LOOPCOUNT)) create(b(1:LOOPCOUNT))
         !$acc kernels if(data_on_device) present(a(1:LOOPCOUNT), &
-            !$acc b(1:LOOPCOUNT))
+           !$acc b(1:LOOPCOUNT))
           !$acc loop
           DO x = 1, LOOPCOUNT
             b(x) = a(x)
@@ -57,13 +57,13 @@
           b = 0
 
           !$acc enter data copyin(a(1:LOOPCOUNT)) &
-              !$acc create(b(1:LOOPCOUNT))
+             !$acc create(b(1:LOOPCOUNT))
           DO x = 1, LOOPCOUNT
             a(x) = -1
           END DO
 
           !$acc kernels if(data_on_device) present(a(1:LOOPCOUNT), &
-              !$acc b(1:LOOPCOUNT))
+             !$acc b(1:LOOPCOUNT))
             !$acc loop
             DO x = 1, LOOPCOUNT
               b(x) = a(x)
@@ -93,7 +93,7 @@
 
           !$acc enter data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
           !$acc kernels if(data_on_device) present(a(1:LOOPCOUNT), &
-              !$acc b(1:LOOPCOUNT))
+             !$acc b(1:LOOPCOUNT))
             !$acc loop
             DO x = 1, LOOPCOUNT
               b(x) = a(x)

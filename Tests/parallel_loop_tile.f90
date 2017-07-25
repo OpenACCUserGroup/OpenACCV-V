@@ -14,7 +14,7 @@
         CALL RANDOM_NUMBER(c)
 
         !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), &
-            !$acc c(1:LOOPCOUNT)) copyout(d(1:LOOPCOUNT,1:LOOPCOUNT))
+           !$acc c(1:LOOPCOUNT)) copyout(d(1:LOOPCOUNT,1:LOOPCOUNT))
           !$acc parallel loop tile(*, *) reduction(+:temp)
           DO x = 1, LOOPCOUNT
             DO y = 1, LOOPCOUNT

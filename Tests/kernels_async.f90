@@ -16,8 +16,8 @@
         g = 0
         !$acc enter data create(g(1:LOOPCOUNT))
         !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), &
-            !$acc d(1:LOOPCOUNT), e(1:LOOPCOUNT)) &
-            !$acc copy(c(1:LOOPCOUNT), f(1:LOOPCOUNT))
+           !$acc d(1:LOOPCOUNT), e(1:LOOPCOUNT)) copy(c(1:LOOPCOUNT), &
+           !$acc f(1:LOOPCOUNT))
           !$acc kernels async(1)
             !$acc loop
             DO x = 1, LOOPCOUNT
