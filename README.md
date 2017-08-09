@@ -25,12 +25,12 @@ at least similar to this example of the acc_copyin.c test's documentation:
 
 /*
 This tests the following functionality of acc_copyin runtime routine:
-Line 1995: The formatting of the runtime routine (incomplete testing, see note 1)
-Lines 1996-1997: The equivalence to an "#pragma acc enter data copyin()" (incomplete testing, see note 2)
-Lines 954-956: The transfer of data is tested.
-Line 1997: The argument specifications
-Lines 1999-2001: Reference counting (incomplete testing, see note 3)
-Lines 2002-2003: Tests that the data is coppied and that reference counts are set to one.
+* Line 1995: The formatting of the runtime routine (incomplete testing, see note 1)
+* Lines 1996-1997: The equivalence to an "#pragma acc enter data copyin()" (incomplete testing, see note 2)
+* Lines 954-956: The transfer of data is tested.
+* Line 1997: The argument specifications
+* Lines 1999-2001: Reference counting (incomplete testing, see note 3)
+* Lines 2002-2003: Tests that the data is coppied and that reference counts are set to one.
 
 
 This test is missing the following functionality:
