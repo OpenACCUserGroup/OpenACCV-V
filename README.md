@@ -34,12 +34,12 @@ This tests the following functionality of acc_copyin runtime routine:
 
 
 This test is missing the following functionality:
-Line 1998: The returned value is not tested nor used
-Lines 2001-2002: The host version of the routine is not tested
-Line 2004: The returned value is not tested nor used
-Lines 2004-2006: The returned value is not used in a deviceptr clause
-Lines 2014-2017: The async versions are not tested
-Lines 2018-2019: The compatibility versions are not tested
+* Line 1998: The returned value is not tested nor used
+* Lines 2001-2002: The host version of the routine is not tested
+* Line 2004: The returned value is not tested nor used
+* Lines 2004-2006: The returned value is not used in a deviceptr clause
+* Lines 2014-2017: The async versions are not tested
+* Lines 2018-2019: The compatibility versions are not tested
 
 Notes:
 1:
