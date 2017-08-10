@@ -25,21 +25,21 @@ at least similar to this example of the acc_copyin.c test's documentation:
 
 /*
 This tests the following functionality of acc_copyin runtime routine:
-Line 1995: The formatting of the runtime routine (incomplete testing, see note 1)
-Lines 1996-1997: The equivalence to an "#pragma acc enter data copyin()" (incomplete testing, see note 2)
-Lines 954-956: The transfer of data is tested.
-Line 1997: The argument specifications
-Lines 1999-2001: Reference counting (incomplete testing, see note 3)
-Lines 2002-2003: Tests that the data is coppied and that reference counts are set to one.
+* Line 1995: The formatting of the runtime routine (incomplete testing, see note 1)
+* Lines 1996-1997: The equivalence to an "#pragma acc enter data copyin()" (incomplete testing, see note 2)
+* Lines 954-956: The transfer of data is tested.
+* Line 1997: The argument specifications
+* Lines 1999-2001: Reference counting (incomplete testing, see note 3)
+* Lines 2002-2003: Tests that the data is coppied and that reference counts are set to one.
 
 
 This test is missing the following functionality:
-Line 1998: The returned value is not tested nor used
-Lines 2001-2002: The host version of the routine is not tested
-Line 2004: The returned value is not tested nor used
-Lines 2004-2006: The returned value is not used in a deviceptr clause
-Lines 2014-2017: The async versions are not tested
-Lines 2018-2019: The compatibility versions are not tested
+* Line 1998: The returned value is not tested nor used
+* Lines 2001-2002: The host version of the routine is not tested
+* Line 2004: The returned value is not tested nor used
+* Lines 2004-2006: The returned value is not used in a deviceptr clause
+* Lines 2014-2017: The async versions are not tested
+* Lines 2018-2019: The compatibility versions are not tested
 
 Notes:
 1:
