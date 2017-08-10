@@ -15,7 +15,7 @@
         a = (999.4 + a) / 2000
         b = (999.4 + b) / 2000
 
-        !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT)) !$acc &
+        !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT))  &
            !$acc copy(c(1:10*LOOPCOUNT), totals(1:10))
           !$acc parallel loop gang private(temp)
           DO x = 0, 9

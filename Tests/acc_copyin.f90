@@ -18,8 +18,8 @@
         CALL RANDOM_NUMBER(b)
         c = 0
 
-        CALL acc_copyin(a, LOOPCOUNT)
-        CALL acc_copyin(b, LOOPCOUNT)
+        CALL acc_copyin(a, 8*LOOPCOUNT)
+        CALL acc_copyin(b, 8*LOOPCOUNT)
 
         !$acc data copyout(c(1:LOOPCOUNT))
           !$acc parallel present(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
@@ -42,8 +42,8 @@
         CALL RANDOM_NUMBER(b)
         c = 1
 
-        CALL acc_copyin(a, LOOPCOUNT)
-        CALL acc_copyin(b, LOOPCOUNT)
+        CALL acc_copyin(a, 8*LOOPCOUNT)
+        CALL acc_copyin(b, 8*LOOPCOUNT)
 
         !$acc data copyout(c(1:LOOPCOUNT))
           !$acc parallel present(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
@@ -70,8 +70,8 @@
           b_copy(:) = b(:)
           c = 0
 
-          CALL acc_copyin(a, LOOPCOUNT)
-          CALL acc_copyin(b, LOOPCOUNT)
+          CALL acc_copyin(a, 8*LOOPCOUNT)
+          CALL acc_copyin(b, 8*LOOPCOUNT)
 
           a = 0
           b = 0

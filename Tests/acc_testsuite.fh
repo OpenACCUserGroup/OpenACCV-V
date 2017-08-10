@@ -1,4 +1,4 @@
-  integer, parameter :: LOOPCOUNT = 1000
+  integer, parameter :: LOOPCOUNT = 256
   integer, parameter :: ARRAYSIZE = 10000
   integer, parameter :: ARRAYSIZE_NEW = 1024
   integer, parameter :: ARRAYSIZE_SMALL = 10

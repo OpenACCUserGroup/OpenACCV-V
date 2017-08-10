@@ -16,8 +16,8 @@
         g = 0
 
         !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), &
-           !$acc d(1:LOOPCOUNT), !$acc e(1:LOOPCOUNT)) &
-           !$acc copy(c(1:LOOPCOUNT), f(1:LOOPCOUNT), !$acc &
+           !$acc d(1:LOOPCOUNT), e(1:LOOPCOUNT)) &
+           !$acc copy(c(1:LOOPCOUNT), f(1:LOOPCOUNT), &
            !$acc g(1:LOOPCOUNT))
           !$acc parallel async(1)
             !$acc loop
@@ -37,6 +37,7 @@
               g(x) = c(x) + f(x)
             END DO
           !$acc end parallel
+          !$acc wait(3)
         !$acc end data
         DO x = 1, LOOPCOUNT
           IF (abs(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN

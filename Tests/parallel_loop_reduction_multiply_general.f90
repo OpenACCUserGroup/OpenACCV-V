@@ -14,7 +14,7 @@
         a = (999.4 + a)/1000
         b = (999.4 + b)/1000
 
-        !$acc data copyin(a(1:LOOPCOUNT))
+        !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
           !$acc parallel loop reduction(*:multiplied_total)
           DO x = 1, LOOPCOUNT
             multiplied_total = multiplied_total * (a(x) + b(x))
@@ -24,7 +24,7 @@
         DO x = 1, LOOPCOUNT
           temp = temp * (a(x) + b(x))
         END DO
-         IF (abs(temp - multiplied_total) .gt. ((temp / 2) + &
+        IF (abs(temp - multiplied_total) .gt. ((temp / 2) + &
             (multiplied_total / 2)) * PRECISION) THEN
           WRITE(*, *) temp
           WRITE(*, *) multiplied_total

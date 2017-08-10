@@ -43,6 +43,11 @@ int main()
   int success=0;                /* number of succeeded tests */
   static FILE * logFile;        /* pointer onto the logfile */
   static const char * logFileName = "OpenACC_testsuite.log";        /* name of the logfile */
+  real_t * b = (real_t *)malloc(n * sizeof(real_t));
+  for (int x = 0; x < n; ++x){
+    b[x] = rand() / (real_t)(RAND_MAX / 10);
+  }
+  #pragma acc declare copyin(b[0:n])
 
 
   /* Open a new Logfile or overwrite the existing one. */
@@ -62,7 +67,7 @@ int main()
 
   for ( i = 0; i < REPETITIONS; i++ ) {
     fprintf (logFile, "\n\n%d. run of declare out of %d\n\n",i+1,REPETITIONS);
-    if (test() == 0) {
+    if (test(b) == 0) {
       fprintf(logFile,"Test successful.\n");
       success++;
     } else {

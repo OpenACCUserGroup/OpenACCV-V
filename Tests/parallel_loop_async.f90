@@ -12,7 +12,7 @@
         c = 0
         d = a + b
 
-        !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT), !$acc &
+        !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT),  &
            !$acc c(1:10*LOOPCOUNT), d(1:10*LOOPCOUNT))
           DO x = 0, 9
             !$acc parallel loop async(x)

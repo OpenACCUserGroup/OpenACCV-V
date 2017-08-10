@@ -35,12 +35,14 @@
       INTEGER :: num_tests,crosschecked, crossfailed, j
       INTEGER :: temp,temp1
       INCLUDE "acc_testsuite.fh"
+      REAL(8),DIMENSION(LOOPCOUNT) :: declare_array
       INTEGER test
-
-
+      !$acc declare create(declare_array(1:LOOPCOUNT))
       CHARACTER*50:: logfilename !Pointer to logfile
       INTEGER :: result
-
+      CALL RANDOM_SEED()
+      CALL RANDOM_NUMBER(declare_array)
+      !$acc update device(declare_array(1:LOOPCOUNT))
       num_tests = 0
       crosschecked = 0
       crossfailed = 0
@@ -74,7 +76,7 @@
       WRITE (1,*)
 
       DO j = 1, N
-        temp =  test()
+        temp =  test(declare_array)
         IF (temp .EQ. 0) THEN
           WRITE (1,*)  j, ". test successfull."
           success = success + 1
