@@ -41,19 +41,5 @@ typedef struct {
   double imag;
 } dcomplex;
 
-int test_acc_kernels_default_none(FILE * logfile);  /* Test for acc kernels default_none */
-int crosstest_acc_kernels_default_none(FILE * logfile);  /* Crosstest for acc kernels default_none */
-int test_acc_kernels_device_type(FILE * logfile);  /* Test for acc kernels device_type */
-int crosstest_acc_kernels_device_type(FILE * logfile);  /* Crosstest for acc kernels device_type */
-int test_acc_kernels_wait(FILE * logfile);  /* Test for acc kernels wait */
-int crosstest_acc_kernels_wait(FILE * logfile);  /* Crosstest for acc kernels wait */
-int test_acc_parallel_default_none(FILE * logfile);  /* Test for acc parallel default_none */
-int crosstest_acc_parallel_default_none(FILE * logfile);  /* Crosstest for acc parallel default_none */
-int test_acc_parallel_device_type(FILE * logfile);  /* Test for acc parallel device_type */
-int crosstest_acc_parallel_device_type(FILE * logfile);  /* Crosstest for acc parallel device_type */
-int test_acc_parallel_wait(FILE * logfile);  /* Test for acc parallel wait */
-int crosstest_acc_parallel_wait(FILE * logfile);  /* Crosstest for acc parallel wait */
-int test_acc_parallel_firstprivate(FILE * logfile);  /* Test for acc parallel firstprivate */
-int crosstest_acc_parallel_firstprivate(FILE * logfile);  /* Crosstest for acc parallel firstprivate */
 
 #endif
