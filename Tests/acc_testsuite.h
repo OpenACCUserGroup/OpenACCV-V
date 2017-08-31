@@ -17,7 +17,7 @@
 #include <string.h>
 /* Version info                                           */
 /**********************************************************/
-#define ACCTS_VERSION "2.0a"
+#define ACCTS_VERSION "2.5"
 
 
 /* General                                                */
