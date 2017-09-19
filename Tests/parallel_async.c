@@ -44,6 +44,7 @@ int test(){
                 g[x] = c[x] + f[x];
             }
         }
+        #pragma acc wait(3)
     }
 
     for (int x = 0; x < n; ++x){
@@ -51,7 +52,7 @@ int test(){
             err = 1;
         }
     }
-    
+
     free(a);
     free(b);
     free(c);
@@ -113,4 +114,3 @@ int main()
   printf ("Result: %i\n", result);
   return result;
 }
-

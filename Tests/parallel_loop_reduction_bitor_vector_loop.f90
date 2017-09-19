@@ -5,7 +5,7 @@
         INTEGER,DIMENSION(10 * LOOPCOUNT):: a !Data
         INTEGER,DIMENSION(10) :: b
         REAL(8) :: false_margin
-        REAL(8),DIMENSION(160 * LOOPCOUNT) :: randoms
+        REAL(8),DIMENSION(10 * LOOPCOUNT, 16) :: randoms
         INTEGER :: errors = 0
         INTEGER :: temp
 
@@ -15,7 +15,7 @@
         false_margin = exp(log(.5) / n)
         DO x = 1, 10 * LOOPCOUNT
           DO y = 1, 16
-             IF (randoms(y * 10 * LOOPCOUNT + y - 1) .gt. &
+             IF (randoms(x, y) .gt. &
                 false_margin) THEN
               temp = 1
               DO z = 1, y
@@ -121,5 +121,3 @@
       ENDIF
       CALL EXIT (result)
       END PROGRAM
-
-

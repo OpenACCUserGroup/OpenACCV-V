@@ -22,7 +22,7 @@
 
 /* General                                                */
 /**********************************************************/
-#define ARRAYSIZE   1000
+#define ARRAYSIZE   100
 long long n = ARRAYSIZE;
 #define PRECISION   1e-8
 typedef double real_t;
