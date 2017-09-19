@@ -19,8 +19,8 @@
             DO x = 1, indexer
               c(x) = a(x) + b(x)
             END DO
-            indexer = 1
           !$acc end parallel
+        indexer = 1
         !$acc end data
         DO x = 1, LOOPCOUNT
           IF (abs(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN
