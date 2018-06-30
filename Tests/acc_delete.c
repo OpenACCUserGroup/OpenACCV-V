@@ -4,18 +4,8 @@ int test(){
     int err = 0;
     srand(time(NULL));
     real_t * a = (real_t *)malloc(n * sizeof(real_t));
-    real_t * a_copy = (real_t *)malloc(n * sizeof(real_t));
     real_t * b = (real_t *)malloc(n * sizeof(real_t));
-    real_t * b_copy = (real_t *)malloc(n * sizeof(real_t));
     real_t * c = (real_t *)malloc(n * sizeof(real_t));
-    int * dev_test = (int *)malloc(n * sizeof(int));
-
-    dev_test[0] = 1;
-    #pragma acc enter data copyin(dev_test[0:1])
-    #pragma acc parallel present(dev_test[0:1])
-    {
-        dev_test[0] = 0;
-    }
 
     for (int x = 0; x < n; ++x){
         a[x] = rand() / (real_t)(RAND_MAX / 10);
@@ -23,10 +13,9 @@ int test(){
         c[x] = 0.0;
     }
 
-    acc_copyin(a, n * sizeof(real_t));
-    acc_copyin(b, n * sizeof(real_t));
+    #pragma acc enter data copyin(a[0:n], b[0:n])
 
-    #pragma acc data copy(c[0:n])
+    #pragma acc data copyout(c[0:n])
     {
         #pragma acc parallel present(a[0:n], b[0:n])
         {
@@ -37,8 +26,8 @@ int test(){
         }
     }
 
-    acc_copyout(a, n * sizeof(real_t));
-    acc_copyout(b, n * sizeof(real_t));
+    acc_delete(a, n * sizeof(real_t));
+    acc_delete(b, n * sizeof(real_t));
 
     for (int x = 0; x < n; ++x){
         if (fabs(c[x] - (a[x] + b[x])) > PRECISION){
@@ -55,7 +44,7 @@ int test(){
     acc_copyin(a, n * sizeof(real_t));
     acc_copyin(b, n * sizeof(real_t));
 
-    #pragma acc data copy(c[0:n])
+    #pragma acc data copyout(c[0:n])
     {
         #pragma acc parallel present(a[0:n], b[0:n])
         {
@@ -66,107 +55,8 @@ int test(){
         }
     }
 
-    #pragma acc exit data copyout(a[0:n], b[0:n])
-
-    for (int x = 0; x < n; ++x){
-        if (fabs(c[x] - (a[x] + b[x])) > PRECISION){
-            err += 1;
-        }
-    }
-
-    if (dev_test[0] == 1){
-        for (int x = 0; x < n; ++x){
-            a[x] = rand() / (real_t)(RAND_MAX / 10);
-            a_copy[x] = a[x];
-            b[x] = rand() / (real_t)(RAND_MAX / 10);
-            b_copy[x] = b[x];
-            c[x] = 0.0;
-        }
-
-        acc_copyin(a, n * sizeof(real_t));
-        acc_copyin(b, n * sizeof(real_t));
-
-        for (int x = 0; x < n; ++x){
-            a[x] = 0;
-            b[x] = 0;
-        }
-
-        #pragma acc data copyin(a[0:n], b[0:n]) copyout(c[0:n])
-        {
-            #pragma acc parallel
-            {
-                #pragma acc loop
-                for (int x = 0; x < n; ++x){
-                    c[x] = a[x] + b[x];
-                }
-            }
-        }
-
-        acc_copyout(a, n * sizeof(real_t));
-        acc_copyout(b, n * sizeof(real_t));
-
-        for (int x = 0; x < n; ++x){
-            if (fabs(a[x] - a_copy[x]) > PRECISION){
-                err += 1;
-            }
-            if (fabs(b[x] - b_copy[x]) > PRECISION){
-                err += 1;
-            }
-            if (fabs(c[x] - (a[x] + b[x])) > PRECISION){
-                err += 1;
-            }
-        }
-    }
-
-    for (int x = 0; x < n; ++x){
-        a[x] = rand() / (real_t)(RAND_MAX / 10);
-        b[x] = rand() / (real_t)(RAND_MAX / 10);
-        c[x] = 0;
-    }
-
-    acc_pcopyin(a, n * sizeof(real_t));
-    acc_pcopyin(b, n * sizeof(real_t));
-
-    #pragma acc data copyout(c[0:n]) present(a[0:n], b[0:n])
-    {
-        #pragma acc parallel
-        {
-            #pragma acc loop
-            for (int x = 0; x < n; ++x){
-                c[x] = a[x] + b[x];
-            }
-        }
-    }
-
-    #pragma acc exit data delete(a[0:n], b[0:n])
-
-    for (int x = 0; x < n; ++x){
-        if (fabs(c[x] - (a[x] + b[x])) > PRECISION){
-            err += 1;
-        }
-    }
-
-    for (int x = 0; x < n; ++x){
-        a[x] = rand() / (real_t)(RAND_MAX / 10);
-        b[x] = rand() / (real_t)(RAND_MAX / 10);
-        c[x] = 0;
-    }
-
-    acc_present_or_copyin(a, n * sizeof(real_t));
-    acc_present_or_copyin(b, n * sizeof(real_t));
-
-    #pragma acc data copyout(c[0:n]) present(a[0:n], b[0:n])
-    {
-        #pragma acc parallel
-        {
-            #pragma acc loop
-            for (int x = 0; x < n; ++x){
-                c[x] = a[x] + b[x];
-            }
-        }
-    }
-
-    #pragma acc exit data delete(a[0:n], b[0:n])
+    acc_delete(a, n * sizeof(real_t));
+    acc_delete(b, n * sizeof(real_t));
 
     for (int x = 0; x < n; ++x){
         if (fabs(c[x] - (a[x] + b[x])) > PRECISION){
@@ -175,9 +65,7 @@ int test(){
     }
 
     free(a);
-    free(a_copy);
     free(b);
-    free(b_copy);
     free(c);
     return err;
 }
