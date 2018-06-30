@@ -1,105 +1,92 @@
       INTEGER FUNCTION test()
         USE OPENACC
         IMPLICIT NONE
-        INCLUDE "acc_testsuite.f90"
+        INCLUDE "acc_testsuite.fh"
         INTEGER :: x !Iterators
-        REAL(8),DIMENSION(LOOPCOUNT):: a, b, c, a_copy, b_copy !Data
+        REAL(8),DIMENSION(LOOPCOUNT):: a, b, c, d, e, f, g, h, i, j, k !Data
+        REAL(8),DIMENSION(LOOPCOUNT):: a_host, d_host, g_host
+        REAL(8) :: RAND
+        REAL(8) :: temp
         INTEGER :: errors = 0
-        LOGICAL,DIMENSION(1):: devtest
-        CALL RANDOM_SEED()
-        devtest(1) = .TRUE.
-        !$acc enter data copyin(devtest(1:1))
-        !$acc parallel present(devtest(1:1))
-          devtest(1) = .FALSE.
-        !$acc end parallel
-        !Initilization
 
+        !Initilization
+        CALL RANDOM_SEED()
         CALL RANDOM_NUMBER(a)
         CALL RANDOM_NUMBER(b)
         c = 0
+        CALL RANDOM_NUMBER(d)
+        CALL RANDOM_NUMBER(e)
+        f = 0
+        CALL RANDOM_NUMBER(g)
+        CALL RANDOM_NUMBER(h)
+        i = 0
+        j = 0
+        k = 0
+        a_host = a
+        d_host = d
+        g_host = g
 
-        CALL acc_copyin(a(1:LOOPCOUNT))
-        CALL acc_copyin(b(1:LOOPCOUNT))
-
-        !$acc data copy(c(1:LOOPCOUNT))
-          !$acc parallel present(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
+        !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), d(1:LOOPCOUNT), e(1:LOOPCOUNT), g(1:LOOPCOUNT), h(1:LOOPCOUNT)) create(c(1:LOOPCOUNT), f(1:LOOPCOUNT), i(1:LOOPCOUNT), j(1:LOOPCOUNT)) copyout(k(1:LOOPCOUNT))
+          !$acc parallel async(1)
             !$acc loop
             DO x = 1, LOOPCOUNT
               c(x) = a(x) + b(x)
             END DO
           !$acc end parallel
-        !$acc end data
-
-        !$acc exit data copyout(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
-
-        DO x = 1, LOOPCOUNT
-          IF (abs(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN
-            errors = errors + 1
-          END IF
-        END DO
-
-        CALL RANDOM_NUMBER(a)
-        CALL RANDOM_NUMBER(b)
-        c = 1
-
-        CALL acc_copyin(a(1:LOOPCOUNT))
-        CALL acc_copyin(b(1:LOOPCOUNT))
-
-        !$acc data copyout(c(1:LOOPCOUNT))
-          !$acc parallel present(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
+          !$acc parallel async(2)
             !$acc loop
             DO x = 1, LOOPCOUNT
-              c(x) = a(x) + b(x)
+              f(x) = d(x) + e(x)
             END DO
           !$acc end parallel
+          !$acc parallel async(3)
+            !$acc loop
+            DO x = 1, LOOPCOUNT
+              i(x) = g(x) + h(x)
+            END DO
+          !$acc end parallel
+          CALL acc_wait_all_async(4)
+          !$acc parallel async(4)
+            !$acc loop
+            DO x = 1, LOOPCOUNT
+              j(x) = c(x) + f(x) + i(x)
+            END DO
+          !$acc end parallel
+          !$acc parallel async(1)
+            !$acc loop
+            DO x = 1, LOOPCOUNT
+              a(x) = b(x) * c(x)
+            END DO
+          !$acc end parallel
+          !$acc parallel async(2)
+            !$acc loop
+            DO x = 1, LOOPCOUNT
+              d(x) = e(x) * f(x)
+            END DO
+          !$acc end parallel
+          !$acc parallel async(3)
+            !$acc loop
+            DO x = 1, LOOPCOUNT
+              g(x) = h(x) * i(x)
+            END DO
+          !$acc end parallel
+          CALL acc_wait_all_async(4)
+          !$acc parallel async(4)
+            !$acc loop
+            DO x = 1, LOOPCOUNT
+              k(x) = j(x) + a(x) + d(x) + g(x)
+            END DO
+          !$acc end parallel
+          !$acc wait(4)
         !$acc end data
 
-        CALL acc_copyout(a(1:LOOPCOUNT))
-        CALL acc_copyout(b(1:LOOPCOUNT))
-
         DO x = 1, LOOPCOUNT
-          IF (abs(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN
+          temp = a_host(x) + b(x) + d_host(x) + e(x) + g_host(x) + h(x)
+          temp = temp + (b(x) * (a_host(x) + b(x))) + (e(x) * (d_host(x) + e(x))) + (h(x) * (g_host(x) + h(x)))
+          IF (abs(k(x) - temp) .gt. PRECISION * 10) THEN
             errors = errors + 1
           END IF
         END DO
-
-        IF (devtest(1) .eqv. .TRUE.) THEN
-          CALL RANDOM_NUMBER(a)
-          a_copy(:) = a(:)
-          CALL RANDOM_NUMBER(b)
-          b_copy(:) = b(:)
-          c = 0
-
-          CALL acc_copyin(a(1:LOOPCOUNT))
-          CALL acc_copyin(b(1:LOOPCOUNT))
-
-          a = 0
-          b = 0
-
-          !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) copyout(c(1:LOOPCOUNT))
-            !$acc parallel
-              !$acc loop
-              DO x = 1, LOOPCOUNT
-                c(x) = a(x) + b(x)
-              END DO
-            !$acc end parallel
-          !$acc end data
-
-          !$acc exit data copyout(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
-
-          DO x = 1, LOOPCOUNT
-            IF (abs(a(x) - a_copy(x)) .gt. PRECISION) THEN
-              errors = errors + 1
-            END IF
-            IF (abs(b(x) - b_copy(x)) .gt. PRECISION) THEN
-              errors = errors + 1
-            END IF
-            IF (abs(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN
-              errors = errors + 1
-            END IF
-          END DO
-        END IF
-
         test = errors
       END
 
@@ -109,7 +96,7 @@
       INTEGER :: failed, success !Number of failed/succeeded tests
       INTEGER :: num_tests,crosschecked, crossfailed, j
       INTEGER :: temp,temp1
-      INCLUDE "acc_testsuite.f90"
+      INCLUDE "acc_testsuite.fh"
       INTEGER test
 
 
