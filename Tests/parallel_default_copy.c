@@ -5,7 +5,7 @@ int test(){
     srand(time(NULL));
     real_t * a = (real_t *)malloc(n * sizeof(real_t));
     real_t * b = (real_t *)malloc(n * sizeof(real_t));
-    real_t * c = (real_t *)malloc(n * sizeof(real_t));
+    real_t c[n];
     int * devtest = (int *)malloc(sizeof(real_t));
 
     devtest[0] = 1;
@@ -78,7 +78,6 @@ int test(){
 
     free(a);
     free(b);
-    free(c);
     return err;
 }
 
