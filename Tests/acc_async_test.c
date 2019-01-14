@@ -24,7 +24,7 @@ int test(){
             c[x] = a[x] + b[x];
         }
     }
-    #pragma acc parallel present(c[0:n], d[0:n], c[0:n]) async(1) wait(2)
+    #pragma acc parallel present(e[0:n], d[0:n], c[0:n]) async(1) wait(2)
     {
         #pragma acc loop
         for (int x = 0; x < n; ++x){
