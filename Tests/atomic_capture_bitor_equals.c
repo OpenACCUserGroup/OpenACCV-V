@@ -51,7 +51,7 @@ int test(){
         b[x] = 0;
     }
 
-    #pragma acc data copyin(a[0:n]) copy(totals[0:n/10 + 1]) copyout(c[0:n])
+    #pragma acc data copyin(a[0:n]) copy(totals[0:n/10 + 1]) copyout(b[0:n])
     {
         #pragma acc parallel
         {
