@@ -3,7 +3,7 @@
 int test(){
     int err = 0;
     srand(time(NULL));
-    const int tile_arg = ARRAYSIZE;
+    const int tile_arg = (int) (n / 10);
     real_t * a = (real_t *)malloc(n * sizeof(real_t));
     real_t * b = (real_t *)malloc(n * sizeof(real_t));
     real_t * c = (real_t *)malloc(n * sizeof(real_t));
@@ -15,7 +15,7 @@ int test(){
         c[x] = rand() / (real_t)(RAND_MAX / 10);
     }
     real_t temp = 0.0;
-    #pragma acc data copy(a[0:n], b[0:n], c[0:n], d2[0:n*n]) 
+    #pragma acc data copy(a[0:n], b[0:n], c[0:n], d2[0:n*n])
     {
         #pragma acc parallel loop tile(*, *) reduction(+:temp)
         for (int x = 0; x < n; ++x){
@@ -42,7 +42,7 @@ int test(){
 
     #pragma acc data copyin(a[0:n], b[0:n], c[0:n]) copyout(d3[0:n*n*n])
     {
-        #pragma acc parallel loop tile(tile_arg/10, tile_arg, tile_arg*2)
+        #pragma acc parallel loop tile((int) tile_arg/10, tile_arg, tile_arg*2)
         for (int x = 0; x < n; ++x){
             for (int y = 0; y < n; ++y){
                 for (int z = 0; z < n; ++z){
@@ -120,4 +120,3 @@ int main()
   printf ("Result: %i\n", result);
   return result;
 }
-
