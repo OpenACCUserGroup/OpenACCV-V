@@ -1,6 +1,7 @@
 #include "acc_testsuite.h"
 
-int test(real_t * b){
+int test(real_t b[]){
+    #pragma acc declare copyin(b)
     int err = 0;
     srand(time(NULL));
     real_t * a = (real_t *)malloc(n * sizeof(real_t));
@@ -13,7 +14,7 @@ int test(real_t * b){
 
     #pragma acc data copyin(a[0:n]) copyout(c[0:n])
     {
-        #pragma acc parallel present(b[0:n])
+        #pragma acc parallel
         {
             #pragma acc loop
             for (int x = 0; x < n; ++x){
@@ -21,13 +22,13 @@ int test(real_t * b){
             }
         }
     }
-    
+
     for (int x = 0; x < n; ++x){
         if (fabs(c[x] - (a[x] + b[x])) > PRECISION) {
             err += 1;
         }
     }
-    
+
     free(a);
     free(b);
     free(c);
@@ -43,11 +44,10 @@ int main()
   int success=0;                /* number of succeeded tests */
   static FILE * logFile;        /* pointer onto the logfile */
   static const char * logFileName = "OpenACC_testsuite.log";        /* name of the logfile */
-  real_t * b = (real_t *)malloc(n * sizeof(real_t));
+  real_t * b[n];
   for (int x = 0; x < n; ++x){
     b[x] = rand() / (real_t)(RAND_MAX / 10);
   }
-  #pragma acc declare copyin(b[0:n])
 
 
   /* Open a new Logfile or overwrite the existing one. */
@@ -89,4 +89,3 @@ int main()
   printf ("Result: %i\n", result);
   return result;
 }
-
