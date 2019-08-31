@@ -74,7 +74,7 @@ END FUNCTION IS_POSSIBLE
 
 INTEGER FUNCTION test()
   IMPLICIT NONE
-  INCLUDE "acc_testsuite.f90"
+  INCLUDE "acc_testsuite.fh"
   INTEGER :: x, y !Iterators
   REAL(8),DIMENSION(LOOPCOUNT, 10):: a !Data
   REAL(8),DIMENSION(LOOPCOUNT, 10):: b
@@ -136,7 +136,7 @@ IMPLICIT NONE
 INTEGER :: failed, success !Number of failed/succeeded tests
 INTEGER :: num_tests,crosschecked, crossfailed, j
 INTEGER :: temp,temp1
-INCLUDE "acc_testsuite.f90"
+INCLUDE "acc_testsuite.fh"
 INTEGER test
 
 

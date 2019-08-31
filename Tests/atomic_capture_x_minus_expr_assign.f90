@@ -70,7 +70,7 @@ END FUNCTION IS_POSSIBLE
 
 INTEGER FUNCTION test()
   IMPLICIT NONE
-  INCLUDE "acc_testsuite.f90"
+  INCLUDE "acc_testsuite.fh"
   INTEGER :: x, y !Iterators
   LOGICAL IS_POSSIBLE
   LOGICAL IS_POSSIBLE_2
@@ -128,7 +128,7 @@ IMPLICIT NONE
 INTEGER :: failed, success !Number of failed/succeeded tests
 INTEGER :: num_tests,crosschecked, crossfailed, j
 INTEGER :: temp,temp1
-INCLUDE "acc_testsuite.f90"
+INCLUDE "acc_testsuite.fh"
 INTEGER test
 
 

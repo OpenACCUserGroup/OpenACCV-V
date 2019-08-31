@@ -15,10 +15,8 @@
         a_host = a
         b_host = b
 
-        WRITE(*, *) "Before"
         CALL acc_copyin_async(a(1), LOOPCOUNT*8, 1)
         CALL acc_copyin_async(b(1), LOOPCOUNT*8, 2)
-        WRITE(*, *) "After"
 
         !$acc data copyout(c(1:LOOPCOUNT)) present(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
           !$acc parallel async(1)
@@ -46,6 +44,7 @@
             errors = errors + 1
           END IF
         END DO
+        !$acc exit data delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
         test = errors
       END
 

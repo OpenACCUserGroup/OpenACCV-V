@@ -93,6 +93,8 @@
           !$acc end parallel
         !$acc end data
 
+        !$acc exit data copyout(c(1:LOOPCOUNT))
+
         DO x = 1, LOOPCOUNT
           IF (abs(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN
             errors = errors + 1

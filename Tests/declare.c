@@ -1,7 +1,7 @@
 #include "acc_testsuite.h"
 
 int test(real_t b[]){
-    #pragma acc declare copyin(b)
+    #pragma acc declare copyin(b[0:n])
     int err = 0;
     srand(time(NULL));
     real_t * a = (real_t *)malloc(n * sizeof(real_t));
@@ -30,7 +30,6 @@ int test(real_t b[]){
     }
 
     free(a);
-    free(b);
     free(c);
     return err;
 }
@@ -44,7 +43,7 @@ int main()
   int success=0;                /* number of succeeded tests */
   static FILE * logFile;        /* pointer onto the logfile */
   static const char * logFileName = "OpenACC_testsuite.log";        /* name of the logfile */
-  real_t * b[n];
+  real_t b[n];
   for (int x = 0; x < n; ++x){
     b[x] = rand() / (real_t)(RAND_MAX / 10);
   }

@@ -14,16 +14,14 @@
         IF (acc_get_device_type() .ne. acc_device_none) THEN
           !host_copy(acc_get_num_devices(acc_get_device_type()), LOOPCOUNT)
           DO x = 1, acc_get_num_devices(acc_get_device_type())
-            DO y = 1, LOOPCOUNT
-              CALL RANDOM_NUMBER(a)
-              host_copy(x) = a
-            END DO
-            acc_set_device_num(x, acc_get_device_type())
+            CALL RANDOM_NUMBER(a)
+            host_copy(x, :) = a
+            CALL acc_set_device_num(x, acc_get_device_type())
             !$acc enter data copyin(a(1:LOOPCOUNT))
           END DO
 
           DO x = 1, acc_get_num_devices(acc_get_device_type)
-            acc_set_device_num(x, acc_get_device_type())
+            CALL acc_set_device_num(x, acc_get_device_type())
             !$acc data present(a(1:LOOPCOUNT))
               !$acc parallel
                 !$acc loop
@@ -35,7 +33,7 @@
           END DO
 
           DO x = 1, acc_get_num_devices(acc_get_device_type())
-            acc_set_device_num(x, acc_get_device_type())
+            CALL acc_set_device_num(x, acc_get_device_type())
             !$acc exit data copyout(a(1:LOOPCOUNT))
             DO y = 1, LOOPCOUNT
               IF (abs(a(y) - (host_copy(x, y) + 1)) .gt. PRECISION) THEN

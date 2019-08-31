@@ -42,9 +42,11 @@
         DO x = 1, LOOPCOUNT
           IF (abs(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN
             errors = errors + 1
+            PRINT*, "1"
           END IF
           IF (abs(d(x) - (a(x) * b(x))) .gt. PRECISION) THEN
             errors = errors + 1
+            PRINT*, "2"
           END IF
         END DO
 
@@ -86,6 +88,7 @@
                 c(x) = a(x) * b(x)
               END DO
             !$acc end parallel
+            !$acc wait(1)
           !$acc end data
 
           DO x = 1, LOOPCOUNT

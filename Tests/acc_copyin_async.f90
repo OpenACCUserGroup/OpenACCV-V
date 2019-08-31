@@ -14,10 +14,8 @@
         c = 0
         a_host = a
         b_host = b
-        WRITE(*, *) "Early"
         CALL acc_copyin_async(a(1:LOOPCOUNT), 1)
         CALL acc_copyin_async(b(1:LOOPCOUNT), 2)
-        WRITE(*, *) "Here"
         !$acc data copyout(c(1:LOOPCOUNT))
           !$acc parallel async(1) present(a(1:LOOPCOUNT))
             !$acc loop
@@ -25,14 +23,12 @@
               a(x) = a(x) * a(x)
             END DO
           !$acc end parallel
-          WRITE(*, *) "Here 2"
           !$acc parallel async(2) present(b(1:LOOPCOUNT))
             !$acc loop
             DO x = 1, LOOPCOUNT
               b(x) = b(x) * b(x)
             END DO
           !$acc end parallel
-          WRITE(* ,*) "Here 3"
           !$acc parallel async(2) wait(1) present(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
             !$acc loop
             DO x = 1, LOOPCOUNT
@@ -40,12 +36,12 @@
             END DO
           !$acc end parallel
         !$acc end data
-        WRITE(*, *) "Here 4"
         DO x = 1, LOOPCOUNT
           IF (abs(c(x) - (a_host(x)*a_host(x) + b_host(x)*b_host(x))) .gt. PRECISION) THEN
             errors = errors + 1
           END IF
         END DO
+        !$acc exit data delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
         test = errors
       END
 

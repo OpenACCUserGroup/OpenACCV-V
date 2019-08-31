@@ -46,7 +46,7 @@ int test(){
         for (int x = 0; x < n; ++x){
             for (int y = 0; y < n; ++y){
                 for (int z = 0; z < n; ++z){
-                    d3[(n * n * x) + (n * y) + z] = a[x] + b[x] + c[x];
+                    d3[(n * n * x) + (n * y) + z] = a[x] + b[y] + c[z];
                 }
             }
         }
@@ -55,7 +55,7 @@ int test(){
     for (int x = 0; x < n; ++x){
         for (int y = 0; y < n; ++y){
             for (int z = 0; z < n; ++z){
-                if (fabs(d3[(n * n * x) + (n * y) + z] - a[x] - b[x] - c[x]) > PRECISION * 2){
+                if (fabs(d3[(n * n * x) + (n * y) + z] - a[x] - b[y] - c[z]) > PRECISION * 2){
                     err = 1;
                 }
             }
