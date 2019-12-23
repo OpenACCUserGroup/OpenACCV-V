@@ -69,7 +69,7 @@
             !$acc end parallel
           !$acc end data
           CALL acc_delete_async(c(1), LOOPCOUNT*8, 1)
-          !$acc enter data copyin(c(1:LOOPCOUNT), 1) async(1)
+          !$acc enter data copyin(c(1:LOOPCOUNT)) async(1)
           !$acc data present(a(1:LOOPCOUNT), b(1:LOOPCOUNT), c(1:LOOPCOUNT))
             !$acc parallel async(1)
               !$acc loop
