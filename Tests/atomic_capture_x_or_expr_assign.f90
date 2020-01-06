@@ -83,7 +83,7 @@ INTEGER FUNCTION test()
   END DO
 
   DO x = 1, LOOPCOUNT
-    IF (totals_comparison(x) .NE. totals(x)) THEN
+    IF (totals_comparison(x) .NEQV. totals(x)) THEN
       errors = errors + 1
       WRITE(*, *) totals_comparison(x)
     END IF
