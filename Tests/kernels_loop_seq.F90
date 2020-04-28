@@ -1,0 +1,61 @@
+#ifndef T1
+!T1:kernels,combined-constructs,loop,V:1.0-2.7
+      LOGICAL FUNCTION test1()
+        IMPLICIT NONE
+        INCLUDE "acc_testsuite.Fh"
+        INTEGER :: x !Iterators
+        REAL(8),DIMENSION(LOOPCOUNT):: a, b !Data
+        INTEGER :: errors = 0
+
+        !Initilization
+        SEEDDIM(1) = 1
+#       ifdef SEED
+        SEEDDIM(1) = SEED
+#       endif
+        CALL RANDOM_SEED(PUT=SEEDDIM)
+
+        CALL RANDOM_NUMBER(a)
+        b = 0
+
+        !$acc data copyin(a(1:LOOPCOUNT)) copy(b(1:LOOPCOUNT))
+          !$acc kernels loop seq
+          DO x = 2, LOOPCOUNT
+            b(x) = b(x - 1) + a(x)
+          END DO
+        !$acc end data
+
+        DO x = 2, LOOPCOUNT
+          IF (abs(b(x) - (b(x - 1) + a(x))) .gt. PRECISION) THEN
+            errors = errors + 1
+          END IF
+        END DO
+
+        IF (errors .eq. 0) THEN
+          test1 = .FALSE.
+        ELSE
+          test1 = .TRUE.
+        END IF
+      END
+#endif
+
+      PROGRAM main
+        IMPLICIT NONE
+        INTEGER :: failcode, testrun
+        LOGICAL :: failed
+        INCLUDE "acc_testsuite.Fh"
+#ifndef T1
+        LOGICAL :: test1
+#endif
+        failed = .FALSE.
+        failcode = 0
+#ifndef T1
+        DO testrun = 1, NUM_TEST_CALLS
+          failed = failed .or. test1()
+        END DO
+        IF (failed) THEN
+          failcode = failcode + 2 ** 0
+          failed = .FALSE.
+        END IF
+#endif
+        CALL EXIT (failcode)
+      END PROGRAM

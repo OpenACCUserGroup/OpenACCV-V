@@ -1,8 +1,9 @@
 #include "acc_testsuite.h"
-
-int test(){
+#ifndef T1
+//T1:kernels,async,wait,V:2.0-2.7
+int test1(){
     int err = 0;
-    srand(time(NULL));
+    srand(SEED);
     real_t * restrict a = (real_t *)malloc(n * sizeof(real_t));
     real_t * restrict b = (real_t *)malloc(n * sizeof(real_t));
     real_t * restrict c = (real_t *)malloc(n * sizeof(real_t));
@@ -13,17 +14,17 @@ int test(){
 
     for (int x = 0; x < n; ++x){
         a[x] = rand() / (real_t)(RAND_MAX / 10);
-	b[x] = rand() / (real_t)(RAND_MAX / 10);
-	c[x] = 0.0;
-	d[x] = rand() / (real_t)(RAND_MAX / 10);
-	e[x] = rand() / (real_t)(RAND_MAX / 10);
-	f[x] = 0.0;
-	g[x] = 0.0;
+      	b[x] = rand() / (real_t)(RAND_MAX / 10);
+      	c[x] = 0.0;
+      	d[x] = rand() / (real_t)(RAND_MAX / 10);
+      	e[x] = rand() / (real_t)(RAND_MAX / 10);
+      	f[x] = 0.0;
+      	g[x] = 0.0;
     }
-    #pragma acc enter data create(g[0:n])
-    #pragma acc data copyin(a[0:n], b[0:n], d[0:n], e[0:n]) copy(c[0:n], f[0:n])
+    #pragma acc enter data create(g[0:n], c[0:n], f[0:n])
+    #pragma acc data copyin(a[0:n], b[0:n], d[0:n], e[0:n])
     {
-	#pragma acc kernels async(1)
+        #pragma acc kernels async(1)
         {
             #pragma acc loop
             for (int x = 0; x < n; ++x){
@@ -37,7 +38,7 @@ int test(){
                 f[x] = d[x] + e[x];
             }
         }
-	#pragma acc kernels wait(1, 2) async(3)
+        #pragma acc kernels wait(1, 2) async(3)
         {
             #pragma acc loop
             for (int x = 0; x < n; ++x){
@@ -45,84 +46,41 @@ int test(){
             }
         }
     }
-    #pragma acc update host(g[0:n]) async(3)
+    #pragma acc wait(1, 2)
+    #pragma acc update host(c[0:n], f[0:n])
+    #pragma acc exit data copyout(g[0:n]) async(3)
     for (int x = 0; x < n; ++x){
         if (fabs(c[x] - (a[x] + b[x])) > PRECISION){
             err += 1;
-	    printf("1\n");
       	}
         if (fabs(f[x] - (d[x] + e[x])) > PRECISION){
             err += 1;
-            printf("2 %d %f + %f = %f\n",x,d[x],e[x],f[x]);
         }
     }
     #pragma acc wait(3)
     for (int x = 0; x < n; ++x){
         if (fabs(g[x] - (c[x] + f[x])) > PRECISION){
             err += 1;
-            printf("%f\n", g[x]);
         }
     }
-
-    free(a);
-    free(b);
-    free(c);
-    free(d);
-    free(e);
-    free(f);
-    free(g);
+    #pragma acc exit data delete(c[0:n], f[0:n])
 
     return err;
 }
+#endif
 
-
-int main()
-{
-  int i;                        /* Loop index */
-  int result;           /* return value of the program */
-  int failed=0;                 /* Number of failed tests */
-  int success=0;                /* number of succeeded tests */
-  static FILE * logFile;        /* pointer onto the logfile */
-  static const char * logFileName = "OpenACC_testsuite.log";        /* name of the logfile */
-
-
-  /* Open a new Logfile or overwrite the existing one. */
-  logFile = fopen(logFileName,"w+");
-
-  printf("######## OpenACC Validation Suite V %s #####\n", ACCTS_VERSION );
-  printf("## Repetitions: %3d                       ####\n",REPETITIONS);
-  printf("## Array Size : %.2f MB                 ####\n",ARRAYSIZE * ARRAYSIZE/1e6);
-  printf("##############################################\n");
-  printf("Testing kernels_async\n\n");
-
-  fprintf(logFile,"######## OpenACC Validation Suite V %s #####\n", ACCTS_VERSION );
-  fprintf(logFile,"## Repetitions: %3d                       ####\n",REPETITIONS);
-  fprintf(logFile,"## Array Size : %.2f MB                 ####\n",ARRAYSIZE * ARRAYSIZE/1e6);
-  fprintf(logFile,"##############################################\n");
-  fprintf(logFile,"Testing kernels_async\n\n");
-
-  for ( i = 0; i < REPETITIONS; i++ ) {
-    fprintf (logFile, "\n\n%d. run of kernels_async out of %d\n\n",i+1,REPETITIONS);
-    if (test() == 0) {
-      fprintf(logFile,"Test successful.\n");
-      success++;
-    } else {
-      fprintf(logFile,"Error: Test failed.\n");
-      printf("Error: Test failed.\n");
-      failed++;
+int main(){
+    int failcode = 0;
+    int testrun;
+    int failed;
+#ifndef T1
+    failed = 0;
+    for (int x = 0; x < NUM_TEST_CALLS; ++x){
+        failed = failed + test1();
     }
-  }
-
-  if(failed==0) {
-    fprintf(logFile,"\nDirective worked without errors.\n");
-    printf("Directive worked without errors.\n");
-    result=0;
-  } else {
-    fprintf(logFile,"\nDirective failed the test %i times out of %i. %i were successful\n",failed,REPETITIONS,success);
-    printf("Directive failed the test %i times out of %i.\n%i test(s) were successful\n",failed,REPETITIONS,success);
-    result = (int) (((double) failed / (double) REPETITIONS ) * 100 );
-  }
-  printf ("Result: %i\n", result);
-  return result;
+    if (failed != 0){
+        failcode = failcode + (1 << 0);
+    }
+#endif
+    return failcode;
 }
-

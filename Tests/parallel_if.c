@@ -1,20 +1,20 @@
 #include "acc_testsuite.h"
-
-int test(){
+#ifndef T1
+//T1:parallel,if,V:1.0-2.7
+int test1(){
     int err = 0;
-    srand(time(NULL));
+    srand(SEED);
     real_t * a = (real_t *)malloc(n * sizeof(real_t));
     real_t * b = (real_t *)malloc(n * sizeof(real_t));
     real_t * c = (real_t *)malloc(n * sizeof(real_t));
-    int dev_test = 0;
+    int accel = 1;
+    int host = 0;
 
     for (int x = 0; x < n; ++x){
         a[x] = rand() / (real_t)(RAND_MAX / 10);
         b[x] = rand() / (real_t)(RAND_MAX / 10);
         c[x] = 0.0;
     }
-    int accel = 1;
-    int host = 0;
     #pragma acc parallel if(host)
     {
         #pragma acc loop
@@ -29,13 +29,36 @@ int test(){
         }
     }
 
-    #pragma acc data copyin(dev_test)
+    return err;
+}
+#endif
+
+#ifndef T2
+//T2:parallel,if,devonly,V:2.0-2.7
+int test2(){
+    int err = 0;
+    srand(SEED);
+    real_t * a = (real_t *)malloc(n * sizeof(real_t));
+    real_t * b = (real_t *)malloc(n * sizeof(real_t));
+    real_t * c = (real_t *)malloc(n * sizeof(real_t));
+    int * dev_test = (int *)malloc(sizeof(int));
+    int accel = 1;
+    int host = 0;
+
+    dev_test[0] = 1;
+    #pragma acc data copyin(dev_test[0:1])
     #pragma acc parallel
     {
-        dev_test = 1;
+      dev_test[0] = 0;
     }
 
-    if (dev_test != 1){
+    if (devtest[0] != 0){
+        for (int x = 0; x < n;  ++x){
+            a[x] = rand() / (real_t)(RAND_MAX / 10);
+            b[x] = rand() / (real_t)(RAND_MAX / 10);
+            c[x] = 0;
+        }
+
         #pragma acc enter data copyin(a[0:n], b[0:n], c[0:n])
         #pragma acc parallel if(host) present(a[0:n], b[0:n], c[0:n])
         {
@@ -45,13 +68,33 @@ int test(){
             }
         }
         #pragma acc exit data delete(a[0:n], b[0:n]) copyout(c[0:n])
+
+        for (int x = 0; x < n; ++x){
+            if (fabs(c[x]) > PRECISION){
+                err = 1;
+            }
+        }
     }
-    #pragma acc exit data delete(dev_test)
+
+    return err;
+}
+#endif
+
+#ifndef T3
+//T3:parallel,if,V:2.0-2.7
+int test3(){
+    int err = 0;
+    srand(SEED);
+    real_t * a = (real_t *)malloc(n * sizeof(real_t));
+    real_t * b = (real_t *)malloc(n * sizeof(real_t));
+    real_t * c = (real_t *)malloc(n * sizeof(real_t));
+    int accel = 1;
+    int host = 0;
 
     for (int x = 0; x < n; ++x){
-        if (fabs(c[x] - (a[x] + b[x])) > PRECISION){
-            err = 1;
-        }
+        a[x] = rand() / (real_t)(RAND_MAX / 10);
+        b[x] = rand() / (real_t)(RAND_MAX / 10);
+        c[x] = 0;
     }
 
     #pragma acc enter data copyin(a[0:n], b[0:n], c[0:n])
@@ -67,65 +110,45 @@ int test(){
     #pragma acc exit data delete(a[0:n], b[0:n]) copyout(c[0:n])
 
     for (int x = 0; x < n; ++x){
-        if (fabs(c[x] - 2 * (a[x] + b[x])) > PRECISION * 2){
+        if (fabs(c[x] - (a[x] + b[x])) > PRECISION * 2){
             err = 1;
         }
     }
 
-    free(a);
-    free(b);
-    free(c);
     return err;
 }
+#endif
 
-
-int main()
-{
-  int i;                        /* Loop index */
-  int result;           /* return value of the program */
-  int failed=0;                 /* Number of failed tests */
-  int success=0;                /* number of succeeded tests */
-  static FILE * logFile;        /* pointer onto the logfile */
-  static const char * logFileName = "OpenACC_testsuite.log";        /* name of the logfile */
-
-
-  /* Open a new Logfile or overwrite the existing one. */
-  logFile = fopen(logFileName,"w+");
-
-  printf("######## OpenACC Validation Suite V %s #####\n", ACCTS_VERSION );
-  printf("## Repetitions: %3d                       ####\n",REPETITIONS);
-  printf("## Array Size : %.2f MB                 ####\n",ARRAYSIZE * ARRAYSIZE/1e6);
-  printf("##############################################\n");
-  printf("Testing parallel_if\n\n");
-
-  fprintf(logFile,"######## OpenACC Validation Suite V %s #####\n", ACCTS_VERSION );
-  fprintf(logFile,"## Repetitions: %3d                       ####\n",REPETITIONS);
-  fprintf(logFile,"## Array Size : %.2f MB                 ####\n",ARRAYSIZE * ARRAYSIZE/1e6);
-  fprintf(logFile,"##############################################\n");
-  fprintf(logFile,"Testing parallel_if\n\n");
-
-  for ( i = 0; i < REPETITIONS; i++ ) {
-    fprintf (logFile, "\n\n%d. run of parallel_if out of %d\n\n",i+1,REPETITIONS);
-    if (test() == 0) {
-      fprintf(logFile,"Test successful.\n");
-      success++;
-    } else {
-      fprintf(logFile,"Error: Test failed.\n");
-      printf("Error: Test failed.\n");
-      failed++;
+int main(){
+    int failcode = 0;
+    int testrun;
+    int failed;
+#ifndef T1
+    failed = 0;
+    for (int x = 0; x < NUM_TEST_CALLS; ++x){
+        failed = failed + test1();
     }
-  }
-
-  if(failed==0) {
-    fprintf(logFile,"\nDirective worked without errors.\n");
-    printf("Directive worked without errors.\n");
-    result=0;
-  } else {
-    fprintf(logFile,"\nDirective failed the test %i times out of %i. %i were successful\n",failed,REPETITIONS,success);
-    printf("Directive failed the test %i times out of %i.\n%i test(s) were successful\n",failed,REPETITIONS,success);
-    result = (int) (((double) failed / (double) REPETITIONS ) * 100 );
-  }
-  printf ("Result: %i\n", result);
-  return result;
+    if (failed != 0){
+        failcode = failcode + (1 << 0);
+    }
+#endif
+#ifndef T2
+    failed = 0;
+    for (int x = 0; x < NUM_TEST_CALLS; ++x){
+        failed = failed + test2();
+    }
+    if (failed != 0){
+        failcode = failcode + (1 << 1);
+    }
+#endif
+#ifndef T3
+    failed = 0;
+    for (int x = 0; x < NUM_TEST_CALLS; ++x){
+        failed = failed + test3();
+    }
+    if (failed != 0){
+        failcode = failcode + (1 << 2);
+    }
+#endif
+    return failcode;
 }
-
