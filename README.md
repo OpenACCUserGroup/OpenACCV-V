@@ -7,65 +7,11 @@ This testsuite is meant to test the functionality of the OpenACC language featur
 test each small segment of the functionality of the language as described in the OpenACC specification
 V2.5.  
 
-In order to run the suite, we will soon provide some assisting scripts that compile, run, and report
-on each of the tests or a specific test if one is provided.  These are intended to assist you, but they
-are not built to work comprehensively every situation and platform.  If these scripts don't provide the
-needed functionality or fail to work on your system, the test suite can run independently. You would simply need to compile
-the test that you are running, using the necessary compiler flags to enable OpenACC compilation
-directives, and run it.  It will display the performance of the test, either passing or failing.
+In order to run the suite, we have provided a Python script, infrastructure.py that can be run.  The script can be invoked with the command (once Python has been loaded into your enironment) >python infrastructure.py -c=<config_input_file> -o=<output_file>
 
-While not implemented in this version, an update is planned for release by the end of September of 2017
-to have thorough documentation, including both OpenACC specifications to test mapping and test to
-OpenACC specifications mapping.  Also, detailed descriptions of each of the tests will be outlined within each of the tests in the suite. 
-For the reverse mapping, we plan on hyperlinking paragraphs of the specifications to a self-generating
-html page that shows the list of related tests.  
+An input configuation file with instructions can be found in the repository as well in init_config.txt.  A single, non-existent file should be given for the output and the testsuite will be run according to the settings in the configuration file.  
 
-The test-to-OpenACC-specifications mapping will look
-at least similar to this example of the acc_copyin.c test's documentation:
-
-/*
-This tests the following functionality of acc_copyin runtime routine:
-* Line 1995: The formatting of the runtime routine (incomplete testing, see note 1)
-* Lines 1996-1997: The equivalence to an "#pragma acc enter data copyin()" (incomplete testing, see note 2)
-* Lines 954-956: The transfer of data is tested.
-* Line 1997: The argument specifications
-* Lines 1999-2001: Reference counting (incomplete testing, see note 3)
-* Lines 2002-2003: Tests that the data is coppied and that reference counts are set to one.
-
-
-This test is missing the following functionality:
-* Line 1998: The returned value is not tested nor used
-* Lines 2001-2002: The host version of the routine is not tested
-* Line 2004: The returned value is not tested nor used
-* Lines 2004-2006: The returned value is not used in a deviceptr clause
-* Lines 2014-2017: The async versions are not tested
-* Lines 2018-2019: The compatibility versions are not tested
-
-Notes:
-1:
-The test only uses the first of the two formats of C/C++ formats for this routine.  Additional testing should be added to both testing the formatting for the second type, as well as the asyncronous functionality of the second format as well.
-
-2:
-This line should imply that all testing that is done on an "#pragma acc enter data copyin()" should be done on the runtime routine as well which is not yet implemented such as:
-Lines 952-954: Reference counting with enter data directive
-
-3:
-There should be more extensive testing that tests more versions of reference counting scenarios.
-
-Dependencies:
-Shared:
-data copy
-enter data copyin
-exit data copyout
-parallel present
-loop
-Separate:
-data copy
-data copyin copyout
-exit data copyout
-parallel present
-loop
-*/
+In addition, the infrastructure can be run with >python infrastructure.py -env=<env_output_file>.  The file generated can be passed to the script through the configuration file and can be used to save an environment for a specific run of the testsuite. 
 
 For any further questions, please feel free to contact us Sunita Chandrasekaran - schandra@udel.edu and Kyle Friedline - utimatu@udel.edu
 
