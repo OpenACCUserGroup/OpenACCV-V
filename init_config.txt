@@ -124,6 +124,10 @@
 
 !ResultsFormat:json
 
+!If you specify the html output format, the file that is output will still be in json format.  The output file should
+!afterward be placed into the directory results_template and renamed to results.json.  The results.html can then be
+!loaded in a browser.  
+
 !To specify that you would like to allow for results to loaded from previous 
 !runs (when their configurations and systems match):
 
