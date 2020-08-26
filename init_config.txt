@@ -34,6 +34,12 @@
 !ShowInfo
 !ShowAll
 
+!The infrastructure can also be used to extend the existing testsuite through the use of "Mutators"
+!which will be called at runtime with a test object.  More information can be found in the demo
+!mutator file.  These can be added with the command below along with the path of the mutator.
+
+!Mutator:/home/OpenACCTestsuite/demo_mutator.py
+
 !The infrastructure also allows for user to specify subsets of the testsuite to be run.
 !If these are ommited, the full testsuite will be run.
 
