@@ -2,7 +2,7 @@
 #ifndef T1
 //T1:runtime,data,executable-data,async,construct-independent,V:2.5-2.7
 int test1(){
-    err = 0;
+    int err = 0;
     real_t *a = (real_t *)malloc(n * sizeof(real_t));
     real_t *b = (real_t *)malloc(n * sizeof(real_t));
     real_t *c = (real_t *)malloc(n * sizeof(real_t));
@@ -63,6 +63,7 @@ int test1(){
 #ifndef T2
 //T2:runtime,data,executable-data,devonly,async,construct-independent,V:2.5-2.7
 int test2(){
+	int err = 0;
     real_t *a = (real_t *)malloc(n * sizeof(real_t));
     real_t *b = (real_t *)malloc(n * sizeof(real_t));
     real_t *c = (real_t *)malloc(n * sizeof(real_t));

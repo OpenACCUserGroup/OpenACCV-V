@@ -169,9 +169,9 @@ int test5(){
     real_t * c = (real_t *)malloc(n * sizeof(real_t));
     int * dev_test = (int *)malloc(sizeof(int));
 
-    devtest[0] = 1;
+    dev_test[0] = 1;
     #pragma acc enter data copyin(dev_test[0:1])
-    #pragma parallel present(dev_test[0:1])
+    #pragma acc parallel present(dev_test[0:1])
     {
         dev_test[0] = 0;
     }

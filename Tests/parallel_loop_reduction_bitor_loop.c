@@ -18,13 +18,7 @@ int test1(){
             b[x * n + y] = (unsigned int) rand() / (real_t)(RAND_MAX / 1000);
             b_copy[x * n + y] = b[x * n + y];
             for (int z = 0; z < 16; ++z){
-                if (rand() / (real_t) RAND_MAX > false_margin){
-                    temp = 1;
-                    for (int i = 0; i < z; ++i){
-                        temp = temp * 2;
-                    }
-                    a[x * n + y] += temp;
-                }
+                a[x * n + y] += (1<<z);
             }
         }
     }
@@ -64,6 +58,73 @@ int test1(){
 }
 #endif
 
+#ifndef T2
+//T2:parallel,private,reduction,combined-constructs,loop,V:2.7-2.7
+int test2(){
+    int err = 0;
+    srand(SEED);
+    unsigned int * a = (unsigned int *)malloc(25 * n * sizeof(unsigned int));
+    unsigned int * b = (unsigned int *)malloc(25 * n * sizeof(unsigned int));
+    unsigned int * b_copy = (unsigned int *)malloc(25 * n * sizeof(unsigned int));
+    unsigned int * c = (unsigned int *)malloc(25 * sizeof(unsigned int));
+    unsigned int temp[5];
+
+    real_t false_margin = pow(exp(1), log(.5)/n);
+
+    for (int x = 0; x < 25 * n; ++x){
+        b[x] = (unsigned int) rand() / (real_t)(RAND_MAX / 1000);
+        b_copy[x] = b[x];
+        for (int y = 0; y < 16; ++y) {
+            if (rand() / (real_t)RAND_MAX > false_margin) {
+                a[x] += (1<<y);
+            }
+        }
+    }
+
+    #pragma acc data copyin(a[0:25*n]) copy(b[0:25*n], c[0:25])
+    {
+        #pragma acc parallel loop gang private(temp)
+        for (int x = 0; x < 5; ++x) {
+            for (int y = 0; y < 5; ++y) {
+                temp[y] = 0;
+            }
+            #pragma acc loop worker reduction(|:temp)
+            for (int y = 0; y < 5 * n; ++y) {
+                temp[y%5] = temp[y%5] | a[x * 5 * n + y];
+            }
+            for (int y = 0; y < 5; ++y) {
+                c[x * 5 + y] = temp[y];
+            }
+            #pragma acc loop worker
+            for (int y = 0; y < 5 * n; ++y) {
+                b[x * 5 * n + y] = b[x * 5 * n + y] + c[x * 5 + (y % 5)];
+            }
+        }
+    }
+
+    for (int x = 0; x < 5; ++x){
+        for (int y = 0; y < 5; ++y){
+            temp[y] = 0;
+        }
+        for (int y = 0; y < 5 * n; ++y) {
+            temp[y%5] = temp[y%5] | a[x * 5 * n + y];
+        }
+        for (int y = 0; y < 5; ++y){
+            if (c[x * 5 + y] != temp[y]) {
+                err += 1;
+            }
+        }
+        for (int y = 0; y < 5 * n; ++y) {
+            if ((b_copy[x * 5 * n + y] + c[x * 5 + (y % 5)]) != b[x * 5 * n + y]) {
+                err += 1;
+            }
+        }
+    }
+
+    return err;
+}
+#endif
+
 int main(){
     int failcode = 0;
     int testrun;
@@ -75,6 +136,15 @@ int main(){
     }
     if (failed != 0){
         failcode = failcode + (1 << 0);
+    }
+#endif
+#ifndef T2
+    failed = 0;
+    for (int x = 0; x < NUM_TEST_CALLS; ++x){
+        failed = failed + test2();
+    }
+    if (failed != 0){
+        failcode = failcode + (1 << 1);
     }
 #endif
     return failcode;

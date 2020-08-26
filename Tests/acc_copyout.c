@@ -64,7 +64,7 @@ int test2(){
             for (int x = 0; x < n; ++x){
                 c[x] = a[x] + b[x];
             }
-        }#
+        }
     }
 
     acc_copyout(c, n * sizeof(real_t));

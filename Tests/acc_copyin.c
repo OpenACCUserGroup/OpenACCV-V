@@ -320,7 +320,7 @@ int test7() {
             }
         }
 
-        #pragma acc exit data delete(a(0:n], b[0:n])
+        #pragma acc exit data delete(a[0:n], b[0:n])
         #pragma acc exit data delete(a[0:n], b[0:n])
 
         for (int x = 0; x < n; ++x){

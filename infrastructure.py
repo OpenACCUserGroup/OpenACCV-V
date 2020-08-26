@@ -11,6 +11,8 @@ from timeit import default_timer as time
 import threading
 import multiprocessing
 import random
+import importlib.util
+import shutil
 
 # Get explicit information from user about accelerator information
 # System Name
@@ -23,6 +25,10 @@ import random
 # TODO: Support construct-independent builds for testing all equivalent constructs in any situation
 # TODO: Add Named Systems | Dynamic System Attributes | Target, SEED, MPI, Versioning
 # TODO: Find bug that is causing duplicate entry into results metadata tables (comparison issue?)
+# TODO: Detect C-Pre-Processor.  If not, run simple tests.
+# TODO: Add parent to test and load the results for child tests in same category of results
+# TODO: Be more verbose with unknown results
+    #How would this work with nested mutators?
 
 
 
@@ -220,6 +226,7 @@ class results:
         """
         assert_created_directory(g_config.build_dir)
         assert_created_directory(g_config.partial_results_dir)
+        assert_created_directory(g_config.mutated_test_dir)
         if isinstance(test_obj, str):
             testname = test_obj
         else:
@@ -271,6 +278,7 @@ class results:
         :param test test_object:
         :rtype: None
         """
+        #TODO: check assertions under conditions of mutated tests
         assert ("testsuites" in self.data.keys())
         ts_reference = None
         for ts in self.data['testsuites']:
@@ -349,6 +357,8 @@ class results:
             testsuite_ref = g_testsuite
         for existing_suite in self.data['testsuites']:
             is_same = True
+            if not list_compare(list(existing_suite.keys()), list(testsuite_ref.get_test_list())):
+                is_same = False
             for testname in existing_suite.keys():
                 if testname == "id":
                     continue
@@ -665,15 +675,17 @@ class results:
                 del self.data['summary'][config['id']]
 
 class test:
-    def __init__(self, path):
+    def __init__(self, path, empty=False):
         self.path = path
         self.name = path.split(sep)[-1]
         [self.tags, self.versions, self.contents] = self.build_tags()
+        self.tests = list(self.tags.keys())
         self.should_compile = True
         self.flags = {}
+        if empty:
+            return
         # self.flags set in self.process_tags()
         self.config_report = self.process_tags()
-        self.tests = self.tags.keys()
         self.compile_attempt_count = 0
         self.executable_path = ""
         self.current_excluded_tests = []
@@ -1039,11 +1051,75 @@ class test:
                 return True
         return False
 
+    def copy(self):
+        returned = test(self.path, empty=True)
+        return returned
+
+    def finalize_mutated_test(self):
+        to_remove = []
+        for test in self.tests:
+            if len(self.versions[test]) == 0:
+                to_remove.append(test)
+        for test in to_remove:
+            self.tests.remove(test)
+            del self.contents[test]
+            del self.tags[test]
+            del self.versions[test]
+        if len(self.tests) == 0:
+            return False
+        self.config_report = self.process_tags()
+        self.compile_attempt_count = 0
+        self.executable_path = ""
+        self.current_excluded_tests = []
+        self.build_dir = join(g_config.build_dir, self.name)
+        return True
+
+    def build_temp_file(self):
+        temp_file = open(join(g_config.mutated_test_dir, self.name), 'w')
+        f = open(self.path, 'r')
+        self.path = join(g_config.mutated_test_dir, self.name)
+        current_scope = 'global'
+        test_scope_re = re.compile("^#ifndef T[0-9]*")
+        if isFortran(self.name):
+            tag_line_re = re.compile("!T[0-9]*")
+            tag_line_prefix = "!T"
+        else:
+            tag_line_re = re.compile("//T[0-9]*")
+            tag_line_prefix = "//T"
+        for line in f:
+            if test_scope_re.match(line):
+                temp_file.write(line)
+                if current_scope == "global":
+                    current_scope = re.search("(?<=T)[0-9]*", line).group(0)
+                    tag_line = tag_line_prefix + str(current_scope) + ":" + ','.join(self.tags[current_scope]) + ',' + self.versions[current_scope][0] + "-" + self.versions[current_scope][-1] + '\n'
+                    temp_file.write(tag_line)
+                    for contents_line in self.contents[current_scope][1:]:
+                        if not tag_line_re.match(contents_line):
+                            temp_file.write(contents_line)
+                            if contents_line.startswith("#endif"):
+                                break
+            elif tag_line_re.match(line):
+                continue
+            elif current_scope == "main":
+                temp_file.write(line)
+            elif line.upper().startswith("#ENDIF"):
+                if current_scope in self.tags.keys():
+                    current_scope = "global"
+            elif line.upper().strip().startswith("PROGRAM ") or line.upper().startswith("INT MAIN"):
+                current_scope = "main"
+                temp_file.write(line)
+            elif current_scope in self.tags.keys():
+                pass
+            elif current_scope == 'global':
+                temp_file.write(line)
+        temp_file.close()
+        f.close()
 
 
 class TestList:
     def __init__(self):
         self.id = -1
+        self.Mutators = []
         self.CTestLocation = None
         self.CPPTestLocation = None
         self.FortranTestLocation = None
@@ -1053,6 +1129,15 @@ class TestList:
         self.CTestsToRun = []
         self.CPPTestsToRun = []
         self.FortranTestsToRun = []
+        for mutator_path in g_config.mutators:
+            if not isfile(mutator_path):
+                print("Cannot find mutator: " + mutator_path)
+                continue
+            name = mutator_path.split(sep)[-1].split(".")[0]
+            spec = importlib.util.spec_from_file_location(name, mutator_path)
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            self.Mutators.append(mod)
         if g_config.CC != "":
             temp = []
             try:
@@ -1065,6 +1150,7 @@ class TestList:
                 if isC(x):
                     t = test(join(self.CTestLocation, x))
                     self.CTests.append(t)
+                    self.process_mutators(t)
         else:
             self.CTests = []
             self.CTestLocation = g_config.test_dir
@@ -1081,6 +1167,7 @@ class TestList:
                 if isCPP(x):
                     t = test(join(g_config.test_dir, "C++", x))
                     self.CPPTests.append(t)
+                    self.process_mutators(t)
         else:
             self.CPPTests = []
             self.CPPTestLocation = g_config.test_dir
@@ -1097,12 +1184,15 @@ class TestList:
                 if isFortran(x):
                     t = test(join(g_config.test_dir, 'Fortran', x))
                     self.FortranTests.append(t)
+                    self.process_mutators(t)
         else:
             self.FortranTests = []
             self.FortranTestLocation = g_config.test_dir
             print("No Fortran compiler provided, skipping Fortran tests")
         self.count = len(self.CTests) + len(self.CPPTests) + len(self.FortranTests)
+        copy_headers_to_dir(self, g_config.mutated_test_dir)
         self.sortLists()
+
     def filter_test_list_with_partial_results(self, partial_results):
         for test_obj in self.CTests:
             if g_config.partial:
@@ -1223,6 +1313,37 @@ class TestList:
             sortedTestObj[stringList.index(self.FortranTests[x].name)] = self.FortranTests[x]
         self.FortranTests = sortedTestObj
 
+    def process_mutators(self, test):
+        tests = []
+        for mutator in self.Mutators:
+            if not hasattr(mutator, "mutate"):
+                continue
+            mutated_tests = mutator.mutate(test.copy())
+            if mutated_tests is None:
+                continue
+            if isinstance(mutated_tests, list):
+                for mutated_test in mutated_tests:
+                    if mutated_test.finalize_mutated_test():
+                        mutated_test.build_temp_file()
+                        tests.append(mutated_test)
+            else:
+                if mutated_tests.finalize_mutated_test():
+                    mutated_tests.build_temp_file()
+                    tests.append(mutated_tests)
+        if len(tests) != 0 and g_verbose['info']:
+            print("Test " + test.name + " was mutated into " + str(len(tests)) + " additional tests.")
+        for test in tests:
+            if isFortran(test.name):
+                self.FortranTests.append(test)
+            if isCPP(test.name):
+                self.CPPTests.append(test)
+            if isC(test.name):
+                self.CTests.append(test)
+    def get_test_list(self):
+        returned = []
+        for test in self.FortranTests + self.CPPTests + self.CTests:
+            returned.append(test.name)
+        return returned
 
 class system:
     def __init__(self, system_dict=None):
@@ -1347,6 +1468,7 @@ class config:
         self.exclude_tags = []  # type: List[str]
 
         self.tag_evaluation = None  # type: Optional[tag_evaluation]
+        self.mutators = [] # type: List[str]
 
         self.include_tests = []  # type: List[str]
         self.exclude_tests = []  # type: List[str]
@@ -1354,6 +1476,7 @@ class config:
         self.test_dir = join(dirname(realpath(__file__)), "tests", "src", "2.5")  # type: str
         self.build_dir = join(dirname(realpath(__file__)), 'build')  # type: str
         self.partial_results_dir = join(self.build_dir, "partial_results")  # type: str
+        self.mutated_test_dir = join(self.build_dir, "mutated_tests")
         self.include_by_default = None  # type: Optional[bool]
 
         self.CC_ACC_Version = None  # type: Optional[str]
@@ -1378,6 +1501,9 @@ class config:
         self.timeout = 10
         # The following can also be : 'off', 'on'
         self.keep_policy = "on-error"  # type: str
+        self.keep_mutated_tests = False  # type: bool
+        self.keep_partial_results = False  # type: bool
+        self.keep_build_dir = False  # type: bool
 
     def __eq__(self, other):
         self_vars = vars(self)
@@ -1562,6 +1688,8 @@ class config:
         data = fil.readlines()
         fil.close()
         build_dir_overwritten = False
+        partial_results_dir_overwritten = False
+        mutated_test_dir_overwritten = False
         for x in data:
             if not (x.startswith("!") or x.startswith("#")):
                 if x.startswith("Vendor:"):
@@ -1608,9 +1736,17 @@ class config:
                 if x.startswith("BuildDir:"):
                     build_dir_overwritten = True
                     self.build_dir = ':'.join(x.split(":")[1:]).strip()
-                    self.partial_results_dir = join(self.build_dir, "partial_results")
+                    if not partial_results_dir_overwritten:
+                        self.partial_results_dir = join(self.build_dir, "partial_results")
+                        assert_created_directory(self.partial_results_dir)
+                    if not mutated_test_dir_overwritten:
+                        self.mutated_test_dir = join(self.build_dir, "mutated_tests")
+                        assert_created_directory(self.mutated_test_dir)
                     assert_created_directory(self.build_dir)
-                    assert_created_directory(self.partial_results_dir)
+                if x.startswith("MutatedTestDir:"):
+                    self.mutated_test_dir = ':'.join(x.split(":")[1:]).strip()
+                    mutated_test_dir_overwritten = True
+                    assert_created_directory(self.mutated_test_dir)
                 if x.startswith("ACC_Version:"):
                     v = x.split(":")[-1].strip()
                     self.CC_ACC_Version = v
@@ -1675,6 +1811,18 @@ class config:
                     g_verbose['info'] = True
                 if x.upper().startswith("SHOWDEBUG"):
                     g_verbose['debug'] = True
+                if x.upper().startswith("MUTATOR:"):
+                    self.mutators.append(x.split(":")[-1].strip())
+                if x.upper().startswith("KEEPMUTATEDTESTS"):
+                    self.keep_mutated_tests = True
+                if x.upper().startswith("KEEPPARTIALRESULTS"):
+                    self.keep_partial_results = True
+                if x.upper().startswith("KEEPBUILD"):
+                    self.keep_build_dir = True
+                if x.upper().startswith("KEEPALL"):
+                    self.keep_mutated_tests = True
+                    self.keep_partial_results = True
+                    self.keep_build_dir = True
         if len(self.exclude_tags) > 0 or len(self.include_tags) > 0:
             if self.tag_evaluation is not None:
                 print("Config file cannot use both include/exclude tags and a tag evaluation string")
@@ -1682,6 +1830,7 @@ class config:
         if not build_dir_overwritten:
             assert_created_directory(self.build_dir)
             assert_created_directory(self.partial_results_dir)
+            assert_created_directory(self.mutated_test_dir)
 
     def return_dict(self):
         returned = {'CC': self.CC, 'CPP': self.CPP, 'FC': self.FC, 'CCFlags': self.CCFlags, 'CPPFlags': self.CPPFlags,
@@ -2005,6 +2154,23 @@ def clean_build_dir(dirname):
                 clean_build_dir(join(dirname, filename))
                 rmdir(join(dirname, filename))
 
+def copy_headers_to_dir(tl, dirname):
+    header_prefix = "acc_testsuite"
+    for x in [(tl.FortranTestLocation, ".Fh"), (tl.CPPTestLocation, ".h"), (tl.CTestLocation, ".h")]:
+        if isfile(join(x[0], header_prefix + x[1])):
+            try:
+                shutil.copyfile(join(x[0], header_prefix + x[1]), join(dirname, header_prefix + x[1]))
+            except OSError:
+                if g_verbose['oserrors'] or g_verbose['debug']:
+                    print("Error copying header file to mutated test directory")
+                if g_verbose['debug']:
+                    traceback.print_exc()
+                print("H")
+        elif g_verbose['oserrors'] or g_verbose['debug'] or g_verbose['info']:
+            print("Could not find header file.  If linking is handled in compilation flags, this can be ignored")
+
+
+
 OpenACCVersions = ["1.0", "2.0", "2.5", "2.6", "2.7"]
 g_config = None  # type: Optional[config]
 g_system = None  # type: Optional[system]
@@ -2072,10 +2238,13 @@ def main():
         if clean:
             clean_build_dir(g_config.build_dir)
             clean_build_dir(g_config.partial_results_dir)
-            if not isdir(g_config.partial_results_dir):
-                mkdir(g_config.partial_results_dir)
+            clean_build_dir(g_config.mutated_test_dir)
             if not isdir(g_config.build_dir):
                 mkdir(g_config.build_dir)
+            if not isdir(g_config.partial_results_dir):
+                mkdir(g_config.partial_results_dir)
+            if not isdir(g_config.mutated_test_dir):
+                mkdir(g_config.mutated_test_dir)
         if temp_system_name is not None:
             if g_config.system_name is not None:
                 print("Warning: system name defined in configuration.  Command line parameter overriding")
@@ -2103,8 +2272,12 @@ def main():
         g_results.build_summary()
         g_results.output(outfile)
         for conf in run_configs:
-            clean_build_dir(conf.partial_results_dir)
-            clean_build_dir(conf.build_dir)
+            if not conf.keep_mutated_tests:
+                clean_build_dir(conf.mutated_test_dir)
+            if not conf.keep_partial_results:
+                clean_build_dir(conf.partial_results_dir)
+            if not conf.keep_partial_results:
+                clean_build_dir(conf.build_dir)
     print("Time to complete: " + str(time() - start))
     print("Time spent running/compiling: " + str(g_subprocess_runtime))
 
