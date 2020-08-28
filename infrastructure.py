@@ -102,9 +102,9 @@ class results:
     def run_init(self):
         if g_config.partial:
             self.load_results_for_config()
-            g_testsuite.filter_test_list_with_partial_results(self)
         else:
             self.clean_partial_results()
+        g_testsuite.filter_test_list_with_partial_results(self)
         self.submit_config()
         self.submit_system()
         self.submit_testsuite()
@@ -1162,7 +1162,7 @@ class TestList:
                 self.CPPTestLocation = g_config.test_dir
             for x in temp:
                 if isCPP(x):
-                    t = test(join(g_config.test_dir, "C++", x))
+                    t = test(join(self.CPPTestLocation, x))
                     self.CPPTests.append(t)
                     self.process_mutators(t)
         else:
@@ -1175,11 +1175,11 @@ class TestList:
                 temp = listdir(join(g_config.test_dir, "Fortran"))
                 self.FortranTestLocation = join(g_config.test_dir, "Fortran")
             except OSError:
-                temp = listdir(g_conifg.test_dir)
+                temp = listdir(g_config.test_dir)
                 self.FortranTestLocation = g_config.test_dir
             for x in temp:
                 if isFortran(x):
-                    t = test(join(g_config.test_dir, 'Fortran', x))
+                    t = test(join(self.FortranTestLocation, x))
                     self.FortranTests.append(t)
                     self.process_mutators(t)
         else:
@@ -1224,6 +1224,7 @@ class TestList:
         loc = 0
         self.count = 0
         for test_obj in self.CTestsToRun + self.CPPTestsToRun + self.FortranTestsToRun:
+            print("Evaluating test " + test_obj.name + ".  Will it run: " + str(test_obj.to_run()))
             if test_obj.to_run():
                 self.count += 1
         for test_obj in self.CTestsToRun + self.CPPTestsToRun + self.FortranTestsToRun:
@@ -1639,7 +1640,7 @@ class config:
                 return "2.7"
         elif lang in ["CPP", "C++"]:
             if isfile(sep.join([local_path, "versiontest.cpp"])):
-                test_command = [self.CPP] + self.CCPFlags + ['-o'] + [sep.join([local_path, "a.out"])] + [sep.join([local_path, "versiontest.cpp"])]
+                test_command = [self.CPP] + self.CPPFlags + ['-o'] + [sep.join([local_path, "a.out"])] + [sep.join([local_path, "versiontest.cpp"])]
             else:
                 print("Could not determine compiler version for " + lang + ".  Did not detect versiontest.c in same directory.  Setting to default(2.7)")
                 return "2.7"
