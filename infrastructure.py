@@ -26,9 +26,6 @@ import shutil
 # TODO: Add Named Systems | Dynamic System Attributes | Target, SEED, MPI, Versioning
 # TODO: Find bug that is causing duplicate entry into results metadata tables (comparison issue?)
 # TODO: Detect C-Pre-Processor.  If not, run simple tests.
-# TODO: Add parent to test and load the results for child tests in same category of results
-# TODO: Be more verbose with unknown results
-    #How would this work with nested mutators?
 
 
 
@@ -1473,7 +1470,7 @@ class config:
         self.include_tests = []  # type: List[str]
         self.exclude_tests = []  # type: List[str]
 
-        self.test_dir = join(dirname(realpath(__file__)), "tests", "src", "2.5")  # type: str
+        self.test_dir = join(dirname(realpath(__file__)), "Tests")  # type: str
         self.build_dir = join(dirname(realpath(__file__)), 'build')  # type: str
         self.partial_results_dir = join(self.build_dir, "partial_results")  # type: str
         self.mutated_test_dir = join(self.build_dir, "mutated_tests")
