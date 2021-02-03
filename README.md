@@ -7,7 +7,7 @@ This testsuite is meant to test the functionality of the OpenACC language featur
 test each small segment of the functionality of the language as described in the OpenACC specification
 V2.5.  
 
-In order to run the suite, we have provided a Python script, infrastructure.py that can be run.  The script can be invoked with the command (once Python has been loaded into your enironment) >python infrastructure.py -c=<config_input_file> -o=<output_file>
+In order to run the suite, we have provided a Python script, infrastructure.py that can be run. It is recommended to use Python 3.3 or later. Once Python has been loaded into your environment, the script can be invoked with the command  >python infrastructure.py -c=<config_input_file> -o=<output_file>
 
 An input configuation file with instructions can be found in the repository as well in init_config.txt.  A single, non-existent file should be given for the output and the testsuite will be run according to the settings in the configuration file.  
 
