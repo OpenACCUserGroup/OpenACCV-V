@@ -6,11 +6,11 @@ int test1(){
     srand(SEED);
     unsigned int * a = (unsigned int *)malloc(n * sizeof(unsigned int));
     unsigned int b = 0;
-    unsigned int host_b = a[0];
 
     for (int x = 0; x < n; ++x){
         a[x] = (unsigned int) rand() / (real_t) (RAND_MAX / 2);
     }
+    unsigned int host_b = a[0];
 
     #pragma acc data copyin(a[0:n])
     {
