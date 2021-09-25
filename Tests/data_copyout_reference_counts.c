@@ -149,7 +149,6 @@ int test3(){
 
 int main(){
     int failcode = 0;
-    int testrun;
     int failed;
 #ifndef T1
     failed = 0;
