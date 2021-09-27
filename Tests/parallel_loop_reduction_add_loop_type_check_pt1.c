@@ -108,11 +108,11 @@ int test2(){
         }
         for (int y = 0; y < n; ++y) {
             temp = host_total + c[x * n + y];
-            if (d[x * n + y] != (host_total + c[x * n + y])) {
+            if (d[x * n + y] != temp) {
                 err += 1;
                 error_count += 1;
                 printf("Error location x: %d \t y: %d\n", x, y); 
-                printf("%d != %d\n", d[x * n + y], host_total + c[x * n + y]);
+                printf("%d != %d\n", d[x * n + y], temp);
             }
             total_count += 1;
         }

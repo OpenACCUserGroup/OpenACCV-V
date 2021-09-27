@@ -1,4 +1,4 @@
-#include "acc_testsuite.h"
+// #include "acc_testsuite.h"
 /* Global headerfile of the OpenACC Testsuite */
 
 /* This file was created with the accts_makeHeader.pl script using the following opions: */
@@ -123,9 +123,9 @@ typedef struct {
 
 #endif
 
-int main(){
-    int failcode = 0;
-    int testrun;
-    int failed;
-    return failcode;
-}
+// int main(){
+//     int failcode = 0;
+//     int testrun;
+//     int failed;
+//     return failcode;
+// }

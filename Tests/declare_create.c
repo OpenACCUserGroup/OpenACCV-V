@@ -1,7 +1,7 @@
-#include "acc_testsuite.h"
 #define DECLARE_TEST
 #define DECLARE_CREATE
 #include "acc_testsuite_declare.h"
+#include "acc_testsuite.h"
 #pragma acc declare create(fixed_size_array)
 #pragma acc declare create(scalar)
 #pragma acc declare create(datapointer)
