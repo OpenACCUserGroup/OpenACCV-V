@@ -85,9 +85,16 @@ int test2(){
 int test3(){
     int err = 0;
     srand(SEED);
+    int * devtest = (int *)malloc(sizeof(int));
     real_t * a = (real_t *)malloc(n * sizeof(real_t));
     real_t * b = (real_t *)malloc(n * sizeof(real_t));
-
+    devtest[0] = 1;
+    #pragma acc enter data copyin(devtest[0:1])
+    #pragma acc kernels present(devtest[0:1])
+    {
+      devtest[0] = 0;
+    }
+    
     if (devtest[0] == 1){
         for (int x = 0; x < n; ++x){
             a[x] = rand() / (real_t)(RAND_MAX / 10);

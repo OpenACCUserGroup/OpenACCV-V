@@ -39,7 +39,7 @@
             errors = errors + 1
             WRITE(*, *) totals_comparison(x)
           END IF
-
+        END DO
         IF (errors .eq. 0) THEN
           test1 = .FALSE.
         ELSE

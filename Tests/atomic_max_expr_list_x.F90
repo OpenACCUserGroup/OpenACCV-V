@@ -2,7 +2,7 @@
 !T1:construct-independent,atomic,V:2.0-2.7
       LOGICAL FUNCTION test1()
         IMPLICIT NONE
-        INCLUDE "acc_testsuite.f90"
+        INCLUDE "acc_testsuite.Fh"
         INTEGER :: x, y !Iterators
         REAL(8),DIMENSION(LOOPCOUNT):: a, b !Data
         REAL(8),DIMENSION(LOOPCOUNT/10 + 1):: totals, totals_comparison
