@@ -66,7 +66,7 @@ int test1(){
                 for (int y = 0; y < 7; ++y){
                     c[x * 7 + y] = a[x];
                     if ((b[x]>>y)%2 == 1){
-                        #pragma acc atomic update capture
+                        #pragma acc atomic capture
                         {
                             c[x * 7 + y] = a[x];
                             a[x] >>= 1;

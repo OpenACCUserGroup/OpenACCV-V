@@ -38,8 +38,6 @@ int test1(){
     int *totals_comparison = (int *)malloc((n/10 + 1) * sizeof(int));
     int *temp_a = (int *)malloc(10 * sizeof(int));
     int *temp_b = (int *)malloc(10 * sizeof(int));
-    int iterator;
-    int iterator2;
     int init;
 
     for (int x = 0; x < n; ++x){
@@ -64,7 +62,7 @@ int test1(){
         {
             #pragma acc loop
             for (int x = 0; x < n; ++x){
-                #pragma acc atomic update capture
+                #pragma acc atomic capture
                     {
                         totals[x/10] |= a[x];
                         b[x] = totals[x/10];
