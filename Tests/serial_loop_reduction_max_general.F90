@@ -8,9 +8,9 @@
   INTEGER:: errors, x
 
   SEEDDIM(1) = 1
-# ifdef SEED
+  #ifdef SEED
   SEEDDIM(1) = SEED
-# endif
+  #endif
   CALL RANDOM_SEED(PUT=SEEDDIM)
 
   CALL RANDOM_NUMBER(a)
@@ -29,7 +29,7 @@
     END DO
   !$acc end data
 
-  IF (abs(host_max - max) .gt. PRECISION) THEN
+  IF (abs(host_max - maxval) .gt. PRECISION) THEN
     errors = errors + 1
   END IF
 
@@ -41,7 +41,7 @@
       END
 #endif
 
-      PROGRAM main
+      PROGRAM serial_loop_reduction_max_general
         IMPLICIT NONE
         INTEGER :: failcode, testrun
         LOGICAL :: failed
