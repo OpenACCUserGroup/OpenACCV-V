@@ -1,6 +1,6 @@
 #include "acc_testsuite.h"
 #ifndef T1
-//T1:kernels,if,V:1.0-2.7
+//T1:kernels,if,V:1.0-3.2
 int test1(){
     int err = 0;
     srand(SEED);
@@ -32,10 +32,11 @@ int test1(){
 #endif
 
 #ifndef T2
-//T2:kernels,if,V:2.0-2.7
+//T2:kernels,if,V:2.0-3.2
 int test2(){
     int err = 0;
     srand(SEED);
+    int data_on_device = 0;
     int * devtest = (int *)malloc(sizeof(int));
     real_t * a = (real_t *)malloc(n * sizeof(real_t));
     real_t * b = (real_t *)malloc(n * sizeof(real_t));
@@ -68,7 +69,7 @@ int test2(){
 #endif
 
 #ifndef T3
-//T3:kernels,if,devonly,V:2.0-2.7
+//T3:kernels,if,devonly,V:2.0-3.2
 int test3(){
     int err = 0;
     srand(SEED);
@@ -77,10 +78,12 @@ int test3(){
     real_t * a = (real_t *)malloc(n * sizeof(real_t));
     real_t * b = (real_t *)malloc(n * sizeof(real_t));
     devtest[0] = 1;
+
     #pragma acc enter data copyin(devtest[0:1])
     #pragma acc parallel present(devtest[0:1])
     {
-      devtest[0] = 0;
+	devtest[0] = 0;
+
     }
 
     if (devtest[0] == 1){
@@ -105,7 +108,7 @@ int test3(){
             if (fabs(a[x] + 1) > PRECISION){
                 err += 1;
             }
-            if (fabs(b[x]) > PRECISION){
+            if (fabs(b[x] + 1) > PRECISION){
                 err += 1;
             }
         }
@@ -123,7 +126,7 @@ int test3(){
 #endif
 
 #ifndef T4
-//T4:kernels,if,devonly,V:2.0-2.7
+//T4:kernels,if,devonly,V:2.0-3.2
 int test4(){
     int err = 0;
     srand(SEED);

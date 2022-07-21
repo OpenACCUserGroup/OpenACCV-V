@@ -30,7 +30,7 @@ int test1(){
         }
     }
 
-    for (int y = 0 y < 10; ++y){
+    for (int y = 0; y < 10; ++y){
         avg = 0.0;
         for (int x = 0; x < n; ++x){
             avg += a[y * n + x]/n;

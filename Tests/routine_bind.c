@@ -100,7 +100,7 @@ int test1(){
         {
             #pragma acc loop gang worker vector
             for (int x = 0; x < n; ++x){
-                b[x] = host_function_identifier_unnamed(a[x], n);
+                b[x] = device_function_identifier_unnamed(a[x], n);
             }
         }
     }
@@ -143,7 +143,7 @@ int test2(){
         {
             #pragma acc loop gang worker vector
             for (int x = 0; x < n; ++x){
-                b[x] = host_function_string_unnamed(a[x], n);
+                b[x] = device_function_string_unnamed(a[x], n);
             }
         }
     }
@@ -185,7 +185,7 @@ int test3(){
         {
             #pragma acc loop gang worker vector
             for (int x = 0; x < n; ++x){
-                b[x] = host_function_identifier_named(a[x], n);
+                b[x] = device_function_identifier_named(a[x], n);
             }
         }
     }
@@ -227,7 +227,7 @@ int test4(){
         {
             #pragma acc loop gang worker vector
             for (int x = 0; x < n; ++x){
-                b[x] = host_function_string_named(a[x], n);
+                b[x] = device_function_string_named(a[x], n);
             }
         }
     }
