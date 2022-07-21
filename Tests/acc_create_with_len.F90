@@ -11,9 +11,9 @@
 
         !Initilization
         SEEDDIM(1) = 1
-#       ifdef SEED
+        #ifdef SEED
         SEEDDIM(1) = SEED
-#       endif
+        #endif
         CALL RANDOM_SEED(PUT=SEEDDIM)
         CALL RANDOM_NUMBER(a)
         CALL RANDOM_NUMBER(b)
@@ -57,9 +57,9 @@
         errors = 0
 
         SEEDDIM(1) = 1
-#       ifdef SEED
+        #ifdef SEED
         SEEDDIM(1) = SEED
-#       endif
+        #endif
         CALL RANDOM_SEED(PUT=SEEDDIM)
         CALL RANDOM_NUMBER(a)
         CALL RANDOM_NUMBER(b)
@@ -103,9 +103,9 @@
         errors = 0
 
         SEEDDIM(1) = 1
-#       ifdef SEED
+        #ifdef SEED
         SEEDDIM(1) = SEED
-#       endif
+        #endif
         CALL RANDOM_SEED(PUT=SEEDDIM)
         CALL RANDOM_NUMBER(a)
         CALL RANDOM_NUMBER(b)
@@ -133,7 +133,7 @@
         IF (errors .eq. 0) THEN
           test3 = .FALSE.
         ELSE
-          test4 = .TRUE.
+          test3 = .TRUE.
         END IF
       END
 #endif
@@ -149,9 +149,9 @@
         errors = 0
 
         SEEDDIM(1) = 1
-#       ifdef SEED
+        #ifdef SEED
         SEEDDIM(1) = SEED
-#       endif
+        #endif
         CALL RANDOM_SEED(PUT=SEEDDIM)
         CALL RANDOM_NUMBER(a)
         CALL RANDOM_NUMBER(b)
@@ -167,6 +167,8 @@
             END DO
           !$acc end parallel
         !$acc end data
+
+        !$acc exit data copyout(c(1:LOOPCOUNT))
 
         DO x = 1, LOOPCOUNT
           IF (abs(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN
@@ -184,7 +186,7 @@
 
 
 
-      PROGRAM main
+      PROGRAM acc_create_with_len
         IMPLICIT NONE
         INTEGER :: failcode, testrun
         LOGICAL :: failed
