@@ -71,7 +71,7 @@ typedef struct {
 #endif
 
 #ifndef SEED
-#define SEED 0
+#define SEED time(NULL)
 #endif
 
 #ifndef NUM_TEST_CALLS
