@@ -11,15 +11,15 @@
   errors = 0
 
   SEEDDIM(1) = 1
-# ifdef SEED
+  #ifdef SEED
   SEEDDIM(1) = SEED
-# endif
+  #endif
   CALL RANDOM_SEED(PUT=SEEDDIM)
 
   CALL RANDOM_NUMBER(a)
   CALL RANDOM_NUMBER(b)
   c = 0
-  mimimums = 0
+  minimums = 0
   host_minimums = 0
 
   DO y = 1, 10
@@ -63,7 +63,7 @@
       END
 #endif
 
-      PROGRAM main
+      PROGRAM serial_loop_reduction_min_loop
         IMPLICIT NONE
         INTEGER :: failcode, testrun
         LOGICAL :: failed

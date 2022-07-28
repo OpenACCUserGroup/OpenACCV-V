@@ -1,6 +1,6 @@
 #include "acc_testsuite.h"
 #ifndef T1
-//T1:serial,loop,reduction,combined-constructs,V:2.6-2.7
+//T1:serial,loop,reduction,combined-constructs,V:2.6-3.2
 int test1(){
     int err = 0;
     srand(SEED);
@@ -19,7 +19,9 @@ int test1(){
 
     #pragma acc data copyin(a[0:10*n], b[0:10*n]) copyout(c[0:10*n]) copy(totals[0:10])
     {
-        #pragma acc serial loop gang private(temp)
+        #pragma acc serial 
+	{   
+	#pragma acc loop gang private(temp)
         for (int x = 0; x < 10; ++x){
             temp = 1;
             #pragma acc loop worker reduction(*:temp)
@@ -32,6 +34,7 @@ int test1(){
                 c[x * n + y] = (a[x * n + y] + b[x * n + y]) / totals[x];
             }
         }
+	}
     }
 
     for (int x = 0; x < 10; ++x){

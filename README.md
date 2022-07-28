@@ -1,9 +1,5 @@
 # OpenACCV-V
-This repository is updated with OpenACC test codes validating and verifying implementations of features and its conformance to the OpenACC specification. We will continue to add more tests.
-
-## Description
-
-This testsuite is meant to test the functionality of the OpenACC language features.  The tests are decomposed to test each small segment of the functionality of the language as described in the OpenACC specification V2.7.  
+This repository is updated with OpenACC test codes validating and verifying implementations of features and its conformance to the OpenACC specification. We are continuously adding and editing tests to conform to the latest version of the [OpenACC Specification](https://www.openacc.org/specification). 
 
 ## Executing program
 

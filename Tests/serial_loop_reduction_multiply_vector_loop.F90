@@ -6,14 +6,14 @@
   REAL(8),DIMENSION(10, LOOPCOUNT):: a, b
   REAL(8),DIMENSION(LOOPCOUNT):: totals, host_totals
   REAL(8):: temp
-  INTEGER:: errors
+  INTEGER:: errors, x, y
 
   errors = 0
 
   SEEDDIM(1) = 1
-# ifdef SEED
+  #ifdef SEED
   SEEDDIM(1) = SEED
-# endif
+  #endif
   CALL RANDOM_SEED(PUT=SEEDDIM)
 
   CALL RANDOM_NUMBER(a)
@@ -52,7 +52,7 @@
       END
 #endif
 
-      PROGRAM main
+      PROGRAM serial_loop_reduction_multiply_vector_loop
         IMPLICIT NONE
         INTEGER :: failcode, testrun
         LOGICAL :: failed

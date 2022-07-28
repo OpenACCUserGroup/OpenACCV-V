@@ -13,9 +13,9 @@
 
   errors = 0
   SEEDDIM(1) = 1
-# ifdef SEED
+  #ifdef SEED
   SEEDDIM(1) = SEED
-# endif
+  #endif
   CALL RANDOM_SEED(PUT=SEEDDIM)
 
   CALL RANDOM_NUMBER(randoms)
@@ -52,7 +52,7 @@
         END IF
       END DO
     END DO
-  !$acc data
+  !$acc end data
 
   DO y = 1, 10
     temp = .FALSE.
@@ -83,7 +83,7 @@
       END
 #endif
 
-      PROGRAM main
+      PROGRAM serial_loop_reduction_or_loop
         IMPLICIT NONE
         INTEGER :: failcode, testrun
         LOGICAL :: failed

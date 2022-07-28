@@ -26,7 +26,7 @@ int test1(){
         {
             #pragma acc loop
             for (int x = 0; x < n; ++x){
-                #pragma acc atomic update capture
+                #pragma acc atomic capture
                 {
                     c[x] = distribution[(int) (a[x]*b[x]/10)];
                     --distribution[(int) (a[x]*b[x]/10)];

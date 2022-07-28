@@ -1,6 +1,6 @@
 #include "acc_testsuite.h"
 #ifndef T1
-//T1:serial,loop,reduction,combined-constructs,V:2.6-2.7
+//T1:serial,loop,reduction,combined-constructs,V:2.6-3.2
 int test1(){
     int err = 0;
     srand(SEED);
@@ -9,7 +9,6 @@ int test1(){
     real_t * c = (real_t *)malloc(10 * n * sizeof(real_t));
     real_t * maximum = (real_t *)malloc(10 * sizeof(real_t));
     real_t temp = 0;
-    real_t max = 0.0;
 
     for (int x = 0; x < n; ++x){
         a[x] = rand() / (real_t)(RAND_MAX/10);
@@ -22,7 +21,7 @@ int test1(){
 
     #pragma acc data copyin(a[0:10*n], b[0:10*n]) copy(c[0:10*n], maximum[0:10])
     {
-        #pragma acc serial loop gang private(temp)
+        #pragma acc serial loop private(temp)
         for (int x = 0; x < 10; ++x){
             temp = 0;
             #pragma acc loop worker reduction(max:temp)

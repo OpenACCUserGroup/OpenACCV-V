@@ -21,15 +21,16 @@
         d = a + b
 				errors = 0
 
-        !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT), c(1:10*LOOPCOUNT), d(1:10*LOOPCOUNT)) copy(errors(1:10))
+        !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT), c(1:10*LOOPCOUNT), d(1:10*LOOPCOUNT)) copy(errors_array(1:10))
           DO x = 0, 9
             !$acc parallel loop async(x)
             DO y = 1, LOOPCOUNT
               c(x * LOOPCOUNT + y) = a(x * LOOPCOUNT + y) + b(x * LOOPCOUNT + y)
             END DO
-            !$acc parallel loop async(x) reduction(+:errors(x))
+            !$acc parallel loop async(x) reduction(+:errors_array(x))
             DO y = 1, LOOPCOUNT
-              IF (c(x * LOOPCOUNT + y) - d(x * LOOPCOUNT + y) .gt. PRECISION .OR. d(x * LOOPCOUNT + y) - c(x * LOOPCOUNT + y) .gt. PRECISION) THEN
+              IF (c(x * LOOPCOUNT + y) - d(x * LOOPCOUNT + y) .gt.  PRECISION .OR. &
+                d(x * LOOPCOUNT + y) - c(x * LOOPCOUNT + y) .gt. PRECISION) THEN
                 errors_array(x) = errors_array(x) + 1
               END IF
             END DO

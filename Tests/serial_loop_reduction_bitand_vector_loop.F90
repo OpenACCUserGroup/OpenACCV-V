@@ -1,21 +1,21 @@
 #ifndef T1
 !T1:serial,private,reduction,combined-constructs,loop,V:2.6-2.7
-      LOGICAL FUNCTION test1()
+  LOGICAL FUNCTION test1()
   IMPLICIT NONE
   INCLUDE "acc_testsuite.Fh"
   INTEGER,DIMENSION(LOOPCOUNT, 10):: a
   INTEGER,DIMENSION(10):: b, b_host
   REAL(8),DIMENSION(LOOPCOUNT, 10, 16):: randoms
   REAL(8):: false_margin
-  INTEGER:: x, y, temp, c
+  INTEGER:: x, y, temp, c, z
   INTEGER:: errors
 
   errors = 0
   false_margin = exp(log(.5) / LOOPCOUNT)
   SEEDDIM(1) = 1
-# ifdef SEED
+  #ifdef SEED
   SEEDDIM(1) = SEED
-# endif
+  #endif
   CALL RANDOM_SEED(PUT=SEEDDIM)
 
   CALL RANDOM_NUMBER(randoms)
@@ -63,7 +63,7 @@
       END
 #endif
 
-      PROGRAM main
+      PROGRAM serial_loop_reduction_bitand_vector_loop
         IMPLICIT NONE
         INTEGER :: failcode, testrun
         LOGICAL :: failed
