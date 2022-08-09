@@ -8,6 +8,10 @@ In order to run the suite, we have provided a Python script, infrastructure.py t
 python infrastructure.py -c=<config_input_file> -o=<output_file>
 ```
 
+```
+python3 infrastructure.py "-c=<configuration_file[,configuration_file2]>", "-o=<output_file>", "-in=<input_file[,input_file2]>",  "verbose", "-system=<system_name>", "-env=<environment_output>"
+```
+
 An input configuation file with instructions can be found in the repository as well in init_config.txt.  A single, non-existent file should be given for the output and the testsuite will be run according to the settings in the configuration file.  
 
 In addition, the infrastructure can be run with
