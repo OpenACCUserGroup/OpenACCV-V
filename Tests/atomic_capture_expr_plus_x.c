@@ -58,7 +58,7 @@ int test1(){
             #pragma acc loop
             for (int x = 0; x < n; ++x){
                 #pragma acc atomic capture
-                    c[x] = totals[x%((int)(n/10 + 1))] = (a[x] + b[x]) + totals[x%((int) n/10 + 1)];
+                    c[x] = totals[x%((int)(n/10 + 1))] = (a[x] + b[x]) + totals[x%((int)(n/10 + 1))];
             }
         }
     }
