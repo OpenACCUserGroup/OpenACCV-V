@@ -1,6 +1,6 @@
 #include "acc_testsuite.h"
 
-bool is_possible(real_t* a, real_t* b, int length, real_t prev){
+bool is_possible(int* a, int* b, int length, int prev){
     if (length == 0){
         return true;
     }
@@ -65,7 +65,7 @@ int test1(){
         {
             #pragma acc loop
             for (int x = 0; x < n; ++x){
-                #pragma acc atomic update capture
+                #pragma acc atomic capture
                     {
                         totals[x/10] = totals[x/10] & a[x];
                         b[x] = totals[x/10];

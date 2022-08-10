@@ -26,7 +26,7 @@ bool is_possible(int* a, int* b, int length, int prev){
     free(passed_b);
     return false;
 }
-
+ 
 #ifndef T1
 //T1:atomic,construct-independent,V:2.0-2.7
 int test1(){
@@ -64,7 +64,7 @@ int test1(){
         {
             #pragma acc loop
             for (int x = 0; x < n; ++x){
-                #pragma acc atomic update capture
+                #pragma acc atomic capture
                     {
                         b[x] = totals[x/10];
                         totals[x/10] &= a[x];
