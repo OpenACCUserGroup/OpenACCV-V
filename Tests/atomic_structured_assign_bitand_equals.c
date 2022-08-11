@@ -38,9 +38,8 @@ int test1(){
     int *totals_comparison = (int *)malloc((n/10 + 1) * sizeof(int));
     int *temp_a = (int *)malloc(10 * sizeof(int));
     int *temp_b = (int *)malloc(10 * sizeof(int));
-    int iterator;
-    int iterator2;
-    int init;
+    int temp_iterator;
+    int ab_iterator;
 
     for (int x = 0; x < n; ++x){
         for (int y = 0; y < 8; ++y){
@@ -51,8 +50,8 @@ int test1(){
     }
     for (int x = 0; x < n/10 + 1; ++x){
         for (int y = 0; y < 8; ++y){
-            totals[x] +=  1<<y;
-            totals_comparison[x] += 1<<y;
+            totals[x] =  1<<y;
+            totals_comparison[x] = 1<<y;
         }
     }
     for (int x = 0; x < n; ++x){
@@ -82,17 +81,14 @@ int test1(){
             break;
         }
     }
-    for (int x = 0; x < 8; ++x){
-        init += 1<<x;
-    }
 
     for (int x = 0; x < n; x = x + 10){
-        int y = x;
-        for (; y < x + 10 && y < n; y++){
-            temp_a[y - x] = a[y];
-            temp_b[y - x] = b[y];
+        temp_iterator = 0;
+        for (ab_iterator = x; ab_iterator < n && ab_iterator < x + 10; ab_iterator+= 1){
+            temp_a[temp_iterator] = a[ab_iterator];
+            temp_b[temp_iterator] = b[ab_iterator];
         }
-        if (!is_possible(temp_a, temp_b, y - x, init)){
+        if (!is_possible(temp_a, temp_b, temp_iterator, 1)){
             err += 1;
         }
     }
