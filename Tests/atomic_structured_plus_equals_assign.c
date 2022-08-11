@@ -82,7 +82,7 @@ int test1(){
             passed_ab[passed_indexer] = a[absolute_indexer] * b[absolute_indexer];
             passed_c[passed_indexer] = c[absolute_indexer];
         }
-        if (!is_possible(passed_ab, passed_c, passed_indexer - 1, 0)){
+        if (!is_possible(passed_ab, passed_c, passed_indexer, 0)){
             err++;
         }
     }
