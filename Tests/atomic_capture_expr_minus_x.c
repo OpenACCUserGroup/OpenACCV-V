@@ -103,7 +103,7 @@ int test1(){
             passed_a[passed_indexer] = a[absolute_indexer];
             passed_b[passed_indexer] = b[absolute_indexer];
         }
-        if (!is_possible(passed_a, passed_b, passed_indexer - 1, 0)){
+        if (!is_possible(passed_a, passed_b, passed_indexer, 0)){
             err += 1;
         }
         break;

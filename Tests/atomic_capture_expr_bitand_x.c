@@ -43,7 +43,7 @@ int test1(){
     int passed_indexer;
 
     for (int x = 0; x < n; ++x){
-        for (int y = 0; y < 8; ++y){
+	for (int y = 0; y < 8; ++y){
             if (rand()/(real_t)(RAND_MAX) < .933){ //.933 gets close to a 50/50 distribution for a collescence of 10 values
                 a[x] += 1<<y;
             }
@@ -52,7 +52,7 @@ int test1(){
     for (int x = 0; x < n/10 + 1; ++x){
         totals[x] = 0;
         totals_comparison[x] = 0;
-        for (int y = 0; y < 8; ++y){
+	for (int y = 0; y < 8; ++y){
             totals[x] +=  1<<y;
             totals_comparison[x] += 1<<y;
         }
@@ -89,7 +89,7 @@ int test1(){
             passed_a[passed_indexer] = a[absolute_indexer];
             passed_b[passed_indexer] = b[absolute_indexer];
         }
-        if (!is_possible(passed_a, passed_b, passed_indexer - 1, passed_total)){
+        if (!is_possible(passed_a, passed_b, passed_indexer, passed_total)){
             err += 1;
         }
     }

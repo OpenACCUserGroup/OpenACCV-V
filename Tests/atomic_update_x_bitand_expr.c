@@ -16,7 +16,9 @@ int test1(){
         }
     }
     for (int x = 0; x < n/10 + 1; ++x){
-        for (int y = 0; y < 8; ++y){
+        totals[x] = 0;
+        totals_comparison[x] = 0;
+	for (int y = 0; y < 8; ++y){
             totals[x] +=  1<<y;
             totals_comparison[x] += 1<<y;
         }
