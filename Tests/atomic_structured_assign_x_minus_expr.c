@@ -48,7 +48,6 @@ int test1(){
     }
     for (int x = 0; x < 10; ++x){
         totals[x] = 0;
-        totals_host[x] = 0;
     }
 
     #pragma acc data copyin(a[0:n], b[0:n]) copy(totals[0:10])
@@ -57,10 +56,9 @@ int test1(){
         {
             #pragma acc loop
             for (int x = 0; x < n; ++x){
-                #pragma acc atomic update capture
+                #pragma acc atomic capture
                 {
-                    c[x] = totals[x%10];
-                    totals[x%10] = totals[x%10] - (a[x] + b[x]);
+                    c[x] = totals[x%10]; totals[x%10] = totals[x%10] - (a[x] + b[x]);
                 }
             }
         }

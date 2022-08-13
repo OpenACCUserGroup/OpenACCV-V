@@ -42,6 +42,7 @@ int test1(){
     int absolute_indexer;
 
     for (int x = 0; x < n; ++x){
+	a[x] = 0;
         for (int y = 0; y < 8; ++y){
             if (rand()/(real_t)(RAND_MAX) > .933){ //.933 gets close to a 50/50 distribution for a collescence of 10 values
                 a[x] += 1<<y;
@@ -50,14 +51,11 @@ int test1(){
     }
     for (int x = 0; x < n/10 + 1; ++x){
         totals[x] = 0;
-        totals_comparison[x] = 0;
-        for (int y = 0; y < 8; ++y){
-            totals[x] +=  1<<y;
-            totals_comparison[x] += 1<<y;
-        }
+	totals_comparison[x] = 0;
+
     }
 
-    #pragma acc data copyin(a[0:n]) copy(totals[0:n/10 + 1])
+    #pragma acc data copyin(a[0:n], b[0:n]) copy(totals[0:n/10 + 1])
     {
         #pragma acc parallel
         {
@@ -83,7 +81,7 @@ int test1(){
             passed_a[passed_indexer] = a[absolute_indexer];
             passed_b[passed_indexer] = b[absolute_indexer];
         }
-        if (!is_possible(passed_a, passed_b, passed_indexer, 0)){
+        if (!is_possible(passed_a, passed_b, passed_indexer - 1, 0)){
             err++;
         }
     }
