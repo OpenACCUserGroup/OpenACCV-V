@@ -48,9 +48,10 @@ int test1(){
     }
     for (int x = 0; x < 10; ++x){
         totals[x] = 0;
+        totals_host[x] = 0;
     }
 
-    #pragma acc data copyin(a[0:n], b[0:n]) copy(totals[0:10])
+    #pragma acc data copyin(a[0:n], b[0:n]) copy(totals[0:10]) copyout(c[0:n])
     {
         #pragma acc parallel
         {
@@ -78,7 +79,7 @@ int test1(){
             passed_ab[passed_indexer] = a[absolute_indexer] + b[absolute_indexer];
             passed_c[passed_indexer] = c[absolute_indexer];
         }
-        if (!is_possible(passed_ab, passed_c, passed_indexer - 1, 0)){
+        if (!is_possible(passed_ab, passed_c, passed_indexer, 0)){
             err++;
         }
     }
@@ -98,6 +99,7 @@ int main(){
     if (failed != 0){
         failcode = failcode + (1 << 0);
     }
+    printf("FAIL CODE: %d\n",failcode);
 #endif
     return failcode;
 }
