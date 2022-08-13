@@ -55,7 +55,7 @@ int test1(){
 
     }
 
-    #pragma acc data copyin(a[0:n], b[0:n]) copy(totals[0:n/10 + 1])
+    #pragma acc data copyin(a[0:n]) copy(totals[0:n/10 + 1], b[0:n])
     {
         #pragma acc parallel
         {
@@ -81,7 +81,7 @@ int test1(){
             passed_a[passed_indexer] = a[absolute_indexer];
             passed_b[passed_indexer] = b[absolute_indexer];
         }
-        if (!is_possible(passed_a, passed_b, passed_indexer - 1, 0)){
+        if (!is_possible(passed_a, passed_b, passed_indexer, 0)){
             err++;
         }
     }
