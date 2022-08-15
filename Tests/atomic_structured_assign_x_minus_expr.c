@@ -50,16 +50,15 @@ int test1(){
         totals[x] = 0;
     }
 
-    #pragma acc data copyin(a[0:n], b[0:n]) copy(totals[0:10])
+    #pragma acc data copyin(a[0:n], b[0:n]) copy(totals[0:10], c[0:n])
     {
         #pragma acc parallel
         {
             #pragma acc loop
             for (int x = 0; x < n; ++x){
-                #pragma acc atomic update capture
+                #pragma acc atomic capture
                 {
-                    c[x] = totals[x%10];
-                    totals[x%10] = totals[x%10] - (a[x] + b[x]);
+                    c[x] = totals[x%10]; totals[x%10] = totals[x%10] - (a[x] + b[x]);
                 }
             }
         }
@@ -79,7 +78,7 @@ int test1(){
             passed_ab[passed_indexer] = a[absolute_indexer] + b[absolute_indexer];
             passed_c[passed_indexer] = c[absolute_indexer];
         }
-        if (!is_possible(passed_ab, passed_c, passed_indexer - 1, 0)){
+        if (!is_possible(passed_ab, passed_c, passed_indexer, 0)){
             err++;
         }
     }

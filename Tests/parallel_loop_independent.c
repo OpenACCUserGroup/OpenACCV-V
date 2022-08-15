@@ -11,7 +11,7 @@ int test1(){
         a[x] = rand() / (real_t)(RAND_MAX / 10);
     }
 
-    #pragma acc data copy(a[0:n])
+    #pragma acc data copy(a[0:n]) copyout(b[0:n])
     {
         #pragma acc parallel loop independent
         for (int x = 0; x < n; ++x){

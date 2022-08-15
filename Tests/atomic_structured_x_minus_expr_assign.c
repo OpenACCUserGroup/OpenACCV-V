@@ -48,9 +48,10 @@ int test1(){
     }
     for (int x = 0; x < 10; ++x){
         totals[x] = 0;
+	totals_host[x] = 0;
     }
 
-    #pragma acc data copyin(a[0:n], b[0:n]) copy(totals[0:10])
+    #pragma acc data copyin(a[0:n], b[0:n]) copy(totals[0:10], c[0:n])
     {
         #pragma acc parallel
         {

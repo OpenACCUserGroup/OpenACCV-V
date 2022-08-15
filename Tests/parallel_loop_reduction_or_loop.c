@@ -20,7 +20,7 @@ int test1(){
             a_copy[x] = 0;
         }
     }
-    #pragma acc data copy(a[0:10*n])
+    #pragma acc data copy(a[0:10*n]) copyout(results[0:10])
     {
         #pragma acc parallel loop gang private(temp)
         for (int x = 0; x < 10; ++x){

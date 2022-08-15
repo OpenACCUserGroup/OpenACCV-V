@@ -17,9 +17,9 @@ int test1(){
 
     devdata = acc_copyin(hostdata, 3 * n * sizeof(real_t));
     #pragma acc enter data create(a[0:n], b[0:n], c[0:n])
-    acc_memcpy_device(a, devdata, n * sizeof(real_t));
-    acc_memcpy_device(b, devdata+n, n * sizeof(real_t));
-    acc_memcpy_device(c, devdata+2*n, n * sizeof(real_t));
+    acc_memcpy_device(acc_deviceptr(a), devdata, n * sizeof(real_t));
+    acc_memcpy_device(acc_deviceptr(b), devdata+n, n * sizeof(real_t));
+    acc_memcpy_device(acc_deviceptr(c), devdata+2*n, n * sizeof(real_t));
 
     #pragma acc data present(a[0:n], b[0:n], c[0:n])
     {

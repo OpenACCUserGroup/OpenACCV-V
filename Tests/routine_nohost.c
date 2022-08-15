@@ -26,7 +26,7 @@ int test1(){
         b[x] = 0;
     }
 
-    #pragma acc data copyin(a[0:n][0:n]) copyout(b[0:n])
+    #pragma acc data copyin(a[0:n]) copyout(b[0:n])
     {
         #pragma acc parallel
         {
