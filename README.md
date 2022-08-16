@@ -24,6 +24,13 @@ The file generated can be passed to the script through the configuration file an
 
 For any further questions, please feel free to contact us Sunita Chandrasekaran - schandra@udel.edu and Aaron Jarmusch - jarmusch@udel.edu
 
+Current Student Authors:
+Aaron Jarmusch
+Aaron Liu
+Vaidhyanathan Ravichandran
+Christian Munley
+Daniel Horta
+
 Past Authors:
 Kyle Friedline
 
