@@ -1,6 +1,8 @@
 # OpenACCV-V
 This repository is updated with OpenACC test codes validating and verifying implementations of features and its conformance to the OpenACC specification. We are continuously adding and editing tests to conform to the latest version of the [OpenACC Specification](https://www.openacc.org/specification). 
 
+Consult our website for more details on results and our project [OpenACC V&V Website](https://crpl.cis.udel.edu/oaccvv/).
+
 ## Executing program
 
 In order to run the suite, we have provided a Python script, infrastructure.py that can be run. It is recommended to use Python 3.3 or later. Once Python has been loaded into your environment, the script can be invoked with the command  
