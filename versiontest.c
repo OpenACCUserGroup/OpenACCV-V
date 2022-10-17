@@ -20,6 +20,12 @@ int main(){
 	else if (_OPENACC == 201911){
 		printf("3.0");
 	}
+	else if (_OPENACC == 202011){
+		printf("3.1");
+	}
+	else if (_OPENACC == 202111){
+		printf("3.2");
+	}
 	else{
 		return 1;
 	}
