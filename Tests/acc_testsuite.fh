@@ -1,9 +1,0 @@
-  integer, parameter :: SMALL_LOOPCOUNT = 100
-  integer, parameter :: LOOPCOUNT = 1000
-  integer, parameter :: ARRAYSIZE = 1000
-  integer, parameter :: ARRAYSIZE_NEW = 1024
-  integer, parameter :: ARRAYSIZE_SMALL = 10
-  integer, parameter :: NUM_TEST_CALLS = 1
-  integer, parameter :: n = 1
-  integer, dimension(33) :: SEEDDIM = 0
-  real, parameter :: PRECISION = 1.e-2
