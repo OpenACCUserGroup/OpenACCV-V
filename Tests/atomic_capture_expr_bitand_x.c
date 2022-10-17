@@ -43,7 +43,7 @@ int test1(){
     int passed_indexer;
 
     for (int x = 0; x < n; ++x){
-	for (int y = 0; y < 8; ++y){
+        for (int y = 0; y < 8; ++y){
             if (rand()/(real_t)(RAND_MAX) < .933){ //.933 gets close to a 50/50 distribution for a collescence of 10 values
                 a[x] += 1<<y;
             }
@@ -52,7 +52,7 @@ int test1(){
     for (int x = 0; x < n/10 + 1; ++x){
         totals[x] = 0;
         totals_comparison[x] = 0;
-	for (int y = 0; y < 8; ++y){
+	    for (int y = 0; y < 8; ++y){
             totals[x] +=  1<<y;
             totals_comparison[x] += 1<<y;
         }
@@ -75,7 +75,7 @@ int test1(){
     }
 
     for (int x = 0; x < 10; ++x){
-        if (fabs(totals_comparison[x] - totals[x]) > PRECISION){
+        if (totals_comparison[x] != totals[x]) {
             err += 1;
             break;
         }
