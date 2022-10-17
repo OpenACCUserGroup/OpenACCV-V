@@ -3,7 +3,7 @@
       LOGICAL FUNCTION test1()
         USE OPENACC
         IMPLICIT NONE
-        INCLUDE "acc_testsuite.fh"
+        INCLUDE "acc_testsuite.Fh"
         INTEGER :: x !Iterators
         REAL(8),DIMENSION(LOOPCOUNT):: a, b, c !Data
         INTEGER :: errors = 0

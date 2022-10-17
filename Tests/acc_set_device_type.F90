@@ -3,7 +3,7 @@
       LOGICAL FUNCTION test1()
         USE OPENACC
         IMPLICIT NONE
-        INCLUDE "acc_testsuite.fh"
+        INCLUDE "acc_testsuite.Fh"
         INTEGER :: errors = 0
         INTEGER :: device_type
 
