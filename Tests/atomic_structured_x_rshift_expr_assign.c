@@ -6,7 +6,7 @@ bool is_possible(unsigned int a, unsigned int* b, int length, unsigned int prev)
     unsigned int passed_a = 0;
     unsigned int *passed_b = (unsigned int *)malloc((length - 1) * sizeof(unsigned int));
     for (int x = 0; x < length; ++x){
-        if ((b[x] == (prev >> 1) && (a>>x)%2==1) || b[x] == prev && (a>>x)%2==0){
+        if ((b[x] == (prev >> 1) && (a>>x)%2==1) || (b[x] == prev && (a>>x)%2==0)) {
             for (int y = 0; y < x; ++y){
                 if ((a>>y)%2 == 1){
                     passed_a += 1<<y;

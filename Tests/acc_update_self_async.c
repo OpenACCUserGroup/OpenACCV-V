@@ -63,13 +63,13 @@ int test1(){
 #ifndef T2
 //T2:runtime,data,executable-data,devonly,async,construct-independent,V:2.5-2.7
 int test2(){
-	int err = 0;
     real_t *a = (real_t *)malloc(n * sizeof(real_t));
     real_t *b = (real_t *)malloc(n * sizeof(real_t));
     real_t *c = (real_t *)malloc(n * sizeof(real_t));
     real_t *d = (real_t *)malloc(n * sizeof(real_t));
 
     int *devtest = (int *)malloc(sizeof(int));
+    int err = 0;
 
     devtest[0] = 1;
     #pragma acc enter data copyin(devtest[0:1])
