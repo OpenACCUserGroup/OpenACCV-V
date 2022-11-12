@@ -82,7 +82,7 @@ int test2(){
             {
                 #pragma acc loop
                 for (int x = 0; x < n; ++x){
-                    c[x] = a[x];
+                    c[x] = b[x];
                 }
             }
         }

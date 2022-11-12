@@ -31,10 +31,10 @@ int test1(){
     }
 
     for (int x = 0; x < n; ++x){
-        if (fabs(c[x] - b_copy[x]) > PRECISION){
+        if (abs(c[x] - b_copy[x]) > PRECISION){
             err++;
         }
-        if (fabs(b[x] - a[x]) > PRECISION){
+        if (abs(b[x] - a[x]) > PRECISION){
             err++;
         }
     }

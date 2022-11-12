@@ -168,7 +168,7 @@ int test1(){
         a[x] = (real_t *)malloc(n * sizeof(real_t));
     }
 
-    for (int x = 0; x < n; ++x)
+    for (int x = 0; x < n; ++x){
         for (int y = 0; y < n; ++y){
             a[x][y] = rand() / (real_t)(RAND_MAX / 10);
         }

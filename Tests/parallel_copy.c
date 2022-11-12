@@ -30,6 +30,7 @@ int test1(){
 }
 #endif
 #ifndef T2
+//T2:parallel,data,data-region,V:1.0-2.7
 int test2(){
     int err = 0;
     srand(SEED);
@@ -40,7 +41,7 @@ int test2(){
         device += 1.0;
     }
 
-    if(fabs(device - host) > PRECISION){
+    if(fabs(host - (device - n) ) > PRECISION){
             err++;
     }
 

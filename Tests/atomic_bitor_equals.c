@@ -40,7 +40,7 @@ int test1(){
         totals_comparison[x%(n/10 + 1)] |= a[x];
     }
     for (int x = 0; x < 10; ++x){
-        if (totals_comparison[x] != totals[x]) {
+        if (fabs(totals_comparison[x] - totals[x]) > PRECISION){
             err += 1;
             break;
         }

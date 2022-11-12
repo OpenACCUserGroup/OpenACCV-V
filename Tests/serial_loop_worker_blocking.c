@@ -33,7 +33,7 @@ int test1(){
 
     for (int x = 0; x < n; ++x){
       if (fabs(c[x] - 3 * (a[x] + b[x])) > PRECISION){
-        err += 1;
+        err + 1;
         break;
       }
     }
