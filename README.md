@@ -235,13 +235,13 @@ Paper: https://ieeexplore.ieee.org/abstract/document/6969543?casa_token=dIj3u0IM
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/OpenACCUserGroup/OpenACCV-V?style=for-the-badge
 [contributors-url]: https://github.com/OpenACCUserGroup/OpenACCV-V/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/OpenACCUserGroup/OpenACCV-V.svg?style=for-the-badge
 [forks-url]: https://github.com/OpenACCUserGroup/OpenACCV-V/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/OpenACCUserGroup/OpenACCV-V.svg?style=for-the-badge
 [stars-url]: https://github.com/OpenACCUserGroup/OpenACCV-V/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/OpenACCUserGroup/OpenACCV-V.svg?style=for-the-badge
 [issues-url]: https://github.com/OpenACCUserGroup/OpenACCV-V/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/OpenACCUserGroup/OpenACCV-V.svg?style=for-the-badge
 [license-url]: https://github.com/OpenACCUserGroup/OpenACCV-V/blob/master/LICENSE
