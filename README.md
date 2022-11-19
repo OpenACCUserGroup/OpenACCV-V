@@ -6,8 +6,8 @@
 [![Issues][issues-shield]][issues-url]
 [![BSD 3-Clause License][license-shield]][license-url]
 
-![Logo](images/OpenACCVVdarknew.png#gh-dark-mode-only)
-![Logo](images/OpenACCVVwhitenew.png#gh-light-mode-only)
+![Logo](images/OpenACCVVdarknew.png#gh-light-mode-only)
+![Logo](images/OpenACCVVwhitenew.png#gh-dark-mode-only)
 
 
 <!-- PROJECT LOGO -->
