@@ -14,10 +14,10 @@
 <br />
 <div align="center" allowed_elements>
 
-  <h3 align="center">Validation Suite</h3>
+  <h3 align="center">Validation and Verification Testsuite</h3>
 
   <p align="center">
-    The private repository for the OpenACC Validation & Verification Testsuite.
+    The Public repository for the OpenACC Validation & Verification Testsuite.
     <br />
     <a href="https://github.com/OpenACC/validation-suite/tree/master"><strong>Explore the docs »</strong></a>
     <br />
@@ -171,13 +171,14 @@ Distributed under the BSD 3-Clause License. See `LICENSE.txt` for more informati
 <!-- CONTACT -->
 ## Contact
 
-Aaron Jarmusch - jarmusch@udel.edu Sunita Chandrasekaran - schandra@udel.edu
+Aaron Jarmusch - jarmusch@udel.edu 
 
-CRPL - [@your_twitter](https://twitter.com/your_username) - [https://crpl.cis.udel.edu/](https://crpl.cis.udel.edu/)
+Sunita Chandrasekaran - schandra@udel.edu
+
+CRPL - [https://crpl.cis.udel.edu/](https://crpl.cis.udel.edu/)
 
 Website Link: [https://crpl.cis.udel.edu/oaccvv/results/](https://crpl.cis.udel.edu/oaccvv/results/)
 
-Public Repo Link: [https://github.com/OpenACCUserGroup/OpenACCV-V](https://github.com/OpenACCUserGroup/OpenACCV-V)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -189,8 +190,8 @@ Current Student Authors:
 * Vaidhyanathan Ravichandran
 * Christian Munley
 * Daniel Horta
-* Joy Mwaria
 * Emma Frampton
+* Will Gunter
 
 Contributors:
 * Joel Denny
@@ -200,6 +201,7 @@ Contributors:
 
 Past Authors:
 * Kyle Friedline
+* Joy Mwaria
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
