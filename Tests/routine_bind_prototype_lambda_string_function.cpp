@@ -86,6 +86,7 @@ real_t device_object_object(data_container<real_t> *a, long long n){
 }
 
 #ifndef T1
+//T1: , V:1.0-2.7
 int test1(){
     int err = 0;
     srand(SEED);
@@ -124,6 +125,7 @@ int test1(){
 }
 #endif
 #ifndef T2
+//T2: , V:1.0-2.7
 int test2(){
     int err = 0;
     srand(SEED);
@@ -162,6 +164,7 @@ int test2(){
 }
 #endif
 #ifndef T3
+//T3: , V:1.0-2.7
 int test3(){
     int err = 0;
     srand(SEED);
@@ -201,6 +204,7 @@ int test3(){
 }
 #endif
 #ifndef T4
+//T4: , V:1.0-2.7
 int test4(){
     int err = 0;
     srand(SEED);
