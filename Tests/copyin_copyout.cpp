@@ -1,8 +1,8 @@
 #include "acc_testsuite.h"
-
 using namespace std;
 
 #ifndef T1
+//T1: , V:1.0-2.7
 int test1(){
     int err = 0;
     real_t test = 0;
@@ -19,6 +19,7 @@ int test1(){
 }
 #endif
 #ifndef T2
+//T2: , V:1.0-2.7
 int test2(){
     int err = 0;
     real_t *test = (real_t *)malloc(n * sizeof(real_t));
@@ -42,6 +43,7 @@ int test2(){
 }
 #endif
 #ifndef T3
+//T3: , V:1.0-2.7
 int test3(){
     int err = 0;
     data_container<real_t> a = *(new data_container<real_t>(n));

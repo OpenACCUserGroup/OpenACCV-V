@@ -1,5 +1,6 @@
 #include "acc_testsuite.h"
 #ifndef T1
+//T1:reference-counting,data,V:3.2-3.3
 int test1(){
     int err = 0;
     srand(SEED);
