@@ -30,7 +30,7 @@ int test1() {
             // Put the queue number in the queues list
             queues[i] = i;
 
-            #pragma acc parallel loop
+            #pragma acc parallel loop async(i)
             for(int k = 0; k < n; k++) {
                 list[i][k]++;
             }

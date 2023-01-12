@@ -1,6 +1,6 @@
 #include "acc_testsuite.h"
 #ifndef T1
-//T1: , V:1.0-2.7
+//T1:, V:1.0-2.7
 int test1(){
     int err = 0;
     real_t test = 0;
