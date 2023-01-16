@@ -62,7 +62,7 @@
 #endif
 
 
-      PROGRAM set_device_type_num
+      PROGRAM main
         IMPLICIT NONE
         INTEGER :: failcode, testrun
         LOGICAL :: failed
