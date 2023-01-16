@@ -1,6 +1,6 @@
 #include "acc_testsuite.h"
 #ifndef T1
-//T1:init,runtime,V:2.5-2.7
+//T1:init,runtime,V:2.5-3.2
 int test1(){
     int err = 0;
     srand(SEED);
@@ -12,7 +12,7 @@ int test1(){
 }
 #endif
 #ifndef T2
-//T1:init,runtime,V:2.5-2.7
+//T1:init,runtime,V:2.5-3.2
 int test2(){
     int err = 0;
     srand(SEED);
@@ -24,7 +24,7 @@ int test2(){
 }
 #endif
 #ifndef T3
-//T1:init,runtime,V:2.5-2.7
+//T1:init,runtime,V:2.5-3.2
 int test3(){
     int err = 0;
     srand(SEED);
