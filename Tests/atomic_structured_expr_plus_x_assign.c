@@ -101,7 +101,6 @@ int main(){
     if (failed != 0){
         failcode = failcode + (1 << 0);
     }
-    printf("FAIL CODE: %d\n",failcode);
 #endif
     return failcode;
 }
