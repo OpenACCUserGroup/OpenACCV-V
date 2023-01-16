@@ -1,7 +1,7 @@
+#include "acc_testsuite.h"
 #define DECLARE_TEST
 #define DECLARE_DEVICE_RESIDENT
 #include "acc_testsuite_declare.h"
-#include "acc_testsuite.h"
 #pragma acc declare device_resident(fixed_size_array)
 #pragma acc declare device_resident(scalar)
 #pragma acc declare device_resident(datapointer)
