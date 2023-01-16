@@ -1,6 +1,6 @@
 #include "acc_testsuite.h"
 #ifndef T1
-//T1:serial,loop,reduction,combined-constructs,V:2.6-2.7
+//T1:serial,loop,reduction,combined-constructs,V:2.6-3.2
 int test1(){
     int err = 0;
     srand(SEED);
