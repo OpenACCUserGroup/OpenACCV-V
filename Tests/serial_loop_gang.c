@@ -16,13 +16,10 @@ int test1(){
 
     #pragma acc data copyin(a[0:n], b[0:n]) copy(c[0:n])
     {
-        #pragma acc serial
-	{
-	    #pragma acc loop gang
-      	    for (int x = 0; x < n; ++x){
- 		c[x] = a[x] + b[x];
-            }
-	}
+        #pragma acc serial loop gang
+        for (int x = 0; x < n; ++x){
+            c[x] = a[x] + b[x];
+        }
     }
 
     for (int x = 0; x < n; ++x){
