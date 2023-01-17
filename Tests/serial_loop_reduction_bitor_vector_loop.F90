@@ -59,7 +59,7 @@
       END
 #endif
 
-      PROGRAM serial_loop_reduction_bitor_vector_loop
+      PROGRAM main
         IMPLICIT NONE
         INTEGER :: failcode, testrun
         LOGICAL :: failed

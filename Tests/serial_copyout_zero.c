@@ -1,6 +1,6 @@
 #include "acc_testsuite.h"
 #ifndef T1
-//T1:serial,data,data-region,V:3.0-3.2
+//T1:serial,data,data-region,V:3.0-3.1
 int test1(){
     int err = 0;
     srand(SEED);

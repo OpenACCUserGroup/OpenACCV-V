@@ -8,9 +8,14 @@
         CHARACTER(len=:),ALLOCATABLE :: output2
         CHARACTER(len=:),ALLOCATABLE :: output3
         IF (acc_get_device_type() .ne. acc_device_none) THEN
-          CALL acc_get_property_string(acc_get_device_num(acc_get_device_type()), acc_get_device_type, acc_property_name, output1)
-          CALL acc_get_property_string(acc_get_device_num(acc_get_device_type()), acc_get_device_type, acc_property_vendor, output2)
-          CALL acc_get_property_string(acc_get_device_num(acc_get_device_type()), acc_get_device_type, acc_property_driver, output3)
+          ! Hopefully, the string is long enough:
+          allocate(character(len=1024) :: output1, output2, output3)
+          CALL acc_get_property_string(acc_get_device_num(acc_get_device_type()), acc_get_device_type(), &
+                                                          acc_property_name, output1)
+          CALL acc_get_property_string(acc_get_device_num(acc_get_device_type()), acc_get_device_type(), &
+                                                          acc_property_vendor, output2)
+          CALL acc_get_property_string(acc_get_device_num(acc_get_device_type()), acc_get_device_type(), &
+                                                          acc_property_driver, output3)
         END IF
         test1 = .FALSE.
       END

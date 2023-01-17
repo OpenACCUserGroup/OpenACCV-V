@@ -1,6 +1,6 @@
 #include "acc_testsuite.h"
 #ifndef T1
-//T1:parallel,wait,async,V:2.0-2.7
+//T1:parallel,wait,async,V:2.0-3.2
 int test1(){
     int err = 0;
     srand(SEED);

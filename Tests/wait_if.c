@@ -122,7 +122,7 @@ int test3(){
 	b[x] = rand() / (real_t)(RAND_MAX / 10);
 	c[x] = 0.0;
 	d[x] = rand() / (real_t)(RAND_MAX / 10);
-	e[x] = rand() / (real_t)(RAND_MAX / 10
+	e[x] = rand() / (real_t)(RAND_MAX / 10);
 	f[x] = 0.0;
     }
 
@@ -150,7 +150,7 @@ int test3(){
 	    err++;
 	}
 	if (f[x] > PRECISION){
-	    err++
+	    err++;
 	}
     }
     return err;
@@ -172,7 +172,7 @@ int test4(){
         b[x] = rand() / (real_t)(RAND_MAX / 10);
         c[x] = 0.0;
         d[x] = rand() / (real_t)(RAND_MAX / 10);
-        e[x] = rand() / (real_t)(RAND_MAX / 10
+        e[x] = rand() / (real_t)(RAND_MAX / 10);
         f[x] = 0.0;
     }
 
@@ -201,7 +201,7 @@ int test4(){
             err++;
         }
         if (f[x] > PRECISION){
-            err++
+            err++;
         }
     }
     return err;
