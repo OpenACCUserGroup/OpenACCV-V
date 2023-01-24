@@ -16,6 +16,8 @@ PROGRAM acc_shutdown
           PRINT*, "3.1"
         ELSE IF (_OPENACC == 202111) THEN
           PRINT*, "3.2"
+        ELSE IF (_OPENACC == 202211) THEN
+          PRINT*, "3.3"
         ELSE
           CALL EXIT(1)
         END IF

@@ -26,6 +26,9 @@ int main(){
 	else if (_OPENACC == 202111){
 		printf("3.2");
 	}
+	else if (_OPENACC == 202211){
+		printf("3.3");
+	}
 	else{
 		return 1;
 	}
