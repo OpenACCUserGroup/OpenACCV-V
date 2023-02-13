@@ -1041,6 +1041,8 @@ class test:
         return command
 
     def to_run(self):
+        if g_config.runAll == True:
+            return True
         if len(self.flags.keys()) == 0:
             return g_config.include_by_default
         for x in self.flags.keys():
@@ -1454,6 +1456,8 @@ class config:
         self.CPP = ""  # type: str
         self.FC = ""  # type: str
 
+        self.runAll = False # type: bool
+
         self.CCFlags = []  # type: List[str]
         self.CPPFlags = []  # type: List[str]
         self.FCFlags = []  # type: List[str]
@@ -1690,6 +1694,8 @@ class config:
         mutated_test_dir_overwritten = False
         for x in data:
             if not (x.startswith("!") or x.startswith("#")):
+                if x.startswith("RunAllTests:"):
+                    self.runAll = (x.split(":")[-1].strip().lower() == "true")
                 if x.startswith("Vendor:"):
                     self.set_vendor((x.split(":")[-1]).strip())
                 if x.startswith("CCFlags:"):
@@ -2169,7 +2175,7 @@ def copy_headers_to_dir(tl, dirname):
 
 
 
-OpenACCVersions = ["1.0", "2.0", "2.5", "2.6", "2.7"]
+OpenACCVersions = ["1.0", "2.0", "2.5", "2.6", "2.7", "3.0", "3.1", "3.2", "3.3"]
 g_config = None  # type: Optional[config]
 g_system = None  # type: Optional[system]
 g_results = None  # type: Optional[results]
