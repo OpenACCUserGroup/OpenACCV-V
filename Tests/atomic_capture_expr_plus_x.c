@@ -51,7 +51,7 @@ int test1(){
         totals_comparison[x] = 0;
     }
 
-    #pragma acc data copyin(a[0:n], b[0:n]) copy(totals[0:10]) copyout(c[0:n])
+    #pragma acc data copyin(a[0:n], b[0:n]) copy(totals[0:11]) copyout(c[0:n])
     {
         #pragma acc parallel
         {
