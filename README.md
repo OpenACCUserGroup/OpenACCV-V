@@ -190,8 +190,8 @@ Current Student Authors:
 * Vaidhyanathan Ravichandran
 * Christian Munley
 * Daniel Horta
-* Emma Frampton
 * Will Gunter
+* Olive Odida
 
 Contributors:
 * Joel Denny
@@ -201,7 +201,6 @@ Contributors:
 
 Past Authors:
 * Kyle Friedline
-* Joy Mwaria
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
