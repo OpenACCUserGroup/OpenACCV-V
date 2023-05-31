@@ -6,7 +6,7 @@ int test1(){
     int *a = (int *)acc_malloc(n * sizeof(int));
     size_t initial_memory = acc_get_property(acc_get_device_num(acc_get_device_type()), acc_get_device_type(), acc_property_free_memory);
 
-    acc_delete[] a;
+    acc_free(a);
     size_t final_memory = acc_get_property(acc_get_device_num(acc_get_device_type()), acc_get_device_type(), acc_property_free_memory);
     if (final_memory < initial_memory + n * sizeof(int)){
         err += 1;

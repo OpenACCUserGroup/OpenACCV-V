@@ -4,7 +4,7 @@
 int test1(){
     int err = 0;
 
-    int device_type = acc_get_device_type();
+    acc_device_t device_type = acc_get_device_type();
 
     acc_set_device_type(device_type);
     if (acc_get_device_type() != device_type){

@@ -6,7 +6,7 @@ int test1(){
     real_t *a = new real_t[n];
     real_t *a_ptr;
 
-    a_ptr = acc_create(a, n * sizeof(real_t));
+    a_ptr = reinterpret_cast<real_t*>(acc_create(a, n * sizeof(real_t)));
 
     if (a != acc_hostptr(acc_deviceptr(a))){
         err += 1;

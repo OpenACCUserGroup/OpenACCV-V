@@ -32,7 +32,7 @@ int test1(){
         e_host[x] = e[x];
     }
 
-    devdata = acc_create(hostdata, 6 * n * sizeof(real_t));
+    devdata = reinterpret_cast<real_t*>(acc_create(hostdata, 6 * n * sizeof(real_t)));
 
     acc_memcpy_to_device_async(devdata, a, n * sizeof(real_t), 1);
     acc_memcpy_to_device_async(&(devdata[n]), b, n * sizeof(real_t), 2);

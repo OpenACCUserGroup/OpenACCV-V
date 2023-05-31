@@ -18,9 +18,9 @@ int test1(){
 
     #pragma acc enter data copyin(a[0:n], b[0:n]) create(c[0:n])
 
-    a_ptr = acc_deviceptr(a);
-    b_ptr = acc_deviceptr(b);
-    c_ptr = acc_deviceptr(c);
+    a_ptr = reinterpret_cast<real_t*>(acc_deviceptr(a));
+    b_ptr = reinterpret_cast<real_t*>(acc_deviceptr(b));
+    c_ptr = reinterpret_cast<real_t*>(acc_deviceptr(c));
 
     #pragma acc data deviceptr(a_ptr, b_ptr, c_ptr)
     {

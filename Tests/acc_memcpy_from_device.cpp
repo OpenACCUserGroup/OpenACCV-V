@@ -15,7 +15,7 @@ int test1(){
         hostdata[2*n + x] = 1;
     }
 
-    devdata = acc_copyin(hostdata, 3 * n * sizeof(real_t));
+    devdata = reinterpret_cast<real_t*>(acc_copyin(hostdata, 3 * n * sizeof(real_t)));
 
     #pragma acc data deviceptr(devdata)
     {

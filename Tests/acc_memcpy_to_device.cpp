@@ -15,7 +15,7 @@ int test1(){
         c[x] = 1;
     }
 
-    devdata = acc_create(hostdata, 3 * n * sizeof(real_t));
+    devdata = reinterpret_cast<real_t*>(acc_create(hostdata, 3 * n * sizeof(real_t)));
 
     acc_memcpy_to_device(devdata, a, n * sizeof(real_t));
     acc_memcpy_to_device(&(devdata[n]), b, n * sizeof(real_t));

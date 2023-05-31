@@ -36,7 +36,7 @@ int test1(){
     }
 
     acc_unmap_data(c);
-    acc_delete[] d;
+    acc_free(d);
 
     return err;
 }
@@ -92,7 +92,7 @@ int test2(){
     }
     acc_unmap_data(c);
     acc_unmap_data(e);
-    acc_delete[] d;
+    acc_delete(d, n * sizeof(real_t));
 
     return err;
 }
@@ -146,7 +146,7 @@ int test3(){
     }
 
     acc_unmap_data(c);
-    acc_delete[] d;
+    acc_delete(d, n * sizeof(real_t));
 
     return err;
 }

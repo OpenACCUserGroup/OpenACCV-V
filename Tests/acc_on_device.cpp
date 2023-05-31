@@ -3,7 +3,7 @@
 //T1:runtime,construct-independent,V:1.0-2.7
 int test1(){
     int err = 0;
-    int device_type = acc_get_device_type();
+    acc_device_t device_type = acc_get_device_type();
 
     if (device_type != acc_device_none){
         #pragma acc data copy(err)
