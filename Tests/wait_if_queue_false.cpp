@@ -65,13 +65,13 @@ int test2(){
     int err = 0;
     srand(time(NULL));
 
-    real_t * a = (real_t *)malloc(n * sizeof(real_t));
-    real_t * b = (real_t *)malloc(n * sizeof(real_t));
-    real_t * c = (real_t *)malloc(n * sizeof(real_t));
-    real_t * d = (real_t *)malloc(n * sizeof(real_t));
-    real_t * e = (real_t *)malloc(n * sizeof(real_t));
-    real_t * f = (real_t *)malloc(n * sizeof(real_t));
-    real_t * g = (real_t *)malloc(n * sizeof(real_t));
+    real_t * a = new real_t[n];
+    real_t * b = new real_t[n];
+    real_t * c = new real_t[n];
+    real_t * d = new real_t[n];
+    real_t * e = new real_t[n];
+    real_t * f = new real_t[n];
+    real_t * g = new real_t[n];
 
     for (int x = 0; x < n; ++x){
         a[x] = rand() / (real_t)(RAND_MAX / 10);
@@ -114,13 +114,13 @@ int test2(){
         }
     }
 
-    free(a);
-    free(b);
-    free(c);
-    free(d);
-    free(e);
-    free(f);
-    free(g);
+    delete[] a;
+    delete[] b;
+    delete[] c;
+    delete[] d;
+    delete[] e;
+    delete[] f;
+    delete[] g;
 
     return err;
 }
@@ -131,11 +131,11 @@ int test3(){
     int err = 0;
     srand(time(NULL));
 
-    real_t * a = (real_t *)malloc(n * sizeof(real_t));
-    real_t * b = (real_t *)malloc(n * sizeof(real_t));
+    real_t * a = new real_t[n];
+    real_t * b = new real_t[n];
     data_container<real_t> c = *(new data_container<real_t>(n));
-    real_t * d = (real_t *)malloc(n * sizeof(real_t));
-    real_t * e = (real_t *)malloc(n * sizeof(real_t));
+    real_t * d = new real_t[n];
+    real_t * e = new real_t[n];
     data_container<real_t> f = *(new data_container<real_t>(n));
     data_container<real_t> g = *(new data_container<real_t>(n));
 
@@ -180,10 +180,10 @@ int test3(){
         }
     }
 
-    free(a);
-    free(b);
-    free(d);
-    free(e);
+    delete[] a;
+    delete[] b;
+    delete[] d;
+    delete[] e;
 
     return err;
 }
@@ -196,11 +196,11 @@ int test4(){
 
     data_container<real_t> a = *(new data_container<real_t>(n));
     data_container<real_t> b = *(new data_container<real_t>(n));
-    real_t * c  = (real_t *)malloc(n * sizeof(real_t));
+    real_t * c  = new real_t[n];
     data_container<real_t> d = *(new data_container<real_t>(n));
     data_container<real_t> e = *(new data_container<real_t>(n));
-    real_t * f = (real_t *)malloc(n * sizeof(real_t));
-    real_t * g = (real_t *)malloc(n * sizeof(real_t));
+    real_t * f = new real_t[n];
+    real_t * g = new real_t[n];
 
     for (int x = 0; x < n; ++x){
         a.data[x] = rand() / (real_t)(RAND_MAX / 10);
@@ -242,9 +242,9 @@ int test4(){
         }
     }
 
-    free(c);
-    free(f);
-    free(g);
+    delete[] c;
+    delete[] f;
+    delete[] g;
 
     return err;
 }
