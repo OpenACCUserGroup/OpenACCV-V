@@ -4,10 +4,10 @@
 int test1() {
     int err = 0;
     srand(SEED);
-    _Bool* a = new _Bool[n];
-    _Bool* b = new _Bool[n];
-    _Bool total = 1;
-    _Bool host_total = 1;
+    bool* a = new bool[n];
+    bool* b = new bool[n];
+    bool total = 1;
+    bool host_total = 1;
 
     for (int x = 0; x < n; ++x) {
         if ((rand()/((real_t) RAND_MAX)) > .5) {

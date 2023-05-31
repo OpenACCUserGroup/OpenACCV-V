@@ -42,7 +42,7 @@ int test1(){
     #pragma acc data copyin(a[0:n][0:n], b[0:n][0:n]) copy(c[0:n][0:n]) copyout(d[0:n][0:n])
     {
         for (int x = 0; x < n; ++x){
-            devpointer_c[x] = acc_deviceptr(c[x]);
+            devpointer_c[x] = reinterpret_cast<real_t *>(acc_copyin(c[x], n * sizeof(real_t)));
             declare_deviceptr(a[x], b[x], devpointer_c[x], d[x]);
         }
     }
@@ -95,7 +95,7 @@ int test2(){
             for (int x = 0; x < n; ++x){
                 #pragma acc data copyout(d[x:1][0:n])
                 {
-                    devpointer_c[x] = acc_copyin(c[x], n * sizeof(real_t));
+                    devpointer_c[x] = reinterpret_cast<real_t *>(acc_copyin(c[x], n * sizeof(real_t)));
                     declare_deviceptr(a[x], b[x], devpointer_c[x], d[x]);
                 }
                 for (int y = 0; y < n; ++y){
