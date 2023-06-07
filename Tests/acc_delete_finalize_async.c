@@ -21,8 +21,6 @@ int test1(){
     }
 
     #pragma acc enter data copyin(a[0:n], b[0:n], d[0:n], e[0:n])
-    #pragma acc enter data copyin(a[0:n], b[0:n], d[0:n], e[0:n])
-
     #pragma acc data present(a[0:n], b[0:n], d[0:n], e[0:n]) copyout(c[0:n], f[0:n])
     {
         #pragma acc parallel async(1)
@@ -87,7 +85,6 @@ int test2(){
         }
 
         #pragma acc enter data copyin(a[0:n], b[0:n], c[0:n])
-        #pragma acc enter data copyin(c[0:n])
         #pragma acc data present(a[0:n], b[0:n], c[0:n])
         {
             #pragma acc parallel async(1)
@@ -110,6 +107,7 @@ int test2(){
                 }
             }
         }
+	#pragma acc wait
         #pragma acc exit data delete(a[0:n], b[0:n]) copyout(c[0:n])
 
         for (int x = 0; x < n; ++x){
