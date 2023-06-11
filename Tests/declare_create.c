@@ -2,6 +2,9 @@
 #define DECLARE_TEST
 #define DECLARE_CREATE
 #include "acc_testsuite_declare.h"
+int scalar = 2;
+real_t * fixed_size_array;
+real_t * datapointer;
 #pragma acc declare create(fixed_size_array)
 #pragma acc declare create(scalar)
 #pragma acc declare create(datapointer)
@@ -23,8 +26,10 @@ int test1(){
     srand(SEED);
     real_t * a = (real_t *)malloc(n * sizeof(real_t));
     real_t * b = (real_t *)malloc(n * sizeof(real_t));
-    int mult = 2;
+    fixed_size_array = (real_t *)malloc(n * sizeof(real_t));
+    // int mult = 2;
     #pragma acc update device(n)
+    #pragma acc update device(fixed_size_array)
 
     for (int x = 0; x < n; ++x){
         a[x] = rand() / (real_t)(RAND_MAX / 10);
@@ -67,7 +72,7 @@ int test2(){
     srand(SEED);
     real_t * a = (real_t *)malloc(n * sizeof(real_t));
     real_t * b = (real_t *)malloc(n * sizeof(real_t));
-    int mult = 2;
+    // int mult = 2;
     #pragma acc update device(n)
 
     for (int x = 0; x < n; ++x){
@@ -106,7 +111,7 @@ int test3(){
     srand(SEED);
     real_t * a = (real_t *)malloc(n * sizeof(real_t));
     real_t * b = (real_t *)malloc(n * sizeof(real_t));
-    int mult = 2;
+    // int mult = 2;
     #pragma acc update device(n)
 
     for (int x = 0; x < n; ++x){
@@ -121,7 +126,8 @@ int test3(){
         {
             #pragma acc loop
             for (int x = 0; x < 1; ++x){
-                extern_multiplyData_create(a, n);
+                // extern_multiplyData_create(a, n);
+                // multiplyData(a, n);
             }
         }
     }
@@ -144,7 +150,7 @@ int test4(){
     srand(SEED);
     real_t * a = (real_t *)malloc(n * sizeof(real_t));
     real_t * b = (real_t *)malloc(n * sizeof(real_t));
-    int mult = 2;
+    // int mult = 2;
     #pragma acc update device(n)
 
     for (int x = 0; x < n; ++x){
@@ -180,7 +186,7 @@ int test5(){
     srand(SEED);
     real_t * a = (real_t *)malloc(n * sizeof(real_t));
     real_t * b = (real_t *)malloc(n * sizeof(real_t));
-    int mult = 2;
+    // int mult = 2;
     #pragma acc update device(n)
 
     for (int x = 0; x < n; ++x){
