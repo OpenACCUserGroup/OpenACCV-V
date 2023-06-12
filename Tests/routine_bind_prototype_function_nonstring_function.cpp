@@ -91,8 +91,8 @@ real_t device_object_object(data_container<real_t> *a, long long n){
 int test1(){
     int err = 0;
     srand(SEED);
-    real_t *a = (real_t *)malloc(n * sizeof(real_t));
-    real_t *b = (real_t *)malloc(n * sizeof(real_t));
+    real_t *a = new real_t[n];
+    real_t *b = new real_t[n];
     int on_host = (acc_get_device_type() == acc_device_none);
 
     for (int x = 0; x < n; ++x){
@@ -119,8 +119,8 @@ int test1(){
             err += 1;
         }
     }
-    free(a);
-    free(b);
+    delete[] a;
+    delete[] b;
 
     return err;
 }
@@ -131,7 +131,7 @@ int test2(){
     int err = 0;
     srand(SEED);
     data_container<real_t> a = *(new data_container<real_t>(n));
-    real_t *b = (real_t *)malloc(n * sizeof(real_t));
+    real_t *b = new real_t[n];
     int on_host = (acc_get_device_type() == acc_device_none);
 
     for (int x = 0; x < n; ++x){
@@ -159,7 +159,7 @@ int test2(){
         }
     }
 
-    free(b);
+    delete[] b;
 
     return err;
 }
@@ -169,7 +169,7 @@ int test2(){
 int test3(){
     int err = 0;
     srand(SEED);
-    real_t *a = (real_t *)malloc(n * sizeof(real_t));
+    real_t *a = new real_t[n];
     data_container<real_t> b = *(new data_container<real_t>(n));
     int on_host = (acc_get_device_type() == acc_device_none);
 
@@ -199,7 +199,7 @@ int test3(){
         }
     }
 
-    free(a);
+    delete[] a;
 
     return err;
 }
