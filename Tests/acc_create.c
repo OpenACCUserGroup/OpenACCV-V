@@ -198,10 +198,10 @@ int test5(){
             }
         }
 
-        #pragma acc exit data delete(c[0:n])
         #pragma acc exit data copyout(c[0:n])
-    
-        for (int x = 0; x < n; ++x) {
+        #pragma acc exit data delete(c[0:n])
+        
+	for (int x = 0; x < n; ++x) {
             if (fabs(c[x] - (1 + a[x] + b[x])) > PRECISION) {
                 err += 1;
             }
