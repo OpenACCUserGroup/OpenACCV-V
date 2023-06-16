@@ -75,7 +75,7 @@ int test2(){
     #pragma acc wait
 
     for (int x = 0; x < n; ++x){
-        err = 1;
+        if(a[x] != b[x] || c[x] != d[x]) err = 1;
     }
 
     return err;
