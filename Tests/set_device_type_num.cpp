@@ -15,7 +15,7 @@ int test1(){
 #ifndef T2
 //T2:set,runtime,syntactic,V:2.5-3.2
 int test2(){
-int err = 0;
+		int err = 0;
         int device_num;
 
         device_num = acc_get_device_num(acc_get_device_type());
@@ -26,9 +26,9 @@ int err = 0;
 #endif
 
 #ifndef T3
-//T2:set,runtime,syntactic,V:2.5-3.2
+//T3:set,runtime,syntactic,V:2.5-3.2
 int test3(){
-int err = 0;
+		int err = 0;
         int device_num;
 
         device_num = acc_get_device_num(acc_get_device_type());

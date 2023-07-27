@@ -1,7 +1,7 @@
 #include "acc_testsuite.h"
 
 #ifndef T1
-//copy clause test wih parallel default(none) and reduction with scalar variable
+//T1:parallel,data,data-region,V:2.0-3.3
 int test1(){
     int err = 0;
     srand(SEED);
@@ -21,7 +21,7 @@ int test1(){
 } 
 #endif
 #ifndef T2
-//copy clause test with parallel loop and reduction with scalar variable
+//T2:parallel,data,data-region,V:2.0-3.3
 int test2(){
 	int err = 0;
 	srand(SEED);
@@ -40,7 +40,7 @@ int test2(){
 }
 #endif
 #ifndef T3
-//firstprivate test with only parallel and reduction with scalar variable
+//T3:parallel,data,data-region,V:2.0-3.3
 int test3(){
 	int err = 0;
 	srand(SEED);
@@ -58,7 +58,7 @@ int test3(){
 }	
 #endif
 #ifndef T4
-//copy clause wtth that calles detach action only parallel loop  with aggregate variables
+//T4:parallel,data,data-region,V:2.0-3.3
 int test4(){
 	int err = 0;
 	srand(SEED);
