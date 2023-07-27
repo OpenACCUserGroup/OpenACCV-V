@@ -40,7 +40,7 @@ int test1(){
     }
     #pragma acc update device(a[0:n])
 
-    #pragma acc data copy(c[0:n]) present(a[0:n])
+    #pragma acc data copy(c[0:n]) present(a[0:n]) 
     {
         #pragma acc parallel
         {
@@ -81,7 +81,7 @@ int test2(){
 
     #pragma acc update device(scalar)
 
-    #pragma acc data copy(local_a[0:n], c[0:n]) present(scalar)
+    #pragma acc data copy(local_a[0:n], c[0:n]) present(scalar) 
     {
         #pragma acc parallel
         {

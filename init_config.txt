@@ -176,6 +176,6 @@
 
 !RuntimePrefix:<prefix>
 
-iThis can be used to test host-fallback on gcc for example with RuntimePrefix:ACC_DEVICE_TYPE=None
+!This can be used to test host-fallback on gcc for example with RuntimePrefix:ACC_DEVICE_TYPE=None
 
 !RunAllTests:True

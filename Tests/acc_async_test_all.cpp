@@ -3,11 +3,11 @@
 //T1:async,runtime,construct-independent,V:2.0-2.7
 int test1(){
     int err = 0;
-    real_t **a = (real_t **)malloc(10 * sizeof(real_t*));
-    real_t **b = (real_t **)malloc(10 * sizeof(real_t*));
-    real_t **c = (real_t **)malloc(10 * sizeof(real_t*));
-    real_t **d = (real_t **)malloc(10 * sizeof(real_t*));
-    real_t **e = (real_t **)malloc(10 * sizeof(real_t*));
+    real_t** a = new real_t*[10];
+    real_t** b = new real_t*[10];
+    real_t** c = new real_t*[10];
+    real_t** d = new real_t*[10];
+    real_t** e = new real_t*[10];
 
     for (int x = 0; x < 10; ++x){
         a[x] = new real_t[n];
@@ -54,11 +54,11 @@ int test1(){
     }
     #pragma acc exit data delete(a[0:10][0:n], b[0:10][0:n], c[0:10][0:n], d[0:10][0:n], e[0:10][0:n])
     for (int x = 0; x < 10; ++x){
-        free(a[x]);
-        free(b[x]);
-        free(c[x]);
-        free(d[x]);
-        free(e[x]);
+        delete[] a[x];
+        delete[] b[x];
+        delete[] c[x];
+        delete[] d[x];
+        delete[] e[x];
     }
     delete[] a;
     delete[] b;
@@ -129,11 +129,11 @@ int test2(){
 //T3:async,runtime,construct-independent,V:2.5-2.7
 int test3(){
     int err = 0;
-    real_t **a = (real_t **)malloc(10 * sizeof(real_t *));
-    real_t **b = (real_t **)malloc(10 * sizeof(real_t *));
-    real_t **c = (real_t **)malloc(10 * sizeof(real_t *));
-    real_t **d = (real_t **)malloc(10 * sizeof(real_t *));
-    real_t **e = (real_t **)malloc(10 * sizeof(real_t *));
+    real_t** a = new real_t*[10];
+    real_t** b = new real_t*[10];
+    real_t** c = new real_t*[10];
+    real_t** d = new real_t*[10];
+    real_t** e = new real_t*[10];
 
     for (int x = 0; x < 10; ++x){
         a[x] = new real_t[n];
@@ -182,7 +182,6 @@ int test3(){
             total += 1;
         }
     }
-    printf("%d out of %d\n", count, total);
 
     for (int x = 0; x < 10; ++x){
         for (int y = 0; y < n; ++y){
@@ -193,11 +192,11 @@ int test3(){
     }
     
     for (int x = 0; x < 10; ++x){
-        free(a[x]);
-        free(b[x]);
-        free(c[x]);
-        free(d[x]);
-        free(e[x]);
+        delete[] a[x];
+        delete[] b[x];
+        delete[] c[x];
+        delete[] d[x];
+        delete[] e[x];
     }
     delete[] a;
     delete[] b;
