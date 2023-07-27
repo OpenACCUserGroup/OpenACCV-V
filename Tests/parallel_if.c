@@ -7,7 +7,6 @@ int test1(){
     real_t * a = (real_t *)malloc(n * sizeof(real_t));
     real_t * b = (real_t *)malloc(n * sizeof(real_t));
     real_t * c = (real_t *)malloc(n * sizeof(real_t));
-    int accel = 1;
     int host = 0;
 
     for (int x = 0; x < n; ++x){
@@ -42,7 +41,6 @@ int test2(){
     real_t * b = (real_t *)malloc(n * sizeof(real_t));
     real_t * c = (real_t *)malloc(n * sizeof(real_t));
     int * dev_test = (int *)malloc(sizeof(int));
-    int accel = 1;
     int host = 0;
 
     dev_test[0] = 1;
@@ -52,7 +50,7 @@ int test2(){
       dev_test[0] = 0;
     }
 
-    if (devtest[0] != 0){
+    if (dev_test[0] != 0){
         for (int x = 0; x < n;  ++x){
             a[x] = rand() / (real_t)(RAND_MAX / 10);
             b[x] = rand() / (real_t)(RAND_MAX / 10);
@@ -89,7 +87,6 @@ int test3(){
     real_t * b = (real_t *)malloc(n * sizeof(real_t));
     real_t * c = (real_t *)malloc(n * sizeof(real_t));
     int accel = 1;
-    int host = 0;
 
     for (int x = 0; x < n; ++x){
         a[x] = rand() / (real_t)(RAND_MAX / 10);

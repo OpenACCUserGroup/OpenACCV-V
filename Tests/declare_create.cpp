@@ -1,212 +1,250 @@
-#include "acc_testsuite.h"
-#define DECLARE_TEST
-#define DECLARE_CREATE
+#define DECLARE_CREATE 1
 #include "acc_testsuite_declare.h"
-#pragma acc declare create(fixed_size_array)
-#pragma acc declare create(scalar)
-#pragma acc declare create(datapointer)
+real_t scalar = 2;
+real_t* a;
 
-int mult_create = 2;
+#pragma acc declare create(scalar, a[0:n], n)
+#pragma acc update device(n)
 
-#pragma acc declare create(n)
-#pragma acc routine vector
-void multiplyData(real_t *a){
-    for (int x = 0; x < n; ++x){
-        a[x] = a[x] * 2;
+void multiply_scalar(real_t* a){
+    #pragma acc parallel loop present(a[0:n])
+    for(int x = 0; x < n; ++x){
+        a[x] += 1;
     }
 }
 
+#pragma acc routine vector
+void multiply_scalar_routine(real_t* a){
+    #pragma acc loop vector
+    for(int x = 0; x < n; ++x){
+        a[x] += 1;
+    }
+    #pragma acc update host(a[0:n])
+}
+
+
 #ifndef T1
-//T1:declare,construct-independent,V:1.0-2.7
+//T1:declare,construct-independent,V:1.0-3.3
 int test1(){
     int err = 0;
     srand(SEED);
-    real_t * a = new real_t[n];
+    a = new real_t[n];
     real_t * b = new real_t[n];
-    int mult = 2;
-    #pragma acc update device(n)
+    real_t * c = new real_t[n];
+
+
+    #pragma acc enter data create(a[0:n])
 
     for (int x = 0; x < n; ++x){
         a[x] = rand() / (real_t)(RAND_MAX / 10);
-        b[x] = 0;
+        b[x] = a[x] * 2;
     }
+    #pragma acc update device(a[0:n])
 
-    #pragma acc data copyin(a[0:n]) copyout(b[0:n]) present(fixed_size_array)
+    #pragma acc data copy(c[0:n]) present(a[0:n]) 
     {
         #pragma acc parallel
         {
             #pragma acc loop
-            for (int x = 0; x < 10; ++x){
-                fixed_size_array[x] = x*x;
-            }
-        }
-        #pragma acc parallel
-        {
-            #pragma acc loop
             for (int x = 0; x < n; ++x){
-                b[x] = a[x] + fixed_size_array[x%10];
+                c[x] = a[x] * 2;
             }
         }
     }
 
     for (int x = 0; x < n; ++x){
-        if (fabs(b[x] - (a[x] + (x%10) * (x%10))) > PRECISION){
+        if (fabs(b[x] - c[x]) > PRECISION){
             err += 1;
             break;
         }
     }
+
+    delete[] b;
+    delete[] c;
 
     return err;
 }
 #endif
 
 #ifndef T2
-//T2:declare,construct-independent,V:1.0-2.7
+//T2:declare,construct-independent,V:1.0-3.3
 int test2(){
     int err = 0;
     srand(SEED);
-    real_t * a = new real_t[n];
+    real_t* local_a = new real_t[n];
     real_t * b = new real_t[n];
-    int mult = 2;
-    #pragma acc update device(n)
+    real_t * c = new real_t[n];
 
     for (int x = 0; x < n; ++x){
-        a[x] = rand() / (real_t)(RAND_MAX / 10);
-        b[x] = 0;
+        local_a[x] = rand() / (real_t)(RAND_MAX / 10);
+        b[x] = local_a[x] * scalar;
     }
 
-    scalar = 10;
     #pragma acc update device(scalar)
-    #pragma acc data copyin(a[0:n]) copyout(b[0:n])
+
+    #pragma acc data copy(local_a[0:n], c[0:n]) present(scalar) 
     {
         #pragma acc parallel
         {
             #pragma acc loop
             for (int x = 0; x < n; ++x){
-                b[x] = a[x] + scalar;
+                c[x] = local_a[x] * scalar;
             }
         }
     }
 
     for (int x = 0; x < n; ++x){
-        if (fabs(b[x] - (a[x] + 10)) > PRECISION){
+        if (fabs(b[x] - c[x]) > PRECISION){
             err += 1;
             break;
         }
     }
+
+    delete[] local_a;
+    delete[] b;
+    delete[] c;
 
     return err;
 }
 #endif
 
 #ifndef T3
-//T3:declare,construct-independent,V:1.0-2.7
+//T3:declare,construct-independent,V:1.0-3.3
 int test3(){
     int err = 0;
     srand(SEED);
-    real_t * a = new real_t[n];
+    a = new real_t[n];
     real_t * b = new real_t[n];
-    int mult = 2;
-    #pragma acc update device(n)
+    
+    #pragma acc enter data create(a[0:n])
 
     for (int x = 0; x < n; ++x){
         a[x] = rand() / (real_t)(RAND_MAX / 10);
-        b[x] = a[x];
+        b[x] = a[x] + 1;
     }
 
-    #pragma acc update device(mult_create)
-    #pragma acc data copy(a[0:n])
-    {
-        #pragma acc parallel
-        {
-            #pragma acc loop
-            for (int x = 0; x < 1; ++x){
-                extern_multiplyData_create(a, n);
-            }
-        }
-    }
+    #pragma acc update device(a[0:n])
+
+    multiply_scalar(a);
+    
+    #pragma acc update host(a[0:n])
 
     for (int x = 0; x < n; ++x){
-        if (fabs(a[x] - (b[x] * 2)) > PRECISION){
+        if (fabs(b[x] - a[x]) > PRECISION){
             err += 1;
             break;
         }
     }
+
+    delete[] b;
 
     return err;
 }
 #endif
 
+
 #ifndef T4
-//T4:declare,construct-independent,V:2.0-2.7
+//T4:declare,construct-independent,V:1.0-3.3
 int test4(){
     int err = 0;
     srand(SEED);
-    real_t * a = new real_t[n];
+    a = new real_t[n];
     real_t * b = new real_t[n];
-    int mult = 2;
-    #pragma acc update device(n)
+    real_t * c = new real_t[n];
+
+    #pragma acc enter data create(a[0:n])
 
     for (int x = 0; x < n; ++x){
         a[x] = rand() / (real_t)(RAND_MAX / 10);
-        b[x] = a[x];
+        b[x] = a[x] * 2;
     }
-    #pragma acc data copy(a[0:n])
-    {
-        #pragma acc parallel
-        {
-            #pragma acc loop
-            for (int x = 0; x < 1; ++x){
-                multiplyData(a);
-            }
-        }
-    }
+    #pragma acc update device(a[0:n])
+
+    extern_multiplyData(a);
 
     for (int x = 0; x < n; ++x){
-        if (fabs(a[x] - (b[x] * 2)) > PRECISION){
+        if (fabs(b[x] - a[x]) > PRECISION){
             err += 1;
             break;
         }
     }
+
+    delete[] b;
+    delete[] c;
 
     return err;
 }
 #endif
 
 #ifndef T5
-//T5:declare,construct-independent,V:2.6-2.7
+//T5:declare,construct-independent,V:1.0-3.3
 int test5(){
     int err = 0;
     srand(SEED);
-    real_t * a = new real_t[n];
+    a = new real_t[n];
     real_t * b = new real_t[n];
-    int mult = 2;
-    #pragma acc update device(n)
+    real_t * c = new real_t[n];
+
+    #pragma acc enter data create(a[0:n])
 
     for (int x = 0; x < n; ++x){
         a[x] = rand() / (real_t)(RAND_MAX / 10);
-        b[x] = a[x];
+        b[x] = a[x] * mult_create;
     }
-    datapointer = a;
+    #pragma acc update device(a[0:n], mult_create)
 
-    #pragma acc data copyin(a[0:n]) attach(datapointer)
+    #pragma acc data copy(c[0:n]) present(a[0:n], mult_create) 
     {
-        #pragma acc parallel present(datapointer[0:n])
+        #pragma acc parallel
         {
             #pragma acc loop
             for (int x = 0; x < n; ++x){
-                datapointer[x] = datapointer[x] * 2;
+                c[x] = a[x] * mult_create;
             }
         }
     }
 
-    #pragma acc exit data copyout(a[0:n])
     for (int x = 0; x < n; ++x){
-        if (fabs(a[x] - (b[x] * 2)) > PRECISION){
+        if (fabs(b[x] - c[x]) > PRECISION){
             err += 1;
             break;
         }
     }
+
+    delete[] b;
+    delete[] c;
+
+    return err;
+}
+#endif
+
+#ifndef T6
+//T6:declare,construct-independent,V:1.0-3.3
+int test6(){
+    int err = 0;
+    srand(SEED);
+   a = new real_t[n];
+    real_t * b = new real_t[n];
+    
+    #pragma acc enter data create(a[0:n])
+
+    for (int x = 0; x < n; ++x){
+        a[x] = rand() / (real_t)(RAND_MAX / 10);
+        b[x] = a[x] + 1;
+    }
+
+    #pragma acc update device(a[0:n])
+
+    multiply_scalar_routine(a);
+    
+    for (int x = 0; x < n; ++x){
+        if (fabs(b[x] - a[x]) > PRECISION){
+            err += 1;
+            break;
+        }
+    }
+
+    delete[] b;
 
     return err;
 }
@@ -260,5 +298,15 @@ int main(){
         failcode = failcode + (1 << 4);
     }
 #endif
+#ifndef T6
+    failed = 0;
+    for (int x = 0; x < NUM_TEST_CALLS; ++x){
+        failed = failed + test6();
+    }
+    if (failed != 0){
+        failcode = failcode + (1 << 5);
+    }
+#endif
+    delete[] a;
     return failcode;
 }
