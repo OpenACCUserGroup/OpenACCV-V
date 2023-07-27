@@ -97,7 +97,7 @@ int test2(){
         }
         acc_delete_finalize_async(c, n * sizeof(real_t), 1);
         #pragma acc enter data copyin(c[0:n]) async(1)
-        #pragma acc data present(a[0:n], b[0:n], c[0:n])
+        #pragma acc data present(a[0:n], b[0:n], c[0:n]) 
         {
             #pragma acc parallel async(1)
             {
@@ -107,7 +107,7 @@ int test2(){
                 }
             }
         }
-	#pragma acc wait
+        #pragma acc wait
         #pragma acc exit data delete(a[0:n], b[0:n]) copyout(c[0:n])
 
         for (int x = 0; x < n; ++x){
@@ -116,7 +116,6 @@ int test2(){
             }
         }
     }
-
     return err;
 }
 #endif
