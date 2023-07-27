@@ -106,7 +106,7 @@ int test2(){
 }
 #endif
 #ifndef T3
-//T2:parallel,wait,async,if,V:2.7-3.3
+//T3:parallel,wait,async,if,V:2.7-3.3
 int test3(){
     int err = 0;
     srand(time(NULL));
