@@ -107,6 +107,7 @@ int test2(){
                 }
             }
         }
+        #pragma acc wait
         #pragma acc exit data delete(a[0:n], b[0:n]) copyout(c[0:n])
 
         for (int x = 0; x < n; ++x){
