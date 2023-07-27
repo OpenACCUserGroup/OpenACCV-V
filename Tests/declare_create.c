@@ -114,7 +114,7 @@ int test3(){
     srand(SEED);
     a = (real_t *)malloc(n * sizeof(real_t));
     real_t * b = (real_t *)malloc(n * sizeof(real_t));
-    
+
     #pragma acc enter data create(a[0:n])
 
     for (int x = 0; x < n; ++x){
@@ -125,7 +125,7 @@ int test3(){
     #pragma acc update device(a[0:n])
 
     multiply_scalar(a);
-    
+
     #pragma acc update host(a[0:n])
 
     for (int x = 0; x < n; ++x){
@@ -192,7 +192,7 @@ int test5(){
     }
     #pragma acc update device(a[0:n], mult_create)
 
-    #pragma acc data copy(c[0:n]) present(a[0:n], mult_create) 
+    #pragma acc data copy(c[0:n]) present(a[0:n], mult_create)
     {
         #pragma acc parallel
         {
@@ -224,7 +224,7 @@ int test6(){
     srand(SEED);
     a = (real_t *)malloc(n * sizeof(real_t));
     real_t * b = (real_t *)malloc(n * sizeof(real_t));
-    
+
     #pragma acc enter data create(a[0:n])
 
     for (int x = 0; x < n; ++x){
@@ -235,7 +235,7 @@ int test6(){
     #pragma acc update device(a[0:n])
 
     multiply_scalar_routine(a);
-    
+
     for (int x = 0; x < n; ++x){
         if (fabs(b[x] - a[x]) > PRECISION){
             err += 1;

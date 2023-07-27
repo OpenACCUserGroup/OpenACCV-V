@@ -52,7 +52,7 @@ void extern_multiplyData_copyin(real_t *a, long long n){
 extern int mult_create = 2;
 #pragma acc declare create(mult_create)
 
-#pragma acc routine vector 
+#pragma acc routine vector
 void extern_multiplyData(real_t *a){
     #pragma acc data present(a[0:n])
     {
@@ -120,8 +120,8 @@ typedef enum { false, true } bool;
 #define REPETITIONS 1
 #define LOOPCOUNT 1000
 /* following times are in seconds */
-#define SLEEPTIME	 0.01
-#define SLEEPTIME_LONG	 0.5
+#define SLEEPTIME        0.01
+#define SLEEPTIME_LONG   0.5
 
 typedef struct {
   double real;

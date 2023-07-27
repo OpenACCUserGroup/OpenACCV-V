@@ -1,9 +1,7 @@
 #include "acc_testsuite.h"
-/*
- *if implimented on wait, but not init, set, nor shutdown
-*/
 
 #ifndef T1
+//T1:parallel,wait,async,if,V:2.7-3.3
 int test1(){
     int err = 0;
     srand(SEED);
@@ -55,6 +53,7 @@ int test1(){
 }
 #endif
 #ifndef T2
+//T2:parallel,wait,async,if,V:2.7-3.3
 int test2(){
     int err = 0;
     srand(SEED);
@@ -107,6 +106,7 @@ int test2(){
 }
 #endif
 #ifndef T3
+//T3:parallel,wait,async,if,V:2.7-3.3
 int test3(){
     int err = 0;
     srand(time(NULL));
@@ -157,6 +157,7 @@ int test3(){
 }
 #endif
 #ifndef T4
+//T4:parallel,wait,async,if,V:2.7-3.3
 int test4(){
     int err = 0;
     srand(time(NULL));

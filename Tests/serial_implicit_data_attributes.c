@@ -1,8 +1,7 @@
 #include "acc_testsuite.h"
 
 #ifndef T1
-//T1:serial,V:1.0-2.7
-//copy cluase test with serial default(none) and reduction with scalar variables
+//T1:serial,data,data-region,V:2.0-3.3
 int test1(){
 	int err = 0;
 	srand(SEED);
@@ -18,8 +17,7 @@ int test1(){
 }
 #endif
 #ifndef T2
-//T2:serial,V:1.0-2.7
-//copy clause test with serial loop and reduction with scalar
+//T2:serial,data,data-region,V:2.0-3.3
 int test2(){
 	int err = 0;
 	srand(SEED);
@@ -35,8 +33,7 @@ int test2(){
 }
 #endif
 #ifndef T3
-//T3:serial, firstprivate, V:1.0-2.7
-//firstprivate test with only serial and reduction with scalar variables
+//T3:serial,firstprivate,data,data-regions,V:2.0-3.3
 int test3(){
 	int err = 0;
 	srand(SEED);
@@ -54,7 +51,7 @@ int test3(){
 }
 #endif
 #ifndef T4
-//T4:serial, host_dataV:1.0-2.7
+//T4:serial,data,data-region,host-data,V:2.0-3.3
 int test4(){
 	int err = 0;
 	srand(SEED);

@@ -928,6 +928,9 @@ class test:
             if self.name in g_config.include_tests:
                 is_valid = True
             self.flags[x] = is_valid
+            if g_config.runAll:
+                self.flags[x] = True
+
         count = 0
         for x in self.tags.keys():
             if not self.flags[x]:

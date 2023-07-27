@@ -1,7 +1,7 @@
 #include "acc_testsuite.h"
 
 #ifndef T1
-//copy clause test wih parallel default(none) and reduction with scalar variable
+//T1:parallel,data,data-region,V:2.0-3.3
 int test1(){
     int err = 0;
     srand(SEED);
@@ -21,7 +21,7 @@ int test1(){
 } 
 #endif
 #ifndef T2
-//copy clause test with parallel loop and reduction with scalar variable
+//T2:parallel,data,data-region,V:2.0-3.3
 int test2(){
 	int err = 0;
 	srand(SEED);

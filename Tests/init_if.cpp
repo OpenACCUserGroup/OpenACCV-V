@@ -1,11 +1,7 @@
 #include "acc_testsuite.h"
 
-/*
- * if clause not implimented on init yet
-*/
-
 #ifndef T1
-//T1:,V:2.7-3.0
+//T1:init,if,V:2.7-3.0
 int test1(){
 	int err = 0;
 	srand(SEED);
@@ -13,14 +9,13 @@ int test1(){
 	int device_num = acc_get_device_num(acc_get_device_type());
 
 	#pragma acc init if(device_num == device_num)
-	//#pragma acc init if(true)
 
 	return err;
 }
 #endif
 
 #ifndef T2
-//T2:,V:2.7-3.0
+//T2:init,if,V:2.7-3.0
 int test2(){
 	int err = 0;
 	srand(SEED);
@@ -28,7 +23,6 @@ int test2(){
 	int device_num = acc_get_device_num(acc_get_device_type());
 
 	#pragma acc init if(device_num != device_num)
-	//#pragma acc init if(false)
 
 	return err;
 }
