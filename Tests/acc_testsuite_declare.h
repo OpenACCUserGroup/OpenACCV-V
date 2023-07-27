@@ -5,13 +5,15 @@
 /* -f=accts-c.conf -t=c  */
 
 
-#ifndef ACC_TESTSUITE_H
-#define ACC_TESTSUITE_H
+#ifndef ACC_TESTSUITE_DECLARE_H
+#define ACC_TESTSUITE_DECLARE_H
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include <limits.h>
+#include <complex.h>
 #ifdef _OPENACC
 #include <openacc.h>
 #endif
@@ -31,7 +33,7 @@ typedef double real_t;
 #ifdef DECLARE_TEST
 int fixed_size_array[10] = {0, 1, 4, 9, 16, 25, 36, 49, 64, 81};
 real_t* datapointer;
-int scalar = 10; //For global scalar tests
+int scalar_extern = 10; //For global scalar tests
 #endif
 
 #ifdef DECLARE_COPYIN
@@ -47,14 +49,20 @@ void extern_multiplyData_copyin(real_t *a, long long n){
 #endif
 
 #ifdef DECLARE_CREATE
-extern int mult_create;
+extern int mult_create = 2;
 #pragma acc declare create(mult_create)
+
 #pragma acc routine vector
-void extern_multiplyData_create(real_t *a, long long n){
-    #pragma acc loop
-    for (int x = 0; x < n; ++x){
-        a[x] = a[x] * mult_create;
+void extern_multiplyData(real_t *a){
+    #pragma acc data present(a[0:n])
+    {
+        #pragma acc loop vector
+        for (int x = 0; x < n; ++x){
+            a[x] = a[x] * 2;
+        }
     }
+
+    #pragma acc update host(a[0:n])
 }
 #endif
 
@@ -112,8 +120,8 @@ typedef enum { false, true } bool;
 #define REPETITIONS 1
 #define LOOPCOUNT 1000
 /* following times are in seconds */
-#define SLEEPTIME	 0.01
-#define SLEEPTIME_LONG	 0.5
+#define SLEEPTIME        0.01
+#define SLEEPTIME_LONG   0.5
 
 typedef struct {
   double real;
@@ -123,6 +131,13 @@ typedef struct {
 
 #endif
 
+#ifndef SEED
+#define SEED time(NULL)
+#endif
+
+#ifndef NUM_TEST_CALLS
+#define NUM_TEST_CALLS 1
+#endif
 // int main(){
 //     int failcode = 0;
 //     int testrun;
