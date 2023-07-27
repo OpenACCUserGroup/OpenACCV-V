@@ -8,11 +8,11 @@ int test1(){
     real_t * b = (real_t *)malloc(10 * n * sizeof(real_t));
     real_t * c = (real_t *)malloc(10 * n * sizeof(real_t));
     real_t * d = (real_t *)malloc(10 * n * sizeof(real_t));
-		int * errors = (int *)malloc(10 * sizeof(int));
+	int * errors = (int *)malloc(10 * sizeof(int));
 
-		for (int x = 0; x < 10; ++x){
-			errors[x] = 0;
-		}
+	for (int x = 0; x < 10; ++x){
+		errors[x] = 0;
+	}
 
     for (int x = 0; x < 10 * n; ++x){
         a[x] = rand() / (real_t)(RAND_MAX / 10);
@@ -35,11 +35,47 @@ int test1(){
                 }
             }
         }
-				#pragma acc wait
+		#pragma acc wait
     }
 
     for (int x = 0; x < 10; ++x){
         err += errors[x];
+    }
+
+    return err;
+}
+#endif
+#ifndef T2
+//T2:parallel,loop,async,combined-constructs,V:1.0-2.7
+int test2(){
+    int err = 0;
+    srand(SEED);
+    real_t * a = (real_t *)malloc(n * sizeof(real_t));
+    real_t * b = (real_t *)malloc(n * sizeof(real_t));
+    real_t * c = (real_t *)malloc(n * sizeof(real_t));
+    real_t * d = (real_t *)malloc(n * sizeof(real_t));
+
+    for (int x = 0; x < n; ++x){
+        a[x] = rand() / (real_t)(RAND_MAX / 10);
+        b[x] = a[x] * 2;
+        c[x] = rand() / (real_t)(RAND_MAX / 10);
+        d[x] = c[x] * 2;
+    }
+
+    #pragma acc parallel loop copy(a[0:n]) async(0)
+    for(int x = 0; x < n; ++x) {
+        a[x] = a[x] * 2;
+    }
+
+    #pragma acc parallel loop copy(c[0:n]) async(0)
+    for(int x = 0; x < n; ++x) {
+        c[x] = c[x] * 2;
+    }
+
+    #pragma acc wait
+
+    for (int x = 0; x < n; ++x){
+        if(a[x] != b[x] || c[x] != d[x]) err = 1;
     }
 
     return err;
@@ -56,6 +92,15 @@ int main(){
     }
     if (failed != 0){
         failcode = failcode + (1 << 0);
+    }
+#endif
+#ifndef T2
+    failed = 0;
+    for (int x = 0; x < NUM_TEST_CALLS; ++x){
+        failed = failed + test2();
+    }
+    if (failed != 0){
+        failcode = failcode + (1 << 1);
     }
 #endif
     return failcode;
