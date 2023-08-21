@@ -42,6 +42,7 @@ int test1(){
 }
 #endif
 
+#ifndef T2
 //T2:runtime,data,executable-data,construct-independent,V:2.0-2.7
 int test2(){
     int err = 0;
@@ -58,7 +59,7 @@ int test2(){
 
     #pragma acc enter data copyin(data)
     #pragma acc enter data copyin(data.a[0:n], data.b[0:n])
-    
+
     #pragma acc parallel loop default(present)
     for(int x = 0; x < n; ++x){
         data.a[x] = data.a[x] * 2;
@@ -92,6 +93,15 @@ int main(){
     }
     if (failed != 0){
         failcode = failcode + (1 << 0);
+    }
+#endif
+#ifndef T2
+    failed = 0;
+    for (int x = 0; x < NUM_TEST_CALLS; ++x){
+        failed = failed + test2();
+    }
+    if (failed != 0){
+        failcode = failcode + (1 << 1);
     }
 #endif
     return failcode;
