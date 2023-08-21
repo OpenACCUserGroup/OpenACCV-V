@@ -77,3 +77,8 @@ typedef struct {
 #ifndef NUM_TEST_CALLS
 #define NUM_TEST_CALLS 1
 #endif
+
+typedef struct {
+  real_t * a;
+  real_t * b;
+} two_d_array;
