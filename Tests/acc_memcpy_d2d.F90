@@ -1,27 +1,19 @@
 #ifndef T1
-!T1:runtime,data,executable-data,construct-independent,V:2.0-2.7
+!T1:runtime,data,executable-data,construct-independent,V:3.3
     INTEGER FUNCTION test1()
         USE OPENACC
         IMPLICIT NONE
         INCLUDE "acc_testsuite.Fh"
-        REAL(8), DIMENSION(LOOPCOUNT) :: a, b, c  !Data
+        REAL(8), DIMENSION(LOOPCOUNT) :: a, b, c  
         INTEGER :: errors = 0
         INTEGER :: x, i
 
-                !Initilization
         SEEDDIM(1) = 1
 #       ifdef SEED
         SEEDDIM(1) = SEED
 #       endif
         CALL RANDOM_SEED(PUT=SEEDDIM)
         CALL RANDOM_NUMBER(a)
-        ! CALL RANDOM_NUMBER(b)
-        
-
-        !Initialization
-        ! ALLOCATE(a(LOOPCOUNT))
-        ! ALLOCATE(b(LOOPCOUNT))
-        ! ALLOCATE(c(LOOPCOUNT))
 
         CALL acc_set_device_num(0, acc_device_nvidia)
         !$acc enter data create(a(1:LOOPCOUNT))
