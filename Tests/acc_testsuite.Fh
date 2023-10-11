@@ -5,5 +5,5 @@ integer, parameter :: ARRAYSIZE_NEW = 1024
 integer, parameter :: ARRAYSIZE_SMALL = 10
 integer, parameter :: NUM_TEST_CALLS = 1
 integer, parameter :: n = 1
-integer, dimension(32) :: SEEDDIM = 0
+integer, dimension(33) :: SEEDDIM = 0
 real, parameter :: PRECISION = 1.e-2
