@@ -20,7 +20,7 @@
 
         CALL acc_map_data(C_LOC(c), C_LOC(d), LOOPCOUNT)
 
-        !$acc data copyin(a(0:LOOPCOUNT), b(0:LOOPCOUNT)) present(c(0:LOOPCOUNT)) copyout(c(0:LOOPCOUNT))
+        !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) present(c(1:LOOPCOUNT)) copyout(c(1:LOOPCOUNT))
             !$acc parallel
                 !$acc loop
                     DO i = 0, LOOPCOUNT

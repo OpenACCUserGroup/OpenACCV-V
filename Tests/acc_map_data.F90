@@ -30,7 +30,7 @@
         !$acc end data
 
 
-        !$acc update host(c(0:LOOPCOUNT))
+        !$acc update host(c(1:LOOPCOUNT))
         DO x = 1, LOOPCOUNT
             IF (ABS(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN
             errors = errors + 1
