@@ -12,7 +12,7 @@
         
         ALLOCATE(a(n))
 
-        acc_free(a)
+        CALL acc_free(a)
 
         final_memory = acc_get_property(acc_get_device_num(acc_get_device_type()), acc_get_device_type(), acc_property_free_memory);
 
