@@ -1,7 +1,7 @@
 #include "acc_testsuite.h"
 bool is_possible_2(real_t* a, real_t* b, int length, real_t prev, real_t destination){
-    if (length == 0 && abs(prev - destination) < PRECISION){
-        return true;
+    if (length == 0){
+        return abs(prev - destination) < PRECISION;
     }
     real_t *passed_a = new real_t[(length - 1)];
     real_t *passed_b = new real_t[(length - 1)];
