@@ -23,7 +23,7 @@
             c(i) = 0
         END DO
 
-        !$acc enter data copyin(a(0:n), b(0:n)) create(c(0:n))
+        !$acc enter data copyin(a(1:n), b(1:n)) create(c(1:n))
 
         a_ptr = acc_deviceptr(a)
         b_ptr = acc_deviceptr(b)
@@ -39,7 +39,7 @@
             !$acc end parallel
         !$acc end data
 
-        !$acc exit data copyout(c(0:n)) delete(a(0:n), b(0:n))
+        !$acc exit data copyout(c(1:n)) delete(a(1:n), b(1:n))
 
         DO x = 0, LOOPCOUNT
             IF (ABS(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN
