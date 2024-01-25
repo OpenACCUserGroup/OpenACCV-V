@@ -13,7 +13,7 @@
                 err = err + 1
         END IF
 
-        CALL acc_delete()
+        CALL acc_delete(a)
 
         IF (err .eq. 0) THEN
           test1 = .FALSE.
