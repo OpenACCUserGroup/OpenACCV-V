@@ -10,7 +10,7 @@
 
         initial_memory = acc_get_property(acc_get_device_num(acc_get_device_type()), acc_get_device_type(), acc_property_free_memory)
         
-        acc_malloc(a(N))
+        CALL acc_malloc(a(N))
 
         IF (initial_memory .ne. 0) THEN
           test1 = .FALSE.
@@ -24,7 +24,7 @@
           END IF
         END DO
 
-        acc_free(a(N))
+        CALL acc_free(a(N))
 
         IF (errors .eq. 0) THEN
           test1 = .FALSE.
