@@ -7,7 +7,7 @@
         REAL(8), DIMENSION(LOOPCOUNT) :: a, b, c  !Data
         REAL(8), POINTER, DIMENSION(:) :: a_ptr, b_ptr, d_ptr
         INTEGER :: errors = 0
-        INTEGER, value :: x, i
+        INTEGER :: x, i
 
         !Initilization
         SEEDDIM(1) = 1
