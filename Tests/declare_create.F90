@@ -2,7 +2,6 @@
 !$acc declare create(scalar)
 !$acc declare create(LOOPCOUNT)
 
-!$acc routine vector
 FUNCTION multiplyData(a)
   REAL(8),DIMENSION(LOOPCOUNT), INTENT(INOUT) :: a
   !$acc loop vector
