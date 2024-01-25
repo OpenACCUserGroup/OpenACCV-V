@@ -3,7 +3,7 @@
       LOGICAL FUNCTION test1()
   IMPLICIT NONE
   INCLUDE "acc_testsuite.Fh"
-  INTEGER,DIMENSION(N):: a
+  INTEGER,DIMENSION(LOOPCOUNT):: a
   INTEGER:: b, host_b
   REAL(8):: false_margin
   REAL(8),DIMENSION(LOOPCOUNT, 16):: randoms
