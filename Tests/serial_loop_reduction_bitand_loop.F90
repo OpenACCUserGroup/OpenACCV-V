@@ -22,10 +22,10 @@
 
   DO y = 1, 10
     DO x = 1, LOOPCOUNT
-      b(x) = INT(10 * randoms(x, y, 17))
+      b(x, y) = INT(10 * randoms(x, y, 17))
       DO z = 1, 16
         IF (randoms(x, y, z) .lt. false_margin) THEN
-          a(x) = a(x) + 2**(z - 1)
+          a(x, y) = a(x, y) + 2**(z - 1)
         END IF
       END DO
     END DO
