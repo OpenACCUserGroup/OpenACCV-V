@@ -44,7 +44,7 @@
       !$acc loop worker
       DO x = 1, LOOPCOUNT
         IF (temp) THEN
-          IF (a(x, y) .eq. 1) THEN
+          IF (a(x, y) .eqv. .TRUE.) THEN
             a(x, y) = .FALSE.
           ELSE
             a(x, y) = .TRUE.
