@@ -121,7 +121,7 @@ int test3() {
         }
     }
     
-    #pragma acc parallel loop num_gang(n,n) gang(dim:2)
+    #pragma acc parallel loop num_gangs(n,n) gang(dim:2)
     for(int i = 0; i < n; i++)
     {
         outer(arr1[i], n);
@@ -187,7 +187,7 @@ int test4() {
         }
     }
 
-    #pragma acc parallel loop num_gang(n,n,n) gang(dim:3)
+    #pragma acc parallel loop num_gangs(n,n,n) gang(dim:3)
     for(int i = 0; i < n; i++)
     {
         outer_3D(arr1[i], n);
