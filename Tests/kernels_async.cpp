@@ -4,13 +4,13 @@
 int test1(){
     int err = 0;
     srand(SEED);
-    real_t * restrict a = new real_t[n];
-    real_t * restrict b = new real_t[n];
-    real_t * restrict c = new real_t[n];
-    real_t * restrict d = new real_t[n];
-    real_t * restrict e = new real_t[n];
-    real_t * restrict f = new real_t[n];
-    real_t * restrict g = new real_t[n];
+    real_t * a = new real_t[n];
+    real_t * b = new real_t[n];
+    real_t * c = new real_t[n];
+    real_t * d = new real_t[n];
+    real_t * e = new real_t[n];
+    real_t * f = new real_t[n];
+    real_t * g = new real_t[n];
 
     for (int x = 0; x < n; ++x){
         a[x] = rand() / (real_t)(RAND_MAX / 10);
