@@ -1,8 +1,18 @@
 #include "acc_testsuite.h"
 #pragma acc routine worker nohost
-real_t function(real_t * a, long long n){
+real_t f(real_t * a, long long n){
     real_t returned = 0;
     #pragma acc loop worker reduction(+:returned)
+    for (int x = 0; x < n; ++x){
+        returned += a[x];
+    }
+    // printf("returned: %d\n", returned);
+    return returned;
+}
+
+#pragma acc routine seq bind(f)
+real_t g(real_t * a, long long n){
+    real_t returned = 0;
     for (int x = 0; x < n; ++x){
         returned += a[x];
     }
@@ -26,13 +36,14 @@ int test1(){
         b[x] = 0;
     }
 
-    #pragma acc data copyin(a[0:n][0:n]) copyout(b[0:n])
+    #pragma acc data copyin(a[0:n][0:n]) copy(b[0:n])
     {
         #pragma acc parallel
         {
             #pragma acc loop gang
             for (int x = 0; x < n; ++x){
-                b[x] = function(a[x], n);
+                b[x] = g(a[x], n);
+                // printf("%d\n", g(a[x], n));
             }
         }
     }
@@ -41,6 +52,7 @@ int test1(){
         summation = 0;
         for (int y = 0; y < n; ++y){
             summation += a[x][y];
+            // printf("%d %d\n", summation, b[x]);
         }
         if (fabs(summation - b[x]) > PRECISION){
             err += 1;
