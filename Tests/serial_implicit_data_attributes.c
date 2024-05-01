@@ -5,12 +5,24 @@
 int test1(){
 	int err = 0;
 	srand(SEED);
-	int temp = rand()/(real_t)(RAND_MAX / 10);
-	#pragma acc serial default(none) reduction(+:temp)
-	for(int x = 0; x < n; ++x){
-		temp += temp;
+	real_t *a = (real_t *) malloc ( n *sizeof(real_t));
+	real_t temp = 0;
+	real_t sum = 0;
+	
+	for( int x = 0; x < n; ++x){
+		a[x] = rand()/ (real_t)(RAND_MAX/10);
 	}
-	if(temp > PRECISION){
+
+	#pragma acc serial default(none) reduction(+:temp) copy(a[0:n])
+	for(int x = 0; x < n; ++x){
+		temp += a[x];
+	}
+
+	for( int x = 0; x < n; ++x){
+		sum += a[x];
+	}
+
+	if((temp - sum) > PRECISION){ 
 		err = 1;
 	}
 	return err;
