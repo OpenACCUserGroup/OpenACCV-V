@@ -52,7 +52,7 @@ int test1(){
     return err;
 }
 #endif
-#ifndef 
+#ifndef T2 
 //T2:parallel,wait,async,if,V:2.7-3.3
 int test2(){
     int err = 0;
