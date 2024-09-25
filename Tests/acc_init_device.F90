@@ -1,42 +1,48 @@
 #ifndef T1
-!T1:runtime,construct-independent,internal-control-values,init,nonvalidating,V:1.0-2.7
+!T1:routine,init,runtime,V:3.2-3.3
       LOGICAL FUNCTION test1()
         USE OPENACC
         IMPLICIT NONE
         INCLUDE "acc_testsuite.Fh"
+        INTEGER :: errors = 0
+
         IF (acc_get_device_type() .ne. acc_device_none) THEN
-          CALL acc_init(acc_get_device_type())
+          CALL acc_init_device(1, acc_get_device_type())
         END IF
 
-        test1 = .FALSE.
+        IF (errors .eq. 0) THEN
+          test1 = .FALSE.
+        ELSE
+          test1 = .TRUE.
+        END IF
       END
 #endif
 
 #ifndef T2
-!T2:runtime,init,parallel,V:2.5-2.7
+!T2:routine,init,runtime,V:3.2-3.3
       LOGICAL FUNCTION test2()
         USE OPENACC
         IMPLICIT NONE
         INCLUDE "acc_testsuite.Fh"
-        REAL(8), DIMENSION(n) :: a
-        INTEGER :: i, errors
-        
-        errors = 0
-        DO i = 1, n
-          a(i) = REAL(i - 1, 8)
-        END DO
+        INTEGER :: x !Iterator
+        REAL(8),DIMENSION(LOOPCOUNT):: a, b !Data
+        INTEGER :: errors = 0
+
+        !Initialization
+        CALL RANDOM_NUMBER(a)
+        b = a * 2
 
         IF (acc_get_device_type() .ne. acc_device_none) THEN
-          CALL acc_init(acc_get_device_type())
+          CALL acc_init_device(1, acc_get_device_type())
         END IF
 
-        !$acc parallel loop copy(a)
-        DO i = 1, n
-          a(i) = a(i) * 2.0d0
+        !$acc parallel loop copy(a(1:LOOPCOUNT))
+        DO x = 1, LOOPCOUNT
+          a(x) = a(x) * 2
         END DO
 
-        DO i = 1, n
-          IF (ABS(a(i) - (2.0d0 * (i - 1))) > PRECISION) THEN
+        DO x = 1, LOOPCOUNT
+          IF (ABS(a(x) - b(x)) .gt. PRECISION) THEN
             errors = errors + 1
           END IF
         END DO
@@ -54,7 +60,6 @@
         INTEGER :: failcode, testrun
         LOGICAL :: failed
         INCLUDE "acc_testsuite.Fh"
-        !Conditionally define test functions
 #ifndef T1
         LOGICAL :: test1
 #endif
