@@ -7,7 +7,7 @@
         INTEGER :: errors = 0
 
         IF (acc_get_device_type() .ne. acc_device_none) THEN
-          CALL acc_init_device(1, acc_get_device_type())
+          CALL acc_init_device(0, acc_get_device_type())
         END IF
 
         IF (errors .eq. 0) THEN
@@ -33,7 +33,7 @@
         b = a * 2
 
         IF (acc_get_device_type() .ne. acc_device_none) THEN
-          CALL acc_init_device(1, acc_get_device_type())
+          CALL acc_init_device(0, acc_get_device_type())
         END IF
 
         !$acc parallel loop copy(a(1:LOOPCOUNT))
