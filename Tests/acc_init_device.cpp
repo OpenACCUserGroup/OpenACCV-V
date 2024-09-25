@@ -1,4 +1,7 @@
 #include "acc_testsuite.h"
+#include <cstdlib>
+#include <cmath>
+
 #ifndef T1
 //T1:routine,init,runtime,V:3.2-3.3
 int test1(){
@@ -16,8 +19,8 @@ int test1(){
 //T2:routine,init,runtime,V:3.2-3.3
 int test2(){
     int err = 0;
-    real_t *a = (real_t *)malloc(n * sizeof(real_t));
-    real_t *b = (real_t *)malloc(n * sizeof(real_t));
+    real_t* a = new real_t[n];
+    real_t* b = new real_t[n];
     for (int x = 0; x < n; ++x){
         a[x] = rand() / (real_t)(RAND_MAX / 10);
         b[x] = a[x] * 2;
@@ -33,10 +36,13 @@ int test2(){
     }
 
     for (int x = 0; x < n; ++x){
-        if (fabs(a[x] - b[x])> PRECISION){
+        if (std::fabs(a[x] - b[x]) > PRECISION){
             err += 1;
         }
     }
+
+    delete[] a;
+    delete[] b;
 
     return err;
 }
@@ -65,4 +71,3 @@ int main(){
 #endif
     return failcode;
 }
-
