@@ -8,7 +8,7 @@ int test1(){
     int err = 0;
 
     if (acc_get_device_type() != acc_device_none){
-        acc_init_device(1, acc_get_device_type());
+        acc_init_device(0, acc_get_device_type());
     }
 
     return err;
@@ -27,7 +27,7 @@ int test2(){
     }
 
     if (acc_get_device_type() != acc_device_none){
-        acc_init_device(1, acc_get_device_type());
+        acc_init_device(0, acc_get_device_type());
     }
 
     #pragma acc parallel loop copy(a[0:n])
