@@ -1,19 +1,25 @@
 #ifndef T1
-!T1:runtime,construct-independent,internal-control-values,shutdown,nonvalidating,V:1.0-2.7
+!T1:routine,shutdown,runtime,syntactic,V:3.2-3.3
       LOGICAL FUNCTION test1()
         USE OPENACC
         IMPLICIT NONE
         INCLUDE "acc_testsuite.Fh"
+        INTEGER :: errors = 0
+
         IF (acc_get_device_type() .ne. acc_device_none) THEN
-          CALL acc_shutdown(acc_get_device_type())
+          CALL acc_shutdown_device(0, acc_get_device_type())
         END IF
 
-        test1 = .FALSE.
+        IF (errors .eq. 0) THEN
+          test1 = .FALSE.
+        ELSE
+          test1 = .TRUE.
+        END IF
       END
 #endif
 
 #ifndef T2
-!T2:runtime,construct-independent,internal-control-values,shutdown,compute,V:1.0-2.7
+!T2:routine,shutdown,runtime,compute,V:3.2-3.3
       LOGICAL FUNCTION test2()
         USE OPENACC
         IMPLICIT NONE
@@ -34,7 +40,7 @@
             a(x) = a(x) * 2
           END DO
 
-          CALL acc_shutdown(acc_get_device_type())
+          CALL acc_shutdown_device(0, acc_get_device_type())
         END IF
 
         DO x = 1, LOOPCOUNT
@@ -56,7 +62,6 @@
         INTEGER :: failcode, testrun
         LOGICAL :: failed
         INCLUDE "acc_testsuite.Fh"
-        !Conditionally define test functions
 #ifndef T1
         LOGICAL :: test1
 #endif
