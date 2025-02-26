@@ -151,8 +151,8 @@ int test5(){
     float host_total = 10;
 
     for (int x = 0; x < n; ++x){
-        a[x] = rand() / (real_t)(RAND_MAX / 10);
-        b[x] = rand() / (real_t)(RAND_MAX / 10);
+        a[x] = rand() / (real_t)RAND_MAX / 10;
+        b[x] = rand() / (real_t)RAND_MAX / 10;
     }
 
     #pragma acc data copyin(a[0:n], b[0:n])
@@ -167,7 +167,7 @@ int test5(){
         host_total += a[x] + b[x];
     }
 
-    if (fabsf(total - host_total) > PRECISION) {
+    if (fabsf(total - host_total) > PRECISION2) {
         err += 1;
     }
 
@@ -256,8 +256,8 @@ int test8(){
     float _Complex host_total = 10 + 10 * I;
 
     for (int x = 0; x < n; ++x){
-        a[x] = rand() / (real_t)(RAND_MAX / 10) + rand() / (real_t)(RAND_MAX / 10) * I;
-        b[x] = rand() / (real_t)(RAND_MAX / 10) + rand() / (real_t)(RAND_MAX / 10) * I;
+        a[x] = rand() / (real_t)RAND_MAX + rand() / (real_t)RAND_MAX * I;
+        b[x] = rand() / (real_t)RAND_MAX + rand() / (real_t)RAND_MAX * I;
     }
 
     #pragma acc data copyin(a[0:n], b[0:n])
@@ -272,10 +272,10 @@ int test8(){
         host_total += a[x] + b[x];
     }
 
-    if (fabsf(crealf(total) - crealf(host_total)) > PRECISION) {
+    if (fabsf(crealf(total) - crealf(host_total)) > PRECISION2) {
         err += 1;
     }
-    if (fabsf(cimagf(total) - cimagf(host_total)) > PRECISION) {
+    if (fabsf(cimagf(total) - cimagf(host_total)) > PRECISION2) {
         err += 1;
     }
 
