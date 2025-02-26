@@ -7,3 +7,6 @@ integer, parameter :: NUM_TEST_CALLS = 1
 integer, parameter :: n = 1
 integer, dimension(33) :: SEEDDIM = 0
 real, parameter :: PRECISION = 1.e-2
+logical, external :: devtest
+logical, external :: VERIFY_ATOMIC_SEQUENCE
+logical, external :: IS_POSSIBLE
