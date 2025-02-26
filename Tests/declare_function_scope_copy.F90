@@ -1,3 +1,5 @@
+#include "common.Fh"
+
 SUBROUTINE copyin_copyout_test(a, b, c, LOOPCOUNT)
   REAL(8),DIMENSION(LOOPCOUNT),INTENT(IN) :: a, b
   REAL(8),DIMENSION(LOOPCOUNT),INTENT(INOUT) :: c
@@ -21,14 +23,7 @@ END SUBROUTINE copyin_copyout_test
   INTEGER :: errors = 0
   INTEGER :: mult = 2
   REAL(8),DIMENSION(LOOPCOUNT, LOOPCOUNT) :: a, b, c
-  INTEGER,DIMENSION(1) :: devtest
   INTEGER :: x, y
-
-  devtest(1) = 1
-  !$acc enter data copyin(devtest(1:1))
-  !$acc parallel present(devtest(1:1))
-    devtest(1) = 0
-  !$acc end parallel
 
   SEEDDIM(1) = 1
 # ifdef SEED
@@ -68,14 +63,7 @@ END SUBROUTINE copyin_copyout_test
   INTEGER :: errors = 0
   INTEGER :: mult = 2
   REAL(8),DIMENSION(LOOPCOUNT, LOOPCOUNT) :: a, b, c
-  INTEGER,DIMENSION(1) :: devtest
   INTEGER :: x, y
-
-  devtest(1) = 1
-  !$acc enter data copyin(devtest(1:1))
-  !$acc parallel present(devtest(1:1))
-    devtest(1) = 0
-  !$acc end parallel
 
   SEEDDIM(1) = 1
 # ifdef SEED
@@ -119,14 +107,7 @@ END SUBROUTINE copyin_copyout_test
   INTEGER :: errors = 0
   INTEGER :: mult = 2
   REAL(8),DIMENSION(LOOPCOUNT, LOOPCOUNT) :: a, b, c
-  INTEGER,DIMENSION(1) :: devtest
   INTEGER :: x, y
-
-  devtest(1) = 1
-  !$acc enter data copyin(devtest(1:1))
-  !$acc parallel present(devtest(1:1))
-    devtest(1) = 0
-  !$acc end parallel
 
   SEEDDIM(1) = 1
 # ifdef SEED
@@ -134,7 +115,7 @@ END SUBROUTINE copyin_copyout_test
 # endif
   CALL RANDOM_SEED(PUT=SEEDDIM)
 
-  IF (devtest(1) .eq. 1) THEN
+  IF (devtest() .eq. .TRUE.) THEN
     CALL RANDOM_NUMBER(a)
     CALL RANDOM_NUMBER(b)
     c = 3
@@ -174,14 +155,7 @@ END SUBROUTINE copyin_copyout_test
   INTEGER :: errors = 0
   INTEGER :: mult = 2
   REAL(8),DIMENSION(LOOPCOUNT, LOOPCOUNT) :: a, b, c
-  INTEGER,DIMENSION(1) :: devtest
   INTEGER :: x, y
-
-  devtest(1) = 1
-  !$acc enter data copyin(devtest(1:1))
-  !$acc parallel present(devtest(1:1))
-    devtest(1) = 0
-  !$acc end parallel
 
   SEEDDIM(1) = 1
 # ifdef SEED
@@ -189,7 +163,7 @@ END SUBROUTINE copyin_copyout_test
 # endif
   CALL RANDOM_SEED(PUT=SEEDDIM)
 
-  IF (devtest(1) .eq. 1) THEN
+  IF (devtest() .eq. .TRUE.) THEN
     CALL RANDOM_NUMBER(a)
     CALL RANDOM_NUMBER(b)
     c = 4

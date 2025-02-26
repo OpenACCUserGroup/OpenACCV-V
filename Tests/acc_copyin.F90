@@ -1,3 +1,5 @@
+#include "common.Fh"
+
 #ifndef T1
 !T1:runtime,data,executable-data,construct-independent,V:2.0-2.7
       LOGICAL FUNCTION test1()
@@ -102,15 +104,8 @@
         INTEGER :: x !Iterators
         REAL(8),DIMENSION(LOOPCOUNT):: a, b, c, a_copy, b_copy !Data
         INTEGER :: errors = 0
-        LOGICAL,DIMENSION(1):: devtest
 
-        devtest(1) = .TRUE.
-        !$acc enter data copyin(devtest(1:1))
-        !$acc parallel present(devtest(1:1))
-          devtest(1) = .FALSE.
-        !$acc end parallel
-
-        IF (devtest(1) .eqv. .TRUE.) THEN
+        IF (devtest() .eqv. .TRUE.) THEN
           SEEDDIM(1) = 1
 #         ifdef SEED
           SEEDDIM(1) = SEED
@@ -316,15 +311,8 @@
         INTEGER :: x !Iterators
         REAL(8),DIMENSION(LOOPCOUNT):: a, b, c, a_copy, b_copy !Data
         INTEGER :: errors = 0
-        LOGICAL,DIMENSION(1):: devtest
 
-        devtest(1) = .TRUE.
-        !$acc enter data copyin(devtest(1:1))
-        !$acc parallel present(devtest(1:1))
-          devtest(1) = .FALSE.
-        !$acc end parallel
-
-        IF (devtest(1) .eqv. .TRUE.) THEN
+        IF (devtest() .eqv. .TRUE.) THEN
           !Initialization
           SEEDDIM(1) = 1
 #         ifdef SEED
