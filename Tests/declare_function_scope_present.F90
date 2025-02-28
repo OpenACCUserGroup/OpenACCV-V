@@ -1,4 +1,6 @@
-FUNCTION present(a, b, c, d, LOOPCOUNT)
+#include "common.Fh"
+
+FUNCTION present_test(a, b, c, d, LOOPCOUNT)
   REAL(8),DIMENSION(LOOPCOUNT),INTENT(IN) :: a, b
   REAL(8),DIMENSION(LOOPCOUNT),INTENT(INOUT) :: c, d
   INTEGER,INTENT(IN) :: LOOPCOUNT
@@ -15,7 +17,7 @@ FUNCTION present(a, b, c, d, LOOPCOUNT)
       d(x) = c(x) * a(x)
     END DO
   !$acc end parallel
-END FUNCTION function_test
+END FUNCTION present_test
 
 #ifndef T1
 !T1:devonly,construct-independent,declare,V:2.0-2.7
@@ -26,14 +28,7 @@ END FUNCTION function_test
   INTEGER :: errors = 0
   INTEGER :: mult = 2
   REAL(8),DIMENSION(LOOPCOUNT, LOOPCOUNT) :: a, b, c, d
-  INTEGER,DIMENSION(1) :: devtest
   INTEGER :: x, y
-
-  devtest(1) = 1
-  !$acc enter data copyin(devtest(1:1))
-  !$acc parallel present(devtest(1:1))
-    devtest(1) = 0
-  !$acc end parallel
 
   SEEDDIM(1) = 1
 # ifdef SEED
@@ -48,8 +43,8 @@ END FUNCTION function_test
 
   !$acc data copyin(a(1:LOOPCOUNT, 1:LOOPCOUNT), b(1:LOOPCOUNT, 1:LOOPCOUNT)) copyout(d(1:LOOPCOUNT, 1:LOOPCOUNT))
     DO x = 1, LOOPCOUNT
-      !$acc data copy(c(x:x, 1:LOOPCOUNT))
-        CALL present(a(x), b(x), c(x), d(x), LOOPCOUNT)
+      !$acc data copy(c(1:LOOPCOUNT, x:x))
+        CALL present_test(a(:,x), b(:,x), c(:,x), d(:,x), LOOPCOUNT)
       !$acc end data
     END DO
   !$acc end data
@@ -81,14 +76,7 @@ END FUNCTION function_test
   INTEGER :: errors = 0
   INTEGER :: mult = 2
   REAL(8),DIMENSION(LOOPCOUNT, LOOPCOUNT) :: a, b, c, d
-  INTEGER,DIMENSION(1) :: devtest
   INTEGER :: x, y
-
-  devtest(1) = 1
-  !$acc enter data copyin(devtest(1:1))
-  !$acc parallel present(devtest(1:1))
-    devtest(1) = 0
-  !$acc end parallel
 
   SEEDDIM(1) = 1
 # ifdef SEED
@@ -96,21 +84,21 @@ END FUNCTION function_test
 # endif
   CALL RANDOM_SEED(PUT=SEEDDIM)
 
-  IF (devtest(1) .eq. 1) THEN
+  IF (devtest() .eq. .TRUE.) THEN
     CALL RANDOM_NUMBER(a)
     CALL RANDOM_NUMBER(b)
     c = 3
 
     !$acc data copyin(a(1:LOOPCOUNT, 1:LOOPCOUNT), b(1:LOOPCOUNT, 1:LOOPCOUNT))
       DO x = 1, LOOPCOUNT
-        !$acc data copyin(c(x:x, 1:LOOPCOUNT)) copyout(d(x:x, 1:LOOPCOUNT))
-          CALL present(a(x), b(x), c(x), d(x), LOOPCOUNT)
+        !$acc data copyin(c(1:LOOPCOUNT, x:x)) copyout(d(1:LOOPCOUNT, x:x))
+          CALL present_test(a(:,x), b(:,x), c(:,x), d(:,x), LOOPCOUNT)
         !$acc end data
         DO y = 1, LOOPCOUNT
-          IF (abs(c(x, y) - 3) .gt. PRECISION) THEN
+          IF (abs(c(y, x) - 3) .gt. PRECISION) THEN
             errors = errors + 1
           END IF
-          IF (abs(d(x, y) - (a(x, y) * (3 + a(x, y) + b(x, y)))) .gt. PRECISION * 2) THEN
+          IF (abs(d(y, x) - (a(y, x) * (3 + a(y, x) + b(y, x)))) .gt. PRECISION * 2) THEN
             errors = errors + 1
           END IF
         END DO
