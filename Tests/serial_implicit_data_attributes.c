@@ -53,10 +53,10 @@ int test3(){
 	int device = host;
 	#pragma acc serial reduction(+:device)
 	for( int x = 0; x < n; ++x){
-		device += device;
+		device += 1;
 	}
 
-	if( fabs(host - device) > PRECISION ){
+	if( fabs(device - host - n) > PRECISION ){
 		err = 1;
 	}
 	return err;
