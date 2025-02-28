@@ -22,7 +22,7 @@ int test1() {
     #pragma acc data copyin(list[0:3][0:n])
     {
         int queues[10];
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 3; i++)
         {
             // Do some unbalanced operation on several queues
             #pragma acc enter data copyin(list[i]) async(i)
