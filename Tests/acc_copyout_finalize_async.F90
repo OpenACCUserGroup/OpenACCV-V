@@ -23,7 +23,6 @@
         f = 0
 
         !$acc enter data create(c(1:LOOPCOUNT), f(1:LOOPCOUNT))
-        !$acc enter data create(c(1:LOOPCOUNT), f(1:LOOPCOUNT))
 
         !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), d(1:LOOPCOUNT), e(1:LOOPCOUNT)) present(c(1:LOOPCOUNT), f(1:LOOPCOUNT))
           !$acc parallel async(1)

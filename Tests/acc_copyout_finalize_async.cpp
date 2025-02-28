@@ -21,7 +21,6 @@ int test1(){
     }
 
     #pragma acc enter data create(c[0:n], f[0:n])
-    #pragma acc enter data create(c[0:n], f[0:n])
 
     #pragma acc data copyin(a[0:n], b[0:n], d[0:n], e[0:n]) present(c[0:n], f[0:n])
     {
@@ -74,7 +73,6 @@ int test2(){
     }
 
     #pragma acc enter data create(c[0:n])
-    #pragma acc enter data create(c[0:n])
     
     #pragma acc data copyin(a[0:n], b[0:n])
     {
@@ -118,7 +116,6 @@ int test3(){
     }
 
     #pragma acc enter data create(c[0:n])
-    #pragma acc enter data create(c[0:n])
     #pragma acc data copyin(a[0:n], b[0:n])
     {
         #pragma acc parallel present(c[0:n]) async
@@ -158,7 +155,6 @@ int test4(){
     }
 
     #pragma acc enter data create(c[0:n])
-    #pragma acc enter data create(c[0:n])
     #pragma acc data copyin(a[0:n], b[0:n])
     {
         #pragma acc parallel present(c[0:n]) async(1)
@@ -177,6 +173,7 @@ int test4(){
                 c[x] += a[x] + b[x];
             }
         }
+        acc_copyout_finalize_async(c, n * sizeof(real_t), 1);
     }
 
     for (int x = 0; x < n; ++x) {
