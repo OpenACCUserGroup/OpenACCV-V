@@ -1,4 +1,5 @@
 #define DECLARE_CREATE 1
+#include "acc_testsuite.h"
 #include "acc_testsuite_declare.h"
 real_t scalar = 2;
 real_t* a;
