@@ -1,5 +1,4 @@
 #include "acc_testsuite.h"
-#pragma acc routine (fmin) seq
 
 #ifndef T1
 //T1:serial,loop,reduction,combined-constructs,V:2.6-2.7
