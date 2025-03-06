@@ -19,10 +19,8 @@ int test1() {
     
     real_t *list[3] = {a, b, c};
 
-    #pragma acc data copyin(list[0:3][0:n])
-    {
         int queues[10];
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 2; i++)
         {
             // Do some unbalanced operation on several queues
             #pragma acc enter data copyin(list[i]) async(i)
@@ -37,7 +35,7 @@ int test1() {
         }
         int next;
         // Look for queue that is ready to process
-        while ((next = acc_wait_any(3, queues)) >= 0)
+        while ((next = acc_wait_any(2, queues)) >= 0)
         {
             // Remove this queue from consideration next time around
             queues[next] = acc_async_sync;
@@ -50,8 +48,9 @@ int test1() {
                     list[next][i] = list[next][i] * 2;
                 }
             }
+
+	    #pragma acc exit data copyout(list[next][0:n]) async(next)
         }
-    }
 
     for (int x = 0; x < n; ++x){
         if (fabs(c[x] - (a[x] + b[x])) > PRECISION){
