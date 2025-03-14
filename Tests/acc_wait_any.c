@@ -41,7 +41,7 @@ int test1() {
             queues[next] = acc_async_sync;
             
             // Process work dependent on above
-            #pragma acc kernels
+            #pragma acc kernels async(next)
             {
                 for(int i = 0; i < n; i++)
                 {
@@ -51,6 +51,8 @@ int test1() {
 
 	    #pragma acc exit data copyout(list[next][0:n]) async(next)
         }
+
+    #pragma acc wait
 
     for (int x = 0; x < n; ++x){
         if (fabs(c[x] - (a[x] + b[x])) > PRECISION){
