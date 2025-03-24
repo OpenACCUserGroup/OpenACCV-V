@@ -1,3 +1,5 @@
+#include "common.Fh"
+
 #ifndef T1
 !T1:devonly,kernels,V:2.0-2.7
       LOGICAL FUNCTION test1()
@@ -6,13 +8,6 @@
         INTEGER :: x !Iterators
         REAL(8),DIMENSION(LOOPCOUNT):: a, b !Data
         INTEGER :: errors = 0
-        INTEGER,DIMENSION(1):: devtest
-        devtest(1) = 1
-
-        !$acc enter data copyin(devtest(1:1))
-        !$acc kernels present(devtest(1:1))
-          devtest(1) = 0
-        !$acc end kernels
 
         !Initilization
         SEEDDIM(1) = 1
@@ -54,13 +49,6 @@
         INTEGER :: x !Iterators
         REAL(8),DIMENSION(LOOPCOUNT):: a, b !Data
         INTEGER :: errors = 0
-        INTEGER,DIMENSION(1):: devtest
-        devtest(1) = 1
-
-        !$acc enter data copyin(devtest(1:1))
-        !$acc kernels present(devtest(1:1))
-          devtest(1) = 0
-        !$acc end kernels
 
         !Initilization
         SEEDDIM(1) = 1
@@ -69,7 +57,7 @@
 #       endif
         CALL RANDOM_SEED(PUT=SEEDDIM)
 
-        IF (devtest(1) .eq. 1) THEN
+        IF (devtest() .eq. .TRUE.) THEN
           CALL RANDOM_NUMBER(a)
           b = 0
           

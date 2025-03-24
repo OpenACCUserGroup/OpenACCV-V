@@ -170,6 +170,7 @@ int test4(){
             }
         }
         acc_copyin_async(c, n * sizeof(real_t), 1);
+        #pragma acc exit data delete(c[0:n]) async(1)
         #pragma acc parallel present(c[0:n]) async(1)
         {
             #pragma acc loop

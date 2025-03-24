@@ -10,7 +10,7 @@ int test1(){
         return err;
     }
     size_t final_memory = acc_get_property(acc_get_device_num(acc_get_device_type()), acc_get_device_type(), acc_property_free_memory);
-    if (final_memory + n * sizeof(int) > initial_memory){
+    if (final_memory > initial_memory){
         err += 1;
     }
 

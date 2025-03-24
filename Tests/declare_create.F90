@@ -1,24 +1,49 @@
-!$acc declare create(fixed_size_array)
-!$acc declare create(scalar)
-!$acc declare create(LOOPCOUNT)
+MODULE DECLARE_COPYIN_MOD
+  INTEGER,DIMENSION(10):: fixed_size_array
+  !$acc declare create(fixed_size_array)
 
-FUNCTION multiplyData(a)
-  REAL(8),DIMENSION(LOOPCOUNT), INTENT(INOUT) :: a
+  INTEGER :: scalar = 2
+  !$acc declare create (scalar)
+
+
+
+  public :: externMultiplyData
+contains
+SUBROUTINE externMultiplyData(a, n)
+!$acc routine vector
+  INTEGER :: n
+  REAL(8),DIMENSION(n), INTENT(INOUT) :: a
+  INTEGER :: x
   !$acc loop vector
-  DO x = 1, LOOPCOUNT
+  DO x = 1, n
     a(x) = a(x) * 2
   END DO
-END FUNCTION multiplyData
+END SUBROUTINE externMultiplyData
+END MODULE DECLARE_COPYIN_MOD
+
+SUBROUTINE multiplyData(a, n)
+  !$acc routine vector
+  INTEGER, INTENT(IN) :: n
+  REAL(8),DIMENSION(n), INTENT(INOUT) :: a
+  INTEGER :: x
+  !$acc loop vector
+  DO x = 1, n
+    a(x) = a(x) * 2
+  END DO
+END SUBROUTINE multiplyData
+
 
 #ifndef T1
 !T1:construct-independent,declare,update,V:2.0-2.7
       LOGICAL FUNCTION test1()
   USE OPENACC
+  USE DECLARE_COPYIN_MOD
   IMPLICIT NONE
   INCLUDE "acc_testsuite.Fh"
   INTEGER :: errors = 0
   INTEGER :: mult = 2
   REAL(8),DIMENSION(LOOPCOUNT) :: a, b
+  INTEGER :: x
 
   SEEDDIM(1) = 1
 # ifdef SEED
@@ -28,7 +53,6 @@ END FUNCTION multiplyData
 
   CALL RANDOM_NUMBER(a)
   b = 0
-  !$acc update device(n)
   !$acc data copyin(a(1:LOOPCOUNT)) copyout(b(1:LOOPCOUNT)) present(fixed_size_array)
     !$acc parallel
       !$acc loop
@@ -61,11 +85,13 @@ END FUNCTION multiplyData
 !T2:construct-independent,declare,update,V:2.0-2.7
       LOGICAL FUNCTION test2()
   USE OPENACC
+  USE DECLARE_COPYIN_MOD
   IMPLICIT NONE
   INCLUDE "acc_testsuite.Fh"
   INTEGER :: errors = 0
   INTEGER :: mult = 2
   REAL(8),DIMENSION(LOOPCOUNT) :: a, b
+  INTEGER :: x
 
   SEEDDIM(1) = 1
 # ifdef SEED
@@ -103,11 +129,13 @@ END FUNCTION multiplyData
 !T3:construct-independent,declare,V:2.0-2.7
       LOGICAL FUNCTION test3()
   USE OPENACC
+  USE DECLARE_COPYIN_MOD
   IMPLICIT NONE
   INCLUDE "acc_testsuite.Fh"
   INTEGER :: errors = 0
   INTEGER :: mult = 2
   REAL(8),DIMENSION(LOOPCOUNT) :: a, b
+  INTEGER :: x
 
   SEEDDIM(1) = 1
 # ifdef SEED
@@ -117,13 +145,9 @@ END FUNCTION multiplyData
 
   CALL RANDOM_NUMBER(a)
   b = a
-  !$acc update
   !$acc data copy(a(1:LOOPCOUNT))
     !$acc parallel
-      !$acc loop
-      DO x = 1, 1
         CALL externMultiplyData(a, LOOPCOUNT)
-      END DO
     !$acc end parallel
   !$acc end data
 
@@ -149,6 +173,7 @@ END FUNCTION multiplyData
   INTEGER :: errors = 0
   INTEGER :: mult = 2
   REAL(8),DIMENSION(LOOPCOUNT) :: a, b
+  INTEGER :: x
 
   SEEDDIM(1) = 1
 # ifdef SEED
@@ -161,10 +186,7 @@ END FUNCTION multiplyData
 
   !$acc data copy(a(1:LOOPCOUNT))
     !$acc parallel
-      !$acc loop
-      DO x = 1, 1
-        CALL multiplyData(a)
-      END DO
+        CALL multiplyData(a, LOOPCOUNT)
     !$acc end parallel
   !$acc end data
 

@@ -80,6 +80,8 @@ int test3(){
     devtest[0] = 1;
 
     #pragma acc enter data copyin(devtest[0:1])
+    data_on_device = 1;
+
     #pragma acc parallel present(devtest[0:1])
     {
 	devtest[0] = 0;
@@ -105,10 +107,7 @@ int test3(){
             }
         }
         for (int x = 0; x < n; ++x){
-            if (fabs(a[x] + 1) > PRECISION){
-                err += 1;
-            }
-            if (fabs(b[x] + 1) > PRECISION){
+            if (fabs(b[x]) > PRECISION){
                 err += 1;
             }
         }

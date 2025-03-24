@@ -1,0 +1,258 @@
+#if !defined(ATOMIC_REAL) && !defined(ATOMIC_INTEGER) && !defined(ATOMIC_LOGICAL)
+#define ATOMIC_REAL
+#endif
+ 
+#ifndef ATOMIC_END
+#define ATOMIC_END !$acc end atomic
+#endif
+ 
+#ifdef ATOMIC_REAL
+#define ATOMIC_TYPE REAL(8)
+#elif defined(ATOMIC_INTEGER)
+#define ATOMIC_TYPE INTEGER
+#elif defined(ATOMIC_LOGICAL)
+#define ATOMIC_TYPE LOGICAL
+#endif
+ 
+#if defined(ATOMIC_REAL) || defined(ATOMIC_INTEGER)
+#define EXPR_PLUS_X 1
+#define EXPR_MINUS_X 2
+#define EXPR_TIMES_X 3
+#define EXPR_DIVIDED_X 4
+#define X_PLUS_EXPR 5
+#define X_MINUS_EXPR 6
+#define X_TIMES_EXPR 7
+#define X_DIVIDED_EXPR 8
+#define MAX_EXPR_X 9
+#define MAX_X_EXPR 10
+#define MIN_EXPR_X 11
+#define MIN_X_EXPR 12
+#ifdef ATOMIC_INTEGER
+#define IAND_EXPR_X 100
+#define IOR_EXPR_X 101
+#define IXOR_EXPR_X 102
+#define IAND_X_EXPR 103
+#define IOR_X_EXPR 104
+#define IXOR_X_EXPR 105
+#endif
+#define MAX_EXPR_LIST_X 1001
+#define MIN_EXPR_LIST_X 1002
+#define MAX_X_EXPR_LIST 1003
+#define MIN_X_EXPR_LIST 1004
+ 
+#if ATOMIC_OPTYPE == EXPR_PLUS_X
+#define ATOMIC_OP(a, b) (a + b)
+#elif ATOMIC_OPTYPE == EXPR_MINUS_X
+#define ATOMIC_OP(a, b) (a - b)
+#elif ATOMIC_OPTYPE == EXPR_TIMES_X
+#define ATOMIC_OP(a, b) (a * b)
+#elif ATOMIC_OPTYPE == EXPR_DIVIDED_X
+#define ATOMIC_OP(a, b) (a / b)
+#elif ATOMIC_OPTYPE == X_PLUS_EXPR
+#define ATOMIC_OP(a, b) (b + a)
+#elif ATOMIC_OPTYPE == X_MINUS_EXPR
+#define ATOMIC_OP(a, b) (b - a)
+#elif ATOMIC_OPTYPE == X_TIMES_EXPR
+#define ATOMIC_OP(a, b) (b * a)
+#elif ATOMIC_OPTYPE == X_DIVIDED_EXPR
+#define ATOMIC_OP(a, b) (b / a)
+#elif ATOMIC_OPTYPE == MAX_EXPR_X
+#define ATOMIC_OP(a, b) max(a, b)
+#elif ATOMIC_OPTYPE == MIN_EXPR_X
+#define ATOMIC_OP(a, b) min(a, b)
+#elif ATOMIC_OPTYPE == MAX_X_EXPR
+#define ATOMIC_OP(a, b) max(b, a)
+#elif ATOMIC_OPTYPE == MIN_X_EXPR
+#define ATOMIC_OP(a, b) min(b, a)
+#elif ATOMIC_OPTYPE == IAND_EXPR_X
+#define ATOMIC_OP(a, b) iand(a, b)
+#elif ATOMIC_OPTYPE == IOR_EXPR_X
+#define ATOMIC_OP(a, b) ior(a, b)
+#elif ATOMIC_OPTYPE == IXOR_EXPR_X
+#define ATOMIC_OP(a, b) ieor(a, b)
+#elif ATOMIC_OPTYPE == IAND_X_EXPR
+#define ATOMIC_OP(a, b) iand(b, a)
+#elif ATOMIC_OPTYPE == IOR_X_EXPR
+#define ATOMIC_OP(a, b) ior(b, a)
+#elif ATOMIC_OPTYPE == IXOR_X_EXPR
+#define ATOMIC_OP(a, b) ieor(b, a)
+#elif ATOMIC_OPTYPE == MAX_EXPR_LIST_X
+#define ATOMIC_LIST
+#define ATOMIC_OP(a, a2, b) max(a, a2, b)
+#elif ATOMIC_OPTYPE == MIN_EXPR_LIST_X
+#define ATOMIC_LIST
+#define ATOMIC_OP(a, a2, b) min(a, a2, b)
+#elif ATOMIC_OPTYPE == MAX_X_EXPR_LIST
+#define ATOMIC_LIST
+#define ATOMIC_OP(a, a2, b) max(b, a, a2)
+#elif ATOMIC_OPTYPE == MIN_X_EXPR_LIST
+#define ATOMIC_LIST
+#define ATOMIC_OP(a, a2, b) min(b, a, a2)
+#endif
+ 
+#elif defined(ATOMIC_LOGICAL)
+#define EXPR_AND_X 2001
+#define EXPR_EQV_X 2002
+#define EXPR_NEQV_X 2003
+#define EXPR_OR_X 2004
+#define X_AND_EXPR 2005
+#define X_EQV_EXPR 2006
+#define X_NEQV_EXPR 2007
+#define X_OR_EXPR 2008
+ 
+#if ATOMIC_OPTYPE == EXPR_AND_X
+#define ATOMIC_OP(a, b) (a .AND. b)
+#elif ATOMIC_OPTYPE == EXPR_EQV_X
+#define ATOMIC_OP(a, b) (a .EQV. b)
+#elif ATOMIC_OPTYPE == EXPR_NEQV_X
+#define ATOMIC_OP(a, b) (a .AND. b)
+#elif ATOMIC_OPTYPE == EXPR_OR_X
+#define ATOMIC_OP(a, b) (a .OR. b)
+#elif ATOMIC_OPTYPE == X_AND_EXPR
+#define ATOMIC_OP(a, b) (b .AND. a)
+#elif ATOMIC_OPTYPE == X_EQV_EXPR
+#define ATOMIC_OP(a, b) (b .EQV. a)
+#elif ATOMIC_OPTYPE == X_NEQV_EXPR
+#define ATOMIC_OP(a, b) (b .NEQV. a)
+#elif ATOMIC_OPTYPE == X_OR_EXPR
+#define ATOMIC_OP(a, b) (b .OR. a)
+#endif
+#endif
+ 
+#include "common.Fh"
+LOGICAL FUNCTION test1()
+  IMPLICIT NONE
+  INCLUDE "acc_testsuite.Fh"
+  ATOMIC_TYPE, DIMENSION(LOOPCOUNT, ATOMIC_SIZE) :: a
+#ifdef ATOMIC_LIST
+  ATOMIC_TYPE, DIMENSION(LOOPCOUNT, ATOMIC_SIZE) :: a2
+#endif
+#if defined(ATOMIC_ASSIGN_FIRST) || defined(ATOMIC_ASSIGN_LATER)
+  ATOMIC_TYPE, DIMENSION(LOOPCOUNT, ATOMIC_SIZE) :: b
+#endif
+#ifdef ATOMIC_INTEGER
+  REAL(8), DIMENSION(LOOPCOUNT, ATOMIC_SIZE, 8) :: random
+#else
+  REAL(8), DIMENSION(LOOPCOUNT, ATOMIC_SIZE) :: random
+#endif
+  ATOMIC_TYPE, DIMENSION(LOOPCOUNT) :: totals
+  INTEGER :: i, j, k
+  INTEGER :: errors = 0
+ 
+  !Initilization
+  SEEDDIM(1) = 1
+#ifdef SEED
+  SEEDDIM(1) = SEED
+#endif
+  CALL RANDOM_SEED(PUT=SEEDDIM)
+ 
+  CALL RANDOM_NUMBER(random)
+#ifdef ATOMIC_REAL
+  a = random
+#ifdef ATOMIC_LIST
+  CALL RANDOM_NUMBER(a2)
+#endif
+#elif defined(ATOMIC_INTEGER)
+  a = 0
+  DO i = 1, LOOPCOUNT
+     DO j = 1, ATOMIC_SIZE
+        DO k = 1, 8
+           IF (random(i, j, k) .gt. .933) THEN
+              a(i, j) = a(i, j) + ISHFT(1, k - 1)
+           END IF
+        END DO
+     END DO
+  END DO
+#elif defined(ATOMIC_LOGICAL)
+  DO i = 1, LOOPCOUNT
+     DO j = 1, ATOMIC_SIZE
+        IF (random(i, j) < .933) THEN
+           a(i, j) = .TRUE.
+        ELSE
+           a(i, j) = .FALSE.
+        END IF
+     END DO
+  END DO
+#endif
+ 
+  totals = ATOMIC_INIT
+ 
+  !$acc data copyin(a(1:LOOPCOUNT, 1:ATOMIC_SIZE)) copy(totals(1:LOOPCOUNT))
+#ifdef ATOMIC_LIST
+  !$acc data copyin(a2(1:LOOPCOUNT, 1:ATOMIC_SIZE))
+#endif
+#if defined(ATOMIC_ASSIGN_FIRST) || defined(ATOMIC_ASSIGN_LATER) 
+  !$acc data copyout(b(1:LOOPCOUNT, 1:ATOMIC_SIZE))
+#endif
+  !$acc parallel
+  !$acc loop
+  DO i = 1, LOOPCOUNT
+     DO j = 1, ATOMIC_SIZE
+        !$acc atomic ATOMIC_CLAUSE
+#ifdef ATOMIC_ASSIGN_FIRST
+        b(i, j) = totals(i)
+#endif
+#ifdef ATOMIC_LIST
+        totals(i) = ATOMIC_OP(a(i, j), a2(i, j), totals(i))
+#else
+        totals(i) = ATOMIC_OP(a(i, j), totals(i))
+#endif
+#ifdef ATOMIC_ASSIGN_LATER
+        b(i, j) = totals(i)
+#endif
+        ATOMIC_END
+     END DO
+  END DO
+  !$acc end parallel
+#ifdef ATOMIC_LIST
+  !$acc end data
+#endif
+#if defined(ATOMIC_ASSIGN_FIRST) || defined(ATOMIC_ASSIGN_LATER) 
+  !$acc end data
+#endif
+  !$acc end data
+ 
+  DO i = 1, LOOPCOUNT
+#if defined(ATOMIC_ASSIGN_FIRST) || defined(ATOMIC_ASSIGN_LATER) 
+#ifdef ATOMIC_LIST
+     IF (.NOT. VERIFY_ATOMIC_SEQUENCE(a(i, :), a2(i, :), b(i, :), &
+      & ATOMIC_SIZE, ATOMIC_INIT, totals(i), ATOMIC_OPTYPE)) THEN
+#else
+     IF (.NOT. VERIFY_ATOMIC_SEQUENCE(a(i, :), b(i, :), &
+      & ATOMIC_SIZE, ATOMIC_INIT, totals(i), ATOMIC_OPTYPE)) THEN
+#endif
+#else
+     IF (.NOT. IS_POSSIBLE(a(i, :), ATOMIC_SIZE, ATOMIC_INIT, totals(i), ATOMIC_OPTYPE)) THEN
+#endif
+        errors = errors + 1
+     END IF
+  END DO
+ 
+  IF (errors .eq. 0) THEN
+     test1 = .FALSE.
+  ELSE
+     test1 = .TRUE.
+  END IF
+END FUNCTION test1
+ 
+PROGRAM main
+  IMPLICIT NONE
+  INTEGER :: failcode, testrun
+  LOGICAL :: failed
+  INCLUDE "acc_testsuite.Fh"
+#ifndef T1
+  LOGICAL :: test1
+#endif
+  failed = .FALSE.
+  failcode = 0
+#ifndef T1
+  DO testrun = 1, NUM_TEST_CALLS
+     failed = failed .or. test1()
+  END DO
+  IF (failed) THEN
+     failcode = failcode + 2 ** 0
+     failed = .FALSE.
+  END IF
+#endif
+  CALL EXIT (failcode)
+END PROGRAM main

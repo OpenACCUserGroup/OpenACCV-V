@@ -1,3 +1,5 @@
+#include "common.Fh"
+
 #ifndef T1
 !T1:data,executable-data,devonly,construct-independent,V:2.0-2.7
       LOGICAL FUNCTION test1()
@@ -6,12 +8,6 @@
         INTEGER :: x !Iterators
         REAL(8),DIMENSION(LOOPCOUNT):: a, a_copy !Data
         INTEGER :: errors = 0
-        INTEGER,DIMENSION(1):: devtest
-        devtest(1) = 1
-        !$acc enter data copyin(devtest(1:1))
-        !$acc parallel
-          devtest(1) = 0
-        !$acc end parallel
 
         !Initilization
         SEEDDIM(1) = 1
@@ -23,7 +19,7 @@
         CALL RANDOM_NUMBER(a)
         a_copy = a
 
-        IF (devtest(1) .eq. 1) THEN
+        IF (devtest() .eq. .TRUE.) THEN
           !$acc enter data copyin(a(1:LOOPCOUNT))
           !$acc parallel present(a(1:LOOPCOUNT))
             !$acc loop
@@ -55,12 +51,6 @@
         INTEGER :: x !Iterators
         REAL(8),DIMENSION(LOOPCOUNT):: a, a_copy !Data
         INTEGER :: errors = 0
-        INTEGER,DIMENSION(1):: devtest
-        devtest(1) = 1
-        !$acc enter data copyin(devtest(1:1))
-        !$acc parallel
-          devtest(1) = 0
-        !$acc end parallel
 
         !Initilization
         SEEDDIM(1) = 1

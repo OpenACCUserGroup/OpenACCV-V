@@ -5,7 +5,7 @@ int test1(){
     int err = 0;
     srand(SEED);
     real_t * a = new real_t[n];
-    real_t reduction;
+    real_t reduction = 0.0;
 
     for (int x = 0; x < n; ++x){
         a[x] = rand() / (real_t)(RAND_MAX / 10);

@@ -25,15 +25,13 @@
 
 /* General                                                */
 /**********************************************************/
-#define ARRAYSIZE   250
-long long n = ARRAYSIZE;
 #define PRECISION   1e-8
 typedef double real_t;
 
 #ifdef DECLARE_TEST
 int fixed_size_array[10] = {0, 1, 4, 9, 16, 25, 36, 49, 64, 81};
 real_t* datapointer;
-int scalar_extern = 10; //For global scalar tests
+int scalar = 10; //For global scalar tests
 #endif
 
 #ifdef DECLARE_COPYIN
@@ -90,43 +88,12 @@ void extern_multiplyData_deviceptr(int mult, long long n){
 }
 #endif
 
-#ifdef __cplusplus
-template<typename acctype>
-class data_container{
-  public:
-    acctype* data;
-    size_t length;
-    inline acctype& operator[](int i){
-        return this->data[i];
-    }
-    acctype* get_data(){
-        return this->data;
-    }
-    data_container(int size){
-        this->length = size;
-        this->data = (acctype *)malloc(size * sizeof(acctype));
-    }
-    ~data_container(){
-        free(data);
-    }
-};
-#else
-typedef enum { false, true } bool;
-#endif
-
-#define ARRAYSIZE_NEW 1024
 #define ARRAYSIZE_SMALL 10
 
 #define REPETITIONS 1
-#define LOOPCOUNT 1000
 /* following times are in seconds */
 #define SLEEPTIME        0.01
 #define SLEEPTIME_LONG   0.5
-
-typedef struct {
-  double real;
-  double imag;
-} dcomplex;
 
 
 #endif
