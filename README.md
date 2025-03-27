@@ -186,21 +186,21 @@ Website Link: [https://crpl.cis.udel.edu/oaccvv/results/](https://crpl.cis.udel.
 
 Current Student Authors:
 * Aaron Jarmusch
-* Aaron Liu
-* Vaidhyanathan Ravichandran
-* Christian Munley
-* Daniel Horta
-* Will Gunter
-* Olive Odida
 
 Contributors:
 * Joel Denny
 * Tobias Burnus
 * Jeff Larkin
 * Mathew Colgrove
+* Christian Munley
 
 Past Authors:
 * Kyle Friedline
+* Aaron Liu
+* Vaidhyanathan Ravichandran
+* Daniel Horta
+* Will Gunter
+* Olive Odida
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
