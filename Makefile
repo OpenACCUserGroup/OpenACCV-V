@@ -18,14 +18,14 @@ SHELL=/bin/bash -o pipefail
 # System specific varibles can be specified
 # in the system files sys/system/###.def
 ###################################################
-ifdef OMPVV_SYSTEM
-	SYSTEM = ${OMPVV_SYSTEM}
+ifdef OACCVV_SYSTEM
+	SYSTEM = ${OACCVV_SYSTEM}
 else
 	SYSTEM ?= generic
 endif
 -include sys/systems/$(SYSTEM).def
 
-# Set OMPVV_NO_COMPILER_MODULE_CHANGES to prevent
+# Set OACCVV_NO_COMPILER_MODULE_CHANGES to prevent
 # changes to the compiler settings inside make.def
 include sys/make/make.def
 
@@ -141,13 +141,13 @@ endif
 
 ifeq "$(SOURCES)" ""
 # Getting all the source files in the project
-ifdef LINK_OMPVV_LIB
+ifdef LINK_OACCVV_LIB
 SOURCES_C := $(shell find $(CURDIR)/Tests -name "*.c")
 else
 SOURCES_C := $(shell find $(CURDIR)/Tests ! -name qmcpack_target_static_lib.c -name "*.c")
 endif
 SOURCES_CPP := $(shell find $(CURDIR)/Tests -name "*.cpp")
-SOURCES_F := $(shell find $(CURDIR)/Tests -name "*.F90" -o -name "*.F95" -o -name "*.F03" -o -name "*.F" -o -name "*.FOR" | grep -v "ompvv.F90")
+SOURCES_F := $(shell find $(CURDIR)/Tests -name "*.F90" -o -name "*.F95" -o -name "*.F03" -o -name "*.F" -o -name "*.FOR" | grep -v "OACCVV.F90")
 
 # Find all the binary files that have been previously compiled
 TESTS_TO_RUN := $(shell test -d $(BINDIR) && \
@@ -244,13 +244,13 @@ ifdef NO_OFFLOADING
 endif
 
 ##################################################
-# OMPVV static library
+# OACCVV static library
 ##################################################
 
-OMPVVLIB=-L$(CURDIR)/ompvv -lompvv
-OMPVVLIB_DEP=$(CURDIR)/ompvv/libompvv.a
+OACCVVLIB=-L$(CURDIR)/oaccvv
+OACCVVLIB_DEP=$(CURDIR)/accvv/libaccvv.a
 
-$(BINDIR)/libompvv.o: $(CURDIR)/ompvv/libompvv.c $(BINDIR)
+$(BINDIR)/libaccvv.o: $(CURDIR)/accvv/libaccvv.c $(BINDIR)
 	@echo -e $(TXTYLW)"\n\n" compile: $< $(TXTNOC)
 	$(call log_section_header,"COMPILE CC="${CCOMPILE},$(SYSTEM),$<,$(CC) $(shell $(call loadModules,$(C_COMPILER_MODULE),"shut up") $(C_VERSION)),$(OMP_VERSION),$(notdir $(@:.o=.log)))
 	-$(QUIET)$(call loadModules,$(C_COMPILER_MODULE)) $(CCOMPILE) $(VERBOSE_MODE) $(DTHREADS) $(DTEAMS) $(HTHREADS) $< -c -o $(BINDIR)/$(notdir $@) $(if $(LOG),$(RECORD)$(notdir $(@:.o=.log))\
@@ -259,9 +259,9 @@ $(BINDIR)/libompvv.o: $(CURDIR)/ompvv/libompvv.c $(BINDIR)
 	-$(call log_section_footer,"COMPILE CC="${CCOMPILE},$(SYSTEM),$$(cat $(LOGTEMPFILE)),$(LOG_NOTE),$(notdir $(@:.o=.log)))
 	-@$(if $(LOG), rm $(LOGTEMPFILE))
 
-$(CURDIR)/ompvv/libompvv.a: $(BINDIR)/libompvv.o
-	ar -rc $(CURDIR)/ompvv/libompvv.a $(BINDIR)/libompvv.o
-	@ranlib $(CURDIR)/ompvv/libompvv.a
+$(CURDIR)/oaccvv/liboaccvv.a: $(BINDIR)/liboaccvv.o
+	ar -rc $(CURDIR)/oaccvv/liboaccvv.a $(BINDIR)/liboaccvv.o
+	@ranlib $(CURDIR)/oaccvv/liboaccvv.a
 
 ##################################################
 # Compilation rules
@@ -276,11 +276,11 @@ $(CURDIR)/ompvv/libompvv.a: $(BINDIR)/libompvv.o
 	-$(call log_section_footer,"COMPILE CC="${CCOMPILE},$(SYSTEM),$$(cat $(LOGTEMPFILE)),$(LOG_NOTE),$(notdir $(@:.o=.log)))
 	-@$(if $(LOG), rm $(LOGTEMPFILE))
 
-# Special rule for test that needs OMPVV lib
-$(CURDIR)/Tests/qmcpack_target_static_lib.c.o: $(CURDIR)/Tests/qmcpack_target_static_lib.c $(BINDIR) $(LOGDIR) $(OMPVVLIB_DEP)
+# Special rule for test that needs OACCVV lib
+$(CURDIR)/Tests/qmcpack_target_static_lib.c.o: $(CURDIR)/Tests/qmcpack_target_static_lib.c $(BINDIR) $(LOGDIR) $(OACCVVLIB_DEP)
 		@echo -e $(TXTYLW)"\n\n" compile: $< $(TXTNOC)
 		$(call log_section_header,"COMPILE CC="${CCOMPILE},$(SYSTEM),$<,$(CC) $(shell $(call loadModules,$(C_COMPILER_MODULE),"shut up") $(C_VERSION)),Tests,$(notdir $(@:.o=.log)))
-		-$(QUIET)$(call loadModules,$(C_COMPILER_MODULE)) $(CCOMPILE) $(VERBOSE_MODE) $(DTHREADS) $(DTEAMS) $(HTHREADS) $< -o $(BINDIR)/$(notdir $@) $(OMPVVLIB) $(if $(LOG),$(RECORD)$(notdir $(@:.o=.log))\
+		-$(QUIET)$(call loadModules,$(C_COMPILER_MODULE)) $(CCOMPILE) $(VERBOSE_MODE) $(DTHREADS) $(DTEAMS) $(HTHREADS) $< -o $(BINDIR)/$(notdir $@) $(OACCVVLIB) $(if $(LOG),$(RECORD)$(notdir $(@:.o=.log))\
 				&& echo "PASS" > $(LOGTEMPFILE) \
 				|| echo "FAIL" > $(LOGTEMPFILE))
 		-$(call log_section_footer,"COMPILE CC="${CCOMPILE},$(SYSTEM),$$(cat $(LOGTEMPFILE)),$(LOG_NOTE),$(notdir $(@:.o=.log)))
@@ -482,7 +482,7 @@ clean: clear_fortran_mod
 
 .PHONY: clear_fortran_mod
 clear_fortran_mod:
-	- rm -f ./ompvv/*.mod
+	- rm -f ./oaccvv/*.mod
 
 .PHONY: tidy
 tidy: clean
@@ -518,7 +518,7 @@ help:
 	@echo "  MODULE_LOAD=1             Before compiling or running, module load is called"
 	@echo "  ADD_BATCH_SCHED=1         Add the jsrun command before the execution of the running script to send it to a compute node"
 	@echo "  NO_OFFLOADING=1           Turn off offloading"
-	@echo "  LINK_OMPVV_LIB=1          Link the OMPVV static library (in ompvv folder) and run the static lib test"
+	@echo "  LINK_OACCVV_LIB=1          Link the OACCVV static library (in oaccvv folder) and run the static lib test"
 	@echo "  NUM_THREADS_HOST=n        Specify n, requested number of threads for tests that use num_threads() on host constructs"
 	@echo "  NUM_THREADS_DEVICE=n      Specify n, requested number of threads for tests that use num_threads() on device constructs"
 	@echo "  NUM_TEAMS_DEVICE=n        Specify n, requested number of threads for tests that use num_teams() on device constructs"
@@ -551,7 +551,7 @@ help:
 	@echo "  report_summary"
 	@echo "    Create a summarized report of the tests that failed, and how many runs in total the given log folder '$(LOGDIRNAME)' has."
 	@echo "  repoort_online"
-	@echo "    Upload the resulting JSON file to the ompvvsollve website for easy visualization and sharing."
+	@echo "    Upload the resulting JSON file to the accvvsollve website for easy visualization and sharing."
 	@echo "  report_html"
 	@echo "    create an html based results report. This rule takes the json file and a prebuild template and creates"
 	@echo "    the $(RESULTS_HTML_OUTPUT_FOLDER) folder containing the report. This report allows filtering the results"
