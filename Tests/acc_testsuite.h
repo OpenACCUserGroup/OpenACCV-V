@@ -51,7 +51,7 @@ class data_container{
     }
 };
 #else
-typedef enum { false, true } bool;
+#include <stdbool.h>
 #endif
 
 #define ARRAYSIZE_NEW 256

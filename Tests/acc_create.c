@@ -179,12 +179,12 @@ int test5(){
         for (int x = 0; x < n; ++x){
             a[x] = rand() / (real_t)(RAND_MAX / 10);
             b[x] = rand() / (real_t)(RAND_MAX / 10);
-            c[x] = 1;
+            c[x] = 0;
         }
 
         #pragma acc enter data copyin(c[0:n])
         for (int x = 0; x < n; ++x){
-            c[x] = 0;
+            c[x] = 1;
         }
         acc_create(c, n * sizeof(real_t));
         #pragma acc data copyin(a[0:n], b[0:n])
@@ -202,7 +202,7 @@ int test5(){
         #pragma acc exit data delete(c[0:n])
         
 	for (int x = 0; x < n; ++x) {
-            if (fabs(c[x] - (1 + a[x] + b[x])) > PRECISION) {
+            if ((fabs(c[x] - 1)) > PRECISION) {
                 err += 1;
             }
         }

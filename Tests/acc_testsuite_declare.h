@@ -88,6 +88,31 @@ void extern_multiplyData_deviceptr(int mult, long long n){
 }
 #endif
 
+#ifdef __cplusplus
+template<typename acctype>
+class data_container{
+  public:
+    acctype* data;
+    size_t length;
+    inline acctype& operator[](int i){
+        return this->data[i];
+    }
+    acctype* get_data(){
+        return this->data;
+    }
+    data_container(int size){
+        this->length = size;
+        this->data = (acctype *)malloc(size * sizeof(acctype));
+    }
+    ~data_container(){
+        free(data);
+    }
+};
+#else
+#include <stdbool.h>
+#endif
+
+#define ARRAYSIZE_NEW 1024
 #define ARRAYSIZE_SMALL 10
 
 #define REPETITIONS 1
