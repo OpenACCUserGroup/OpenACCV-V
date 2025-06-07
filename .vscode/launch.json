@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/usa/jarmusch/OpenACCV-V",
-      "program": "/usa/jarmusch/OpenACCV-V/build/Debug/outDebug",
+      "cwd": "/usa/jarmusch/OpenACCV-V/tests/parallel",
+      "program": "/usa/jarmusch/OpenACCV-V/tests/parallel/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

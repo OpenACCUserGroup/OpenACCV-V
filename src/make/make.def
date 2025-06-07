@@ -1,0 +1,245 @@
+#---------------------------------------------------------------------------
+#
+#				OPENACC VALIDATION & VERIFICATION SUITE
+#			   SITE- AND PLATFORM-SPECIFIC DEFINITIONS
+#
+#---------------------------------------------------------------------------
+
+###################################################
+# OpenACC Version Detection
+###################################################
+VERSION_BIN = $(CURDIR)/bin/version_check
+VERSION_MK = $(VERSION_BIN)/version.mk
+
+# Define version detection function
+# Args: 1=compiler_type (c, cpp, f), 2=compiler, 3=flags
+define detect_oacc_version
+	@echo "Checking OpenACC version with $(2)"
+	@mkdir -p $(VERSION_BIN)
+	@$(2) $(3) $(CURDIR)/src/version_tests/versiontest.$(1) -o $(VERSION_BIN)/versiontest_$(1) 2>/dev/null || \
+		echo "Failed to compile OpenACC version test with $(2)"
+	@if [ -f "$(VERSION_BIN)/versiontest_$(1)" ]; then \
+		VERSION=$$($(VERSION_BIN)/versiontest_$(1)); \
+		echo "Detected OpenACC version: $$VERSION"; \
+		echo "OACC_VERSION = $$VERSION" > $(VERSION_MK); \
+	fi
+endef
+
+# Check OpenACC version with available compilers
+oacc_version_check:
+	@echo "=== DETECTING OPENACC VERSION ==="
+	@rm -f $(VERSION_MK)
+ifneq ($(CC),none)
+	$(call detect_oacc_version,c,$(CCOMPILE),$(COFFLOADING))
+endif
+ifneq ($(CXX),none)
+	$(call detect_oacc_version,cpp,$(CXXCOMPILE),$(CXXOFFLOADING))
+endif
+ifneq ($(FC),none)
+	$(call detect_oacc_version,F90,$(FCOMPILE),$(FOFFLOADING))
+endif
+	@if [ -f "$(VERSION_MK)" ]; then \
+		echo "OpenACC version detection complete."; \
+		include $(VERSION_MK); \
+	else \
+		echo "OpenACC version detection failed with all available compilers."; \
+		echo "OACC_VERSION = unknown" > $(VERSION_MK); \
+	fi
+
+###################################################
+# Compiler Selection and Configuration
+###################################################
+
+# Update the compiler settings, unless OACCVV_NO_COMPILER_CHANGES is set
+ifndef OACCVV_NO_COMPILER_CHANGES
+
+# Supported compiler collections
+COMPILERS := "nvidia, gnu, cray"
+CCOMPILERS := "gcc, nvc"
+CXXCOMPILERS := "g++, nvc++"
+FCOMPILERS := "gfortran, nvfortran, ftn"
+
+# Version detection commands (default)
+VERSION := echo "version unknown"
+C_VERSION := echo "version unknown"
+CXX_VERSION := echo "version unknown"
+F_VERSION := echo "version unknown"
+
+# Handle COMPILER option to select vendor-specific compiler set
+ifdef COMPILER
+  ifeq ($(COMPILER),nvidia)
+	CC = nvc
+	CXX = nvc++
+	FC = nvfortran
+  else ifeq ($(COMPILER),gnu)
+	CC = gcc
+	CXX = g++
+	FC = gfortran
+  else ifeq ($(COMPILER),cray)
+	CC = none
+	CXX = none
+	FC = ftn
+  else
+	$(error Unknown compiler specified: $(COMPILER). Supported values: nvidia, gnu, cray)
+  endif
+else
+  # Default values if COMPILER is not specified
+  CC ?= none
+  CXX ?= none
+  FC ?= none
+endif
+
+# Strip directory for matching configurations
+# The full pathname compiler will be used for compilation
+OACCVV_USED_CC := $(notdir $(CC))
+OACCVV_USED_CXX := $(notdir $(CXX))
+OACCVV_USED_FC := $(notdir $(FC))
+
+###################################################
+# C Compiler Configuration
+###################################################
+
+# NVIDIA C compiler
+ifeq ($(OACCVV_USED_CC), nvc)
+	C_VERSION	= $(shell ${CC} -dumpversion)
+	CLINK		= $(CC)
+	COFFLOADING  = -acc=gpu -Mpreprocess
+	C_NO_OFFLOADING = 
+	CFLAGS	   += -O3 $(COFFLOADING)
+	CLINKFLAGS   += -O3 $(COFFLOADING)
+endif
+
+# GCC C compiler
+ifeq ($(OACCVV_USED_CC), gcc)
+  C_VERSION	  = $(shell ${CC} -dumpversion)
+  CLINK		  = $(CC)
+  COFFLOADING	= -foffload="-lm" -lm -fopenacc
+  C_NO_OFFLOADING = -foffload=disable
+  CFLAGS		 += -O3 -std=c99 $(COFFLOADING)
+  CLINKFLAGS	 += -O3 $(COFFLOADING)
+endif
+
+###################################################
+# C++ Compiler Configuration
+###################################################
+
+# NVIDIA C++ compiler
+ifeq ($(OACCVV_USED_CXX), nvc++)
+	CXX_VERSION   = $(shell ${CXX} -dumpversion)
+	CXXLINK	   = $(CXX)
+	CXXOFFLOADING = -acc=gpu -Mpreprocess
+	CXX_NO_OFFLOADING = 
+	CXXFLAGS	  += -O3 $(CXXOFFLOADING)
+	CXXLINKFLAGS  += -O3 $(CXXOFFLOADING)
+endif
+
+# GCC C++ compiler
+ifeq ($(OACCVV_USED_CXX), g++)
+  CXX_VERSION	  = $(shell ${CXX} -dumpversion)
+  CXXLINK		  = $(CXX)
+  CXXOFFLOADING	= -foffload="-lm" -lm -fopenacc
+  CXX_NO_OFFLOADING = -foffload=disable 
+  CXXFLAGS		 += -O3 -std=c++11 $(CXXOFFLOADING)
+  CXXLINKFLAGS	 += -O3 $(CXXOFFLOADING)
+endif
+
+###################################################
+# Fortran Compiler Configuration
+###################################################
+
+# NVIDIA Fortran compiler
+ifeq ($(OACCVV_USED_FC), nvfortran)
+	F_VERSION	 = $(shell ${FC} -dumpversion)
+	FLINK		 = $(FC)
+	FOFFLOADING   = -acc=gpu -Mpreprocess
+	F_NO_OFFLOADING = 
+	FFLAGS		+= -O3 $(FOFFLOADING)
+	FLINKFLAGS	+= -O3 $(FOFFLOADING)
+endif
+
+# CRAY Fortran compiler 
+ifeq ($(OACCVV_USED_FC), ftn)
+  F_VERSION	   = $(shell ${FC} -dumpversion)
+  FLINK		   = $(FC)
+  FOFFLOADING	 = -hacc
+  F_NO_OFFLOADING = -hnoacc
+  FFLAGS		  += -lm -dm -O3 $(FOFFLOADING)
+  FLINKFLAGS	  += -lm -O3 $(FOFFLOADING)
+endif
+
+# GCC Fortran compiler
+ifeq ($(OACCVV_USED_FC), gfortran)
+  F_VERSION	   = $(shell ${FC} -dumpversion)
+  FLINK		   = gcc
+  FOFFLOADING	 = -foffload="-lm" -lm -fopenacc -foffload-options=-lgfortran
+  F_NO_OFFLOADING = -foffload=disable
+  FFLAGS		  += -O3 $(FOFFLOADING) -ffree-line-length-none -J./ompvv
+  FLINKFLAGS	  += -O3 $(FOFFLOADING)
+endif
+
+
+###################################################
+# Determine Version from Available Compilers
+###################################################
+
+# Set VERSION to the first available compiler version (priority: C, C++, Fortran)
+ifeq ($(C_VERSION),none)
+  ifeq ($(CXX_VERSION),none)
+    ifneq ($(FC_VERSION),none)
+      # Only Fortran compiler is available
+      VERSION = $(FC_VERSION)
+    endif
+  else
+    # C++ compiler is available (no C compiler)
+    VERSION = $(CXX_VERSION)
+  endif
+else
+  # C compiler is available
+  VERSION = $(C_VERSION)
+endif
+
+# End of compiler settings update
+endif
+
+###################################################
+# Compilation Commands
+###################################################
+
+# Common include paths
+C_INC = -I./include
+CXX_INC = -I./include
+F_INC = -I./include
+
+# Library paths
+C_LIB =
+CXX_LIB =
+F_LIB =
+
+# Executable destination
+BINDIR ?= bin
+
+# Final compilation commands
+CCOMPILE = $(CC) $(C_INC) $(CFLAGS)
+CXXCOMPILE = $(CXX) $(CXX_INC) $(CXXFLAGS)
+FCOMPILE = $(FC) $(F_INC) $(FFLAGS)
+
+###################################################
+# Color Definitions
+###################################################
+TXTBLK := "\033[0;30m" # Black - Regular
+TXTRED := "\033[0;31m" # Red
+TXTGRN := "\033[0;32m" # Green
+TXTYLW := "\033[0;33m" # Yellow
+TXTBLU := "\033[0;34m" # Blue
+TXTPUR := "\033[0;35m" # Purple
+TXTCYN := "\033[0;36m" # Cyan
+TXTWHT := "\033[0;37m" # White
+TXTNOC := "\033[0m"	# Reset
+
+###################################################
+# Logging Configuration
+###################################################
+LOGRANDNUM = ${shell echo $$RANDOM}
+LOGTEMPFILE ?= _oaccvv_temp_result_.exitstatus.${LOGRANDNUM}
+
+.PHONY: oacc_version_check

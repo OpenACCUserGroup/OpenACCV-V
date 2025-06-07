@@ -1,3 +1,5 @@
 bin/*
 build/*
 .vscode/*
+logs/*
+**/__pycache__/*

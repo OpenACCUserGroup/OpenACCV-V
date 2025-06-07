@@ -1,0 +1,72 @@
+{
+    "configs": [
+        {
+            "CC": "gcc",
+            "CCFlags": [
+                "-fopenacc",
+                "-foffload-options=-march=gfx90a",
+                "-cpp",
+                "-lm",
+                "-foffload='-lm'"
+            ],
+            "CC_ACC_Version": "2.6",
+            "CPP": "g++",
+            "CPPFlags": [
+                "-fopenacc",
+                "-foffload-options=-march=gfx90a",
+                "-cpp",
+                "-lm",
+                "-foffload='-lm'"
+            ],
+            "CPP_ACC_Version": "2.6",
+            "FC": "gfortran",
+            "FCFlags": [
+                "-fopenacc",
+                "-foffload-options=-march=gfx90a",
+                "-cpp",
+                "-lm",
+                "-foffload='-lm'"
+            ],
+            "FC_ACC_Version": "2.6",
+            "build_dir": "/autofs/nccs-svm1_home1/jarmusch/OpenACC_VV/src/OpenACCV-V/build",
+            "export_format": "json",
+            "fast": true,
+            "seed": null,
+            "system_name": null,
+            "test_dir": "/autofs/nccs-svm1_home1/jarmusch/OpenACC_VV/src/OpenACCV-V/Tests",
+            "timeout": 10
+        }
+    ],
+    "runs": {
+        "acc_async_test.F90": [
+            {
+                "compilation": {
+                    "command": "",
+                    "errors": "",
+                    "export": true,
+                    "output": "",
+                    "result": 1,
+                    "execution_time": 0.4172021179983858
+                },
+                "runtime": {
+                    "errors": "",
+                    "export": true,
+                    "output": "",
+                    "result": 0,
+                    "runtime": 0.06644779600901529,
+                    "system": 1
+                }
+            }
+        ],
+            },
+    "systems": [
+        {
+            "id": 1,
+            "machine": "x86_64",
+            "name": null,
+            "node": "login09",
+            "processor": "x86_64",
+            "release": "6.4.0-150600.23.17_14.0.63-cray_shasta_c",
+            "version": "#1 SMP Tue Oct  1 19:32:58 UTC 2024 (d0ca6eb)"
+        }
+    ],
