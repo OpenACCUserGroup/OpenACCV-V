@@ -270,9 +270,9 @@ $(TMPDIR):
 ###################################################
 .PHONY: report_json report_summary
 
-report_json: $(RESULTS_JSON_OUTPUT_FILE)
+report_json: 
 	@echo "Creating $(RESULTS_JSON_OUTPUT_FILE) file"
-	@$(RESULTS_ANALYZER) -r -f json -o $(RESULTS_JSON_OUTPUT_FILE) $(LOGDIRNAME)/*
+	@python3 src/scripts/run_report.py -l $(LOGDIR) -o $(RESULTS_JSON_OUTPUT_FILE)
 	@echo "=== REPORT DONE ==="
 
 report_summary:
