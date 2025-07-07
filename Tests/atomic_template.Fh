@@ -101,21 +101,21 @@
 #define X_OR_EXPR 2008
  
 #if ATOMIC_OPTYPE == EXPR_AND_X
-#define ATOMIC_OP(a, b) (a .AND. b)
+#define ATOMIC_OP(a, b) a .AND. b
 #elif ATOMIC_OPTYPE == EXPR_EQV_X
-#define ATOMIC_OP(a, b) (a .EQV. b)
+#define ATOMIC_OP(a, b) a .EQV. b
 #elif ATOMIC_OPTYPE == EXPR_NEQV_X
-#define ATOMIC_OP(a, b) (a .AND. b)
+#define ATOMIC_OP(a, b) a .NEQV. b
 #elif ATOMIC_OPTYPE == EXPR_OR_X
-#define ATOMIC_OP(a, b) (a .OR. b)
+#define ATOMIC_OP(a, b) a .OR. b
 #elif ATOMIC_OPTYPE == X_AND_EXPR
-#define ATOMIC_OP(a, b) (b .AND. a)
+#define ATOMIC_OP(a, b) b .AND. a
 #elif ATOMIC_OPTYPE == X_EQV_EXPR
-#define ATOMIC_OP(a, b) (b .EQV. a)
+#define ATOMIC_OP(a, b) b .EQV. a
 #elif ATOMIC_OPTYPE == X_NEQV_EXPR
-#define ATOMIC_OP(a, b) (b .NEQV. a)
+#define ATOMIC_OP(a, b) b .NEQV. a
 #elif ATOMIC_OPTYPE == X_OR_EXPR
-#define ATOMIC_OP(a, b) (b .OR. a)
+#define ATOMIC_OP(a, b) b .OR. a
 #endif
 #endif
  

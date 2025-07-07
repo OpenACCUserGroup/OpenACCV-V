@@ -42,8 +42,10 @@ FUNCTION VERIFY_ATOMIC_SEQUENCE(a, a2, b, length, init, final, op) RESULT(POSSIB
 #ifdef ATOMIC_ASSIGN_FIRST
 #ifdef ATOMIC_REAL
       if (.NOT. done(j) .AND. abs(b(j) - current) .lt. PRECISION) then
-#elif defined(ATOMIC_INTEGER) || defined(ATOMIC_LOGICAL)
+#elif defined(ATOMIC_INTEGER)
       if (.NOT. done(j) .AND. b(j) .eq. current) then
+#elif defined(ATOMIC_LOGICAL)
+      if (.NOT. done(j) .AND. (b(j) .eqv. current)) then
 #endif
         done(j) = .TRUE.
 #endif
@@ -59,8 +61,10 @@ FUNCTION VERIFY_ATOMIC_SEQUENCE(a, a2, b, length, init, final, op) RESULT(POSSIB
 #else
 #ifdef ATOMIC_REAL
       if (.NOT. done(j) .AND. abs(b(j) - tmp) .lt. PRECISION) then
-#elif defined(ATOMIC_INTEGER) || defined(ATOMIC_LOGICAL)
+#elif defined(ATOMIC_INTEGER)
       if (.NOT. done(j) .AND. b(j) .eq. tmp) then
+#elif defined(ATOMIC_LOGICAL)
+      if (.NOT. done(j) .AND. (b(j) .eqv. tmp)) then
 #endif
         current = tmp
         done(j) = .TRUE.
@@ -73,8 +77,10 @@ FUNCTION VERIFY_ATOMIC_SEQUENCE(a, a2, b, length, init, final, op) RESULT(POSSIB
 
 #ifdef ATOMIC_REAL
   if (abs(current - final) .lt. PRECISION) then
-#elif defined(ATOMIC_INTEGER) || defined(ATOMIC_LOGICAL)
+#elif defined(ATOMIC_INTEGER)
   if (current .eq. final) then
+#elif defined(ATOMIC_LOGICAL)
+  if (current .eqv. final) then
 #endif
     POSSIBLE = .TRUE.
   end if
