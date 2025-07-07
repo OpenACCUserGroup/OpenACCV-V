@@ -4,10 +4,8 @@
 int test1(){
     int err = 0;
 
-    int device_type = acc_get_device_type();
-
     #pragma acc set device_type(host)
-    if (acc_get_device_type() != device_type){
+    if (acc_get_device_type() != acc_device_host){
         err += 1;
     }
 
@@ -19,10 +17,8 @@ int test1(){
 int test2(){
     int err = 0;
 
-    int device_type = acc_get_device_type();
-
     #pragma acc set device_type(multicore)
-    if (acc_get_device_type() != device_type){
+    if (acc_get_device_type() != acc_device_host){
         err += 1;
     }
 

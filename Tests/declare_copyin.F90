@@ -1,12 +1,31 @@
+MODULE DECLARE_COPYIN_MOD
+  INTEGER,DIMENSION(10):: fixed_size_array
+  !$acc declare copyin(fixed_size_array)
+
+  public :: externMultiplyData
+contains
+SUBROUTINE externMultiplyData(a, n)
 !$acc routine vector
-FUNCTION multiplyData(a)
-  REAL(8),DIMENSION(LOOPCOUNT), INTENT(INOUT) :: a
+  INTEGER :: n
+  REAL(8),DIMENSION(n), INTENT(INOUT) :: a
   INTEGER :: x
   !$acc loop vector
-  DO x = 1, LOOPCOUNT
+  DO x = 1, n
     a(x) = a(x) * 2
   END DO
-END FUNCTION multiplyData
+END SUBROUTINE externMultiplyData
+END MODULE DECLARE_COPYIN_MOD
+
+SUBROUTINE multiplyData(a, n)
+  !$acc routine vector
+  INTEGER, INTENT(IN) :: n
+  REAL(8),DIMENSION(n), INTENT(INOUT) :: a
+  INTEGER :: x
+  !$acc loop vector
+  DO x = 1, n
+    a(x) = a(x) * 2
+  END DO
+END SUBROUTINE multiplyData
 
 #ifndef T1
 !T1:construct-independent,declare,V:2.0-2.7
@@ -60,6 +79,9 @@ END FUNCTION multiplyData
   INCLUDE "acc_testsuite.Fh"
   INTEGER :: errors = 0
   INTEGER :: mult = 2
+  INTEGER :: scalar = 10  
+  !$acc declare copyin(scalar)
+  INTEGER :: x
   REAL(8),DIMENSION(LOOPCOUNT) :: a, b
 
   SEEDDIM(1) = 1
@@ -102,6 +124,7 @@ END FUNCTION multiplyData
   INCLUDE "acc_testsuite.Fh"
   INTEGER :: errors = 0
   INTEGER :: mult = 2
+  INTEGER :: x
   REAL(8),DIMENSION(LOOPCOUNT) :: a, b
 
   SEEDDIM(1) = 1
@@ -115,10 +138,7 @@ END FUNCTION multiplyData
 
   !$acc data copy(a(1:LOOPCOUNT))
     !$acc parallel
-      !$acc loop
-      DO x = 1, 1
-        CALL externMultiplyData(a, LOOPCOUNT)
-      END DO
+      call externMultiplyData(a, LOOPCOUNT)
     !$acc end parallel
   !$acc end data
 
@@ -144,6 +164,7 @@ END FUNCTION multiplyData
   INCLUDE "acc_testsuite.Fh"
   INTEGER :: errors = 0
   INTEGER :: mult = 2
+  INTEGER :: x
   REAL(8),DIMENSION(LOOPCOUNT) :: a, b
 
   SEEDDIM(1) = 1
@@ -157,10 +178,7 @@ END FUNCTION multiplyData
 
   !$acc data copy(a(1:LOOPCOUNT))
     !$acc parallel
-      !$acc loop
-      DO x = 1, 1
-        CALL multiplyData(a)
-      END DO
+      CALL multiplyData(a, LOOPCOUNT)
     !$acc end parallel
   !$acc end data
 

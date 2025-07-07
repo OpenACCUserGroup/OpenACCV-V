@@ -1,7 +1,7 @@
 #include "acc_testsuite.h"
 #ifndef T1
 //#T1:parallel,data,data_region,V:3.0-3.2
-int Test1(){
+int test1(){
     int err=0;
     srand(SEED);
     real_t * a = (real_t *)malloc(n * sizeof(real_t));
@@ -12,7 +12,7 @@ int Test1(){
         b[x] = 0.0;
     }
 
-    #pragma acc data copyin(a[0:n]) copyout(b[0:n]
+    #pragma acc data copyin(a[0:n]) copyout(b[0:n])
     {
         #pragma acc parallel create(zero: b[0:n])
         {

@@ -24,14 +24,14 @@
 
         !$acc enter data create(c(1:LOOPCOUNT), f(1:LOOPCOUNT))
 
-        !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), d(1:LOOPCOUNT), e(1:LOOPCOUNT)) present(c(1:LOOPCOUNT), f(1:LOOPCOUNT))
-          !$acc parallel async(1)
+        !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT), d(1:LOOPCOUNT), e(1:LOOPCOUNT))
+          !$acc parallel async(1) present(c(1:LOOPCOUNT))
             !$acc loop
             DO x = 1, LOOPCOUNT
               c(x) = a(x) + b(x)
             END DO
           !$acc end parallel
-          !$acc parallel async(2)
+          !$acc parallel async(2) present(f(1:LOOPCOUNT))
             !$acc loop
             DO x = 1, LOOPCOUNT
               f(x) = d(x) + e(x)

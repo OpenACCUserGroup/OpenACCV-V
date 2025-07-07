@@ -21,7 +21,7 @@ int test1(){
     }
 
     #pragma acc enter data copyin(a[0:10*n], b[0:10*n], d[0:10])
-    #pragma acc serial private(c[0:n])
+    #pragma acc serial private(c[0:n]) present(a, b, d)
     {
         #pragma acc loop gang
         for (int x = 0; x < 10; ++x){

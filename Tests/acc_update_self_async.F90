@@ -1,3 +1,5 @@
+#include "common.Fh"
+
 #ifndef T1
 !T1:runtime,data,executable-data,devonly,async,construct-independent,update,V:2.5-2.7
       LOGICAL FUNCTION test1()
@@ -6,15 +8,8 @@
         INCLUDE "acc_testsuite.Fh"
         INTEGER :: x !Iterators
         REAL(8),DIMENSION(LOOPCOUNT):: a, b, c, d !Data
-        INTEGER,DIMENSION(1):: devtest
         REAL(8) :: RAND
         INTEGER :: errors = 0
-
-        devtest(1) = 1
-        !$acc enter data copyin(devtest(1:1))
-        !$acc parallel
-          devtest(1) = 0
-        !$acc end parallel
 
         !Initilization
         SEEDDIM(1) = 1
@@ -70,15 +65,8 @@
         INCLUDE "acc_testsuite.Fh"
         INTEGER :: x !Iterators
         REAL(8),DIMENSION(LOOPCOUNT):: a, b, c, d !Data
-        INTEGER,DIMENSION(1):: devtest
         REAL(8) :: RAND
         INTEGER :: errors = 0
-
-        devtest(1) = 1
-        !$acc enter data copyin(devtest(1:1))
-        !$acc parallel
-          devtest(1) = 0
-        !$acc end parallel
 
         !Initilization
         SEEDDIM(1) = 1
@@ -87,7 +75,7 @@
 #       endif
         CALL RANDOM_SEED(PUT=SEEDDIM)
 
-        IF (devtest(1) .eq. 1) THEN
+        IF (devtest() .eq. .TRUE.) THEN
           CALL RANDOM_NUMBER(a)
           CALL RANDOM_NUMBER(b)
           c = 0

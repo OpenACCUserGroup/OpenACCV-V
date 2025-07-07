@@ -58,6 +58,9 @@ int test2(){
     real_t ** c = (real_t **)malloc(n * sizeof(real_t));
 
     for (int x = 0; x < n; ++x){
+        a[x] = new real_t[n];
+        b[x] = new real_t[n];
+        c[x] = new real_t[n];
         for (int y = 0; y < n; ++y){
             a[x][y] = rand() / (real_t)(RAND_MAX / 10);
             b[x][y] = rand() / (real_t)(RAND_MAX / 10);
@@ -106,6 +109,9 @@ int test3(){
 
     if (devtest[0] == 1){
         for (int x = 0; x < n; ++x){
+	    a[x] = new real_t[n];
+	    b[x] = new real_t[n];
+	    c[x] = new real_t[n];
             for (int y = 0; y < n; ++y){
                 a[x][y] = rand() / (real_t)(RAND_MAX / 10);
                 b[x][y] = rand() / (real_t)(RAND_MAX / 10);
@@ -157,6 +163,9 @@ int test4(){
 
     if (devtest[0] == 1){
         for (int x = 0; x < n; ++x){
+	    a[x] = new real_t[n];
+	    b[x] = new real_t[n];
+	    c[x] = new real_t[n];
             for (int y = 0; y < n; ++y){
                 a[x][y] = rand() / (real_t)(RAND_MAX / 10);
                 b[x][y] = rand() / (real_t)(RAND_MAX / 10);

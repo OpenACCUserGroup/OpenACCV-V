@@ -4,6 +4,7 @@
         USE OPENACC
         IMPLICIT NONE
         INCLUDE "acc_testsuite.Fh"
+	INTEGER :: device_num
         INTEGER :: device_type
         INTEGER :: errors = 0
 

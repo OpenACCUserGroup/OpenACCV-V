@@ -6,7 +6,7 @@ bool is_possible(real_t* a, real_t* b, int length, real_t prev){
     real_t *passed_a = new real_t[(length - 1)];
     real_t *passed_b = new real_t[(length - 1)];
     for (int x = 0; x < length; ++x){
-        if (fabs(b[x] - (a[x] * prev)) < PRECISION){
+        if (fabs(b[x] - (a[x] * prev)) < PRECISION2){
             for (int y = 0; y < x; ++y){
                 passed_a[y] = a[y];
                 passed_b[y] = b[y];
