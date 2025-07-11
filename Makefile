@@ -76,36 +76,33 @@ endif
 # Find all the binary files that have been previously compiled
 TESTS_TO_RUN := $(shell test -d $(BINDIR) && \
                         find $(BINDIR) -name "*.F90.o" \
-                        -o -name "*.FOR.o" \
                         -o -name "*.c.o" \
                         -o -name "*.cpp.o")
-TESTS_TO_RUN := $(TESTS_TO_RUN:.F90.o=.F90.FOR.o)
 RUN_TESTS := $(TESTS_TO_RUN:.o=.runonly)
 
 # Creating compile dependencies
 ifneq "$(CC)" "none"
-OBJS_C := $(SOURCES_C:.c=.c.o)
+OBJS_C := $(patsubst %.c,$(BINDIR)/%.c.o,$(notdir $(SOURCES_C)))
 endif
 ifneq "$(CXX)" "none"
-OBJS_CPP := $(SOURCES_CPP:.cpp=.cpp.o)
+OBJS_CPP := $(patsubst %.cpp,$(BINDIR)/%.cpp.o,$(notdir $(SOURCES_CPP)))
 endif
 ifneq "$(FC)" "none"
-OBJS_F := $(SOURCES_F:.F90=.FOR.o)
+OBJS_F := $(patsubst %.F90,$(BINDIR)/%.F90.o,$(notdir $(SOURCES_F)))
 endif
 COMP_DEP := $(OBJS_C) $(OBJS_CPP) $(OBJS_F)
 
 # Get all the dependencies for all rule
 ALL_DEP :=
 ifneq "$(CC)" "none"
-ALL_DEP := $(SOURCES_C:.c=.c.run)
+ALL_DEP += $(patsubst %.c,%.c.run,$(notdir $(SOURCES_C)))
 endif
 ifneq "$(CXX)" "none"
-ALL_DEP += $(SOURCES_CPP:.cpp=.cpp.run)
+ALL_DEP += $(patsubst %.cpp,%.cpp.run,$(notdir $(SOURCES_CPP)))
 endif
 ifneq "$(FC)" "none"
-ALL_DEP += $(SOURCES_F:.F90=.FOR.run)
+ALL_DEP += $(patsubst %.F90,%.F90.run,$(notdir $(SOURCES_F)))
 endif
-
 
 ###################################################
 # Testsuite Configuration
@@ -135,6 +132,7 @@ $(CONFIGDIR)/build_config.vars: | $(CONFIGDIR)
 .PHONY: all init compile run message_display $(COMPILE_TARGETS)
 
 all : reset_counter reset_run_counter $(ALL_DEP)
+	@echo ""
 	@echo "==== COMPILE AND RUN DONE ===="
 
 init : message_display 
@@ -175,7 +173,8 @@ LOCKFILE := $(TMPDIR)/.counter.lock
 reset_counter: $(TMPDIR)
 	@echo "0" > $(COUNTER_FILE)
 
-%.c.o: %.c init $(BINDIR)
+# Pattern rules for compiling source files to object files in BINDIR
+$(BINDIR)/%.c.o: %.c init $(BINDIR)
 	@(flock -x 200; \
 	COUNTER=$$(cat $(COUNTER_FILE)); \
 	NEXT_COUNTER=$$((COUNTER+1)); \
@@ -185,7 +184,7 @@ reset_counter: $(TMPDIR)
 	python3 src/scripts/compile.py \
 		--src="$<" 
 
-%.cpp.o: %.cpp init $(BINDIR)
+$(BINDIR)/%.cpp.o: %.cpp init $(BINDIR)
 	@(flock -x 200; \
 	COUNTER=$$(cat $(COUNTER_FILE)); \
 	NEXT_COUNTER=$$((COUNTER+1)); \
@@ -195,7 +194,7 @@ reset_counter: $(TMPDIR)
 	python3 src/scripts/compile.py \
 		--src="$<" 
 
-%.FOR.o: %.F90 init $(BINDIR)
+$(BINDIR)/%.F90.o: %.F90 init $(BINDIR)
 	@(flock -x 200; \
 	COUNTER=$$(cat $(COUNTER_FILE)); \
 	NEXT_COUNTER=$$((COUNTER+1)); \
@@ -217,35 +216,35 @@ reset_run_counter: $(TMPDIR)
 	@echo "0" > $(RUN_COUNTER_FILE)
 
 # Individual run targets with progress indicator
-%.c.run: %.c.o
+%.c.run: $(BINDIR)/%.c.o
 	@(flock -x 201; \
 	COUNTER=$$(cat $(RUN_COUNTER_FILE)); \
 	NEXT_COUNTER=$$((COUNTER+1)); \
 	echo "$$NEXT_COUNTER" > $(RUN_COUNTER_FILE); \
-	printf "\r[%3d/%-3d] Running %-50.50s" "$$NEXT_COUNTER" "$(RUN_TOTAL_FILES)" "$<.o"; \
+	printf "\r[%3d/%-3d] Running %-50.50s" "$$NEXT_COUNTER" "$(RUN_TOTAL_FILES)" "$(notdir $<)"; \
 	) 201>$(RUN_LOCKFILE); \
 	python3 src/scripts/run.py \
-		--executable="$(BINDIR)/$(notdir $<)" 
+		--executable="$<" 
 
-%.cpp.run: %.cpp.o
+%.cpp.run: $(BINDIR)/%.cpp.o
 	@(flock -x 201; \
 	COUNTER=$$(cat $(RUN_COUNTER_FILE)); \
 	NEXT_COUNTER=$$((COUNTER+1)); \
 	echo "$$NEXT_COUNTER" > $(RUN_COUNTER_FILE); \
-	printf "\r[%3d/%-3d] Running %-50.50s" "$$NEXT_COUNTER" "$(RUN_TOTAL_FILES)" "$<.o"; \
+	printf "\r[%3d/%-3d] Running %-50.50s" "$$NEXT_COUNTER" "$(RUN_TOTAL_FILES)" "$(notdir $<)"; \
 	) 201>$(RUN_LOCKFILE); \
 	python3 src/scripts/run.py \
-		--executable="$(BINDIR)/$(notdir $<)" 
+		--executable="$<" 
 
-%.FOR.run: %.F90.FOR.o
+%.F90.run: $(BINDIR)/%.F90.o
 	@(flock -x 201; \
 	COUNTER=$$(cat $(RUN_COUNTER_FILE)); \
 	NEXT_COUNTER=$$((COUNTER+1)); \
 	echo "$$NEXT_COUNTER" > $(RUN_COUNTER_FILE); \
-	printf "\r[%3d/%-3d] Running %-50.50s" "$$NEXT_COUNTER" "$(RUN_TOTAL_FILES)" "$<.o"; \
+	printf "\r[%3d/%-3d] Running %-50.50s" "$$NEXT_COUNTER" "$(RUN_TOTAL_FILES)" "$(notdir $<)"; \
 	) 201>$(RUN_LOCKFILE); \
 	python3 src/scripts/run.py \
-		--executable="$(BINDIR)/$(notdir $<)" 
+		--executable="$<" 
 
 ###################################################
 # Directory Creation Rules
@@ -329,3 +328,13 @@ help:
 	@echo " compilers			 Show available compiler configurations"
 	@echo " systems			   Show available system configurations"
 	@echo " help				  Show this help message"
+
+###################################################
+# Source File Search Paths
+###################################################
+# Help Make find source files when building object files in BINDIR
+vpath %.c $(sort $(dir $(SOURCES_C)))
+vpath %.cpp $(sort $(dir $(SOURCES_CPP)))
+vpath %.F90 $(sort $(dir $(SOURCES_F)))
+
+###################################################

@@ -54,7 +54,7 @@ def main():
     if verbose and serial:
         print(' '.join(cmd))
 
-    # Run the test
+    # Run the test with a timeout
     start = time.time()
     try:
         process = subprocess.run(
@@ -63,7 +63,8 @@ def main():
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
-            check=False
+            check=False,
+            timeout=30  # Set timeout in seconds
         )
         end = time.time()
         runtime = round(end - start, 6)
@@ -73,7 +74,19 @@ def main():
             "success": process.returncode == 0,
             "return_code": process.returncode,
             "errors": process.stderr if process.returncode != 0 else "",
-            "output": process.stderr,
+            "output": process.stdout,
+            "runtime": runtime,
+        }
+    except subprocess.TimeoutExpired as e:
+        end = time.time()
+        runtime = round(end - start, 6)
+
+        result = {
+            "command": " ".join(cmd),
+            "success": False,
+            "return_code": "",
+            "errors": f"Timeout expired after {runtime} seconds",
+            "output": "",
             "runtime": runtime,
         }
     except Exception as e:
@@ -84,8 +97,8 @@ def main():
             "errors": str(e),
             "output": "",
             "runtime": 0.0
-        }     
-    
+        }
+
     results(project_root, executable_path, None, result)
 
 

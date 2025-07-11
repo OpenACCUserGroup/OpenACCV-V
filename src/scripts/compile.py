@@ -60,7 +60,7 @@ def main():
         compiler = config["compilers"].get("fc").split()[0]
         flags = config["flags"].get("f_flags", "").split()
         include = config["includes"].get("f_includes", "")
-        bin_name = src_name + ".FOR.o"
+        bin_name = src_name + ".o"
         
     else:
         return {"success": False, "error": f"Unknown file extension: {ext}"}
@@ -85,7 +85,8 @@ def main():
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
-            check=False
+            check=False,
+            timeout=30  # Set timeout in seconds
         )
         end = time.time()
         runtime = round(end - start, 6)
@@ -98,16 +99,28 @@ def main():
             "output": process.stdout,
             "runtime": runtime
         }
+    except subprocess.TimeoutExpired as e:
+        end = time.time()
+        runtime = round(end - start, 6)
+
+        result = {
+            "command": " ".join(cmd),
+            "success": False,
+            "return_code": "",
+            "errors": f"Timeout expired after {runtime} seconds",
+            "output": "",
+            "runtime": runtime
+        }
     except Exception as e:
         result = {
             "command": " ".join(cmd),
             "success": False,
-            "return_code": process.returncode,
+            "return_code": "",
             "errors": str(e),
-            "output": process.stdout,
-            "runtime": runtime
+            "output": "",
+            "runtime": 0.0
         }
-    
+
     results(project_root, src_path, result, None)
                 
 

@@ -105,8 +105,9 @@ def combine_json_logs(logs_dir, output_file, config_file=None, verbose=False):
 def main():
     """Command-line entry point."""
     parser = argparse.ArgumentParser(description="Combine OpenACCV-V test JSON logs into a single file")
-    parser.add_argument('-l', default="build/logs", help="Directory containing JSON log files")
-    parser.add_argument('-o', default="build/results.json", help="Output JSON file path")
+    parser.add_argument('-l', '--logs-dir', default="build/logs", help="Directory containing JSON log files")
+    parser.add_argument('-o', '--output', default="build/results.json", help="Output JSON file path")
+    parser.add_argument('-v', '--verbose', default=False, action='store_true', help="Enable verbose output")
     args = parser.parse_args()
     
     # Determine project root
