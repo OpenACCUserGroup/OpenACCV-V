@@ -110,15 +110,26 @@ _In order to run the suite, we have provided a Python script, infrastructure.py 
    ```sh
    python3 infrastructure.py -c=<configuration_file[,configuration_file2]> -o=<output_file> -in=<input_file[,input_file2]>  verbose -system=<system_name> -env=<environment_output>
     ```
-5. Parse through the results using the Directive Based V&V Results Generator: [View Generator](https://crpl.cis.udel.edu/oaccvv/generator/)
-    ```sh
-   a.) Input the JSON file you received from running the testsuite into the generator.
-   b.) View a summary of your results, toggle between runtime/compiler to view each output.
-   c.) Click on the "View Details" button inside the "Upload Results" section for downloadable Excel reports. Which will also include All Tests, Compiler Failures, and Runtime Failure drop downs that
-       include all details about the individual tests.
-   d.) Compare two JSON files by uploading them into the "Compare Two Results" section to generate a detailed graph. Toggle between runtime/compiler to view each output. You can hover over each bar on
-       the graph to see more details. 
-   ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- DIRECTIVE BASED V&V RESULTS GENERATOR -->
+## Directive Based V&V Results Generator
+
+Once you have processed your results and have your JSON file, parse through the results using the Directive Based V&V Results Generator: [https://crpl.cis.udel.edu/oaccvv/generator/](https://crpl.cis.udel.edu/oaccvv/generator/)
+   
+    
+   1. Input the JSON file you received from running the testsuite into the generator inside of "Upload Results".
+   
+   2. View a summary of your results, toggle between runtime/compiler to view each output.
+   
+   3. Click on the "View Details" button inside the "Upload Results" section for downloadable Excel reports. Which will also include All Tests, 
+       Compiler Failures, and Runtime Failure drop downs that include all details about the individual tests.
+       
+   4. Compare two JSON files by uploading them into the "Compare Two Results" section to generate a detailed graph. Toggle between runtime/compiler 
+       to view each output. You can hover over each bar on the graph to see more details. 
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -164,6 +175,8 @@ Sunita Chandrasekaran - schandra@udel.edu
 CRPL - [https://crpl.cis.udel.edu/](https://crpl.cis.udel.edu/)
 
 Website Link: [https://crpl.cis.udel.edu/oaccvv/results/](https://crpl.cis.udel.edu/oaccvv/results/)
+
+Results Generator: [https://crpl.cis.udel.edu/oaccvv/generator/](https://crpl.cis.udel.edu/oaccvv/generator/)
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
