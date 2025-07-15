@@ -110,30 +110,16 @@ _In order to run the suite, we have provided a Python script, infrastructure.py 
    ```sh
    python3 infrastructure.py -c=<configuration_file[,configuration_file2]> -o=<output_file> -in=<input_file[,input_file2]>  verbose -system=<system_name> -env=<environment_output>
     ```
+5. Parse through the results using the Directive Based V&V Results Generator: [View Generator](https://crpl.cis.udel.edu/oaccvv/generator/)
+    ```sh
+   a.) Input the JSON file you received from running the testsuite into the generator.
+   b.) View a summary of your results, toggle between runtime/compiler to view each output.
+   c.) Click on the "View Details" button inside the "Upload Results" section for downloadable Excel reports. Which will also include All Tests, Compiler Failures, and Runtime Failure drop downs that
+       include all details about the individual tests.
+   d.) Compair two JSON files by uploading them into the "Compare Two Results" section to generate a detailed graph. Toggle between runtime/compiler to view each output. You can hover over each bar on
+       the graph to see more details. 
+   ```
 
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [x] Add Initial Tests
-- [x] Add Infrastructure
-- [ ] Develop Example Guide
-- [ ] Add More Case Features
-- [ ] OpenACC Specification Version
-    - [ ] 3.3
-    - [ ] 3.2
-    - [ ] 3.1
-    - [ ] 3.0
-    - [X] 2.7
-    - [X] 2.5
-    - [X] 2.0
-    - [X] 1.0
-
-
-See the [open issues](https://github.com/OpenACCUserGroup/OpenACCV-V/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
