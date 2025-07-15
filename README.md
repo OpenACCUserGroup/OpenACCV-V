@@ -116,7 +116,7 @@ _In order to run the suite, we have provided a Python script, infrastructure.py 
    b.) View a summary of your results, toggle between runtime/compiler to view each output.
    c.) Click on the "View Details" button inside the "Upload Results" section for downloadable Excel reports. Which will also include All Tests, Compiler Failures, and Runtime Failure drop downs that
        include all details about the individual tests.
-   d.) Compair two JSON files by uploading them into the "Compare Two Results" section to generate a detailed graph. Toggle between runtime/compiler to view each output. You can hover over each bar on
+   d.) Compare two JSON files by uploading them into the "Compare Two Results" section to generate a detailed graph. Toggle between runtime/compiler to view each output. You can hover over each bar on
        the graph to see more details. 
    ```
 
