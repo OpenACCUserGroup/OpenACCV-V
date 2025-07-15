@@ -185,6 +185,7 @@ Website Link: [https://crpl.cis.udel.edu/oaccvv/results/](https://crpl.cis.udel.
 ## Members
 
 Current Student Authors:
+* Nathan Graddon
 * Aaron Jarmusch
 
 Contributors:
@@ -218,7 +219,7 @@ Special thanks to the following organizations for their support
 <!-- PUBLICATIONS -->
 ## Publications
 
-All publications relating to OpenAcc Validation Tesuite
+All publications relating to OpenACC V&V Testsuite
 
 * Jarmusch, A. M., Liu, A., Munley, C., Horta, D., Ravichandran, V., Denny, J., & Chandrasekaran, S. (2022). [Analysis of Validating and Verifying OpenACC Compilers 3.0 and Above.](https://arxiv.org/abs/2208.13071) Presentation given at the SC22 Conference. [SC22](https://sc22.supercomputing.org/)
 
