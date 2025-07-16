@@ -27,7 +27,6 @@ def main():
         sys.exit(1)
     
     project_root = os.getcwd()
-    print(f"Project root: {project_root}")
     config_path = join(project_root, "build/testsuite_config/", "build_config.json")
         
     if not exists(config_path):
