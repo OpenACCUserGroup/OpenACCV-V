@@ -26,7 +26,8 @@ def main():
         print(f"Error: Source file not found: {src_path}", file=sys.stderr)
         sys.exit(1)
     
-    project_root = abspath(src_path[:src_path.find('/OpenACCV-V/') + len('/OpenACCV-V/')])
+    project_root = os.getcwd()
+    print(f"Project root: {project_root}")
     config_path = join(project_root, "build/testsuite_config/", "build_config.json")
         
     if not exists(config_path):
