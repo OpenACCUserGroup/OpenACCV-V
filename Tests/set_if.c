@@ -7,7 +7,7 @@ int test1(){
 	srand(SEED);
 	int device_type = acc_get_device_type();
 
-	#pragma acc set if(acc_get_device_type == device_type)
+	#pragma acc set if(acc_get_device_type() == device_type) default_async(acc_async_default)
 
 	return err;	
 }
@@ -19,7 +19,7 @@ int test2(){
         srand(SEED);
         int device_type = acc_get_device_type();
 
-        #pragma acc set if(acc_get_device_type != device_type)
+        #pragma acc set if(acc_get_device_type() != device_type) default_async(acc_async_default)
 
         return err;
 }
