@@ -12,7 +12,7 @@ int Test1(){
         b[x] = 0.0;
     }
 
-    #pragma acc data copyin(a[0:n]) copyout(b[0:n]
+    #pragma acc data copyin(a[0:n]) copyout(b[0:n])
     {
         #pragma acc parallel create(zero: b[0:n])
         {
@@ -40,7 +40,7 @@ int main(){
 #ifndef T1
     failed = 0;
     for (int x = 0; x < NUM_TEST_CALLS; ++x){
-        failed = failed + test1();
+        failed = failed + Test1();
     }
     if (failed != 0){
         failcode = failcode + (1 << 0);
