@@ -28,7 +28,7 @@ int test1(){
             a[i] *= 2;
         }
 
-        #pragma acc wait(devnum:0, queues:1) async(2)
+        #pragma acc wait(devnum:0 : queues:1) async(2)
         #pragma acc parallel loop async(2)
         for(int i = 0; i < n; ++i){
             b[i] = a[i];
