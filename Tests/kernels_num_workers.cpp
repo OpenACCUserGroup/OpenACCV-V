@@ -4,8 +4,8 @@
 int test1(){
     int err = 0;
     srand(SEED);
-    real_t * restrict a = new real_t[n];
-    real_t * restrict b = new real_t[n];
+    real_t * __restrict a = new real_t[n];
+    real_t * __restrict b = new real_t[n];
 
     for (int x = 0; x < n; ++x){
         a[x] = rand() / (real_t)(RAND_MAX / 10);
