@@ -128,7 +128,7 @@ int test3(){
                 c[x] = a[x] + b[x];
             }
         }
-        acc_copyout_async(c, n * sizeof(real_t), def_async_var + 1);
+        acc_copyout_finalize_async(c, n * sizeof(real_t), def_async_var + 1);
         #pragma acc wait
     }
 
@@ -177,6 +177,7 @@ int test4(){
                 c[x] += a[x] + b[x];
             }
         }
+        acc_copyout_finalize_async(c, n * sizeof(real_t), 1);
     }
 
     for (int x = 0; x < n; ++x) {

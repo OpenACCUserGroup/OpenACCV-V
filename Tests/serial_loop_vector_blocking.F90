@@ -5,7 +5,7 @@
   INCLUDE "acc_testsuite.Fh"
   INTEGER:: errors
   REAL(8),DIMENSION(LOOPCOUNT):: a, b, c
-  INTEGER:: multiplier, x
+  INTEGER:: multiplier = 1, x
   errors = 0
 
   SEEDDIM(1) = 1

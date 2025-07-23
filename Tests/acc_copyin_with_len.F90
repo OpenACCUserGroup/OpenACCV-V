@@ -1,3 +1,5 @@
+#include "common.Fh"
+
 #ifndef T1
 !T1:runtime,data,executable-data,construct-independent,V:2.0-2.7
       LOGICAL FUNCTION test1()
@@ -103,15 +105,8 @@
         REAL(8),DIMENSION(LOOPCOUNT):: a, b, c, a_copy, b_copy !Data
         REAL(8) :: RAND
         INTEGER :: errors = 0
-        INTEGER,DIMENSION(1) :: devtest
 
-        devtest(1) = 1
-        !$acc enter data copyin(devtest(1:1))
-        !$acc parallel present(devtest(1:1))
-          devtest(1) = 0
-        !$acc end parallel
-
-        IF (devtest(1) .eq. 1) THEN
+        IF (devtest() .eq. .TRUE.) THEN
           SEEDDIM(1) = 1
 #         ifdef SEED
           SEEDDIM(1) = SEED
@@ -296,7 +291,7 @@
         !$acc exit data delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
 
         DO x = 1, LOOPCOUNT
-          IF (abs(c(x) + (a(x) + b(x))) .gt. PRECISION) THEN
+          IF (abs(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN
             errors = errors + 1
           END IF
         END DO
@@ -319,15 +314,8 @@
         REAL(8),DIMENSION(LOOPCOUNT):: a, b, c, a_copy, b_copy !Data
         REAL(8) :: RAND
         INTEGER :: errors = 0
-        LOGICAL,DIMENSION(1):: devtest
 
-        devtest(1) = .TRUE.
-        !$acc enter data copyin(devtest(1:1))
-        !$acc parallel present(devtest(1:1))
-          devtest(1) = .FALSE.
-        !$acc end parallel
-
-        IF (devtest(1) .eqv. .TRUE.) THEN
+        IF (devtest() .eqv. .TRUE.) THEN
           SEEDDIM(1) = 1
 #         ifdef SEED
           SEEDDIM(1) = SEED
@@ -361,7 +349,7 @@
           !$acc exit data delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
 
           DO x = 1, LOOPCOUNT
-            IF (abs(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN
+            IF (abs(c(x) - (a_copy(x) + b_copy(x))) .gt. PRECISION) THEN
               errors = errors + 1
             END IF
           END DO

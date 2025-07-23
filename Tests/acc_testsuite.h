@@ -27,6 +27,7 @@
 #define ARRAYSIZE   100
 long long n = ARRAYSIZE;
 #define PRECISION   1e-8
+#define PRECISION2  1e-4
 typedef double real_t;
 
 #ifdef __cplusplus

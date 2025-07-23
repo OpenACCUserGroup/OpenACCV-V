@@ -1,3 +1,5 @@
+#include "common.Fh"
+
 #ifndef T1
 !T1:runtime,devonly,construct-independent,present,V:2.0-2.7
       LOGICAL FUNCTION test1()
@@ -6,15 +8,8 @@
         INCLUDE "acc_testsuite.Fh"
         INTEGER :: x !Iterators
         REAL(8),DIMENSION(LOOPCOUNT):: a !Data
-        INTEGER,DIMENSION(1):: devtest
         INTEGER :: errors
         errors = 0
-
-        devtest(1) = 1
-        !$acc enter data copyin(devtest(1:1))
-        !$acc parallel present(devtest(1:1))
-          devtest(1) = 0
-        !$acc end parallel
 
         !$acc enter data create(a(1:LOOPCOUNT))
         IF (acc_is_present(a(1:LOOPCOUNT)) .eqv. .FALSE.) THEN
@@ -23,7 +18,7 @@
         END IF
         !$acc exit data delete(a(1:LOOPCOUNT))
 
-        IF (devtest(1) .eq. 1) THEN
+        IF (devtest() .eq. .TRUE.) THEN
           IF (acc_is_present(a(1:LOOPCOUNT)) .eqv. .TRUE.) THEN
             errors = errors + 1
             PRINT*, 2

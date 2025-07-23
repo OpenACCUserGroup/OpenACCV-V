@@ -83,6 +83,9 @@ int test2(){
 
     if (devtest[0] == 1){
         for (int x = 0; x < n; ++x){
+	    a[x] = (real_t *)malloc(n * sizeof(real_t));
+	    b[x] = (real_t *)malloc(n * sizeof(real_t));
+	    c[x] = (real_t *)malloc(n * sizeof(real_t));
             a_host[x] = (real_t *)malloc(n * sizeof(real_t));
             b_host[x] = (real_t *)malloc(n * sizeof(real_t));
             for (int y = 0; y < n; ++y){
@@ -141,6 +144,11 @@ int test3(){
 
     if (devtest[0] == 1){
         for (int x = 0; x < n; ++x){
+	    a[x] = (real_t *)malloc(n * sizeof(real_t));
+	    b[x] = (real_t *)malloc(n * sizeof(real_t));
+	    c[x] = (real_t *)malloc(n * sizeof(real_t));
+            a_host[x] = (real_t *)malloc(n * sizeof(real_t));
+            b_host[x] = (real_t *)malloc(n * sizeof(real_t));
             for (int y = 0; y < n; ++y){
                 a[x][y] = rand() / (real_t)(RAND_MAX / 10);
                 a_host[x][y] = a[x][y];
