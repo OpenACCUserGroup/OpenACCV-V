@@ -2,8 +2,8 @@
 
 //test 1 host function
 real_t host_array_array(real_t * a, long long n){
-    #pragma acc loop reduction(+:returned)
     real_t returned = 0.0;
+    #pragma acc loop reduction(+:returned)
     for (int x = 0; x < n; ++x){
         returned += a[x];
     }
@@ -22,8 +22,8 @@ real_t host_object_array(data_container<real_t> * a, long long n){
 
 //test 3 host function
 real_t host_array_object(real_t * a, long long n){
-   #pragma acc loop reduction(+:returned)
     real_t returned = 0.0;
+   #pragma acc loop reduction(+:returned)
     for (int x = 0; x < n; ++x){
         returned += a[x];
     }
