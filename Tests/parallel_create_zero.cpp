@@ -17,10 +17,8 @@ int Test1(){
         #pragma acc parallel create(zero: b[0:n])
         {
             #pragma acc loop
-            {
-                for(int x = 0; x < n; x++){
-                    b[x] += a[x];
-                }
+            for(int x = 0; x < n; x++){
+                b[x] += a[x];
             }
         }
     }
