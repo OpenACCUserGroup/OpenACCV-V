@@ -18,10 +18,8 @@ int test1(){
       #pragma acc parallel copyout(zero: b[0:n])
       {
         #pragma acc loop
-        {
-          for (int x = 0; x < n; ++x){
-            b[x] += a[x];
-          }
+        for (int x = 0; x < n; ++x){
+          b[x] += a[x];
         }
       }
     }
@@ -66,10 +64,8 @@ int test2(){
         #pragma acc parallel copyout(zero: b[0:n])
         {
           #pragma acc loop
-          {
-            for (int x = 0; x < n; ++x){
-              b[x] += a[x];
-            }
+          for (int x = 0; x < n; ++x){
+            b[x] += a[x];
           }
         }
       }
@@ -105,10 +101,8 @@ int test3(){
       #pragma acc parallel copyout(zero: b[0:n])
       {
         #pragma acc loop
-        {
-          for (int x = 0; x < n; ++x){
-            b[x] += a[x];
-          }
+        for (int x = 0; x < n; ++x){
+          b[x] += a[x];
         }
       }
     }
