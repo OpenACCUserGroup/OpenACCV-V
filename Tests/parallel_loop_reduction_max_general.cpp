@@ -29,7 +29,7 @@ int test1(){
             found = 1;
         }
     }
-    if (found = 0){
+    if (found == 0){
         err = 1;
     }
 

@@ -1,8 +1,8 @@
 #define DECLARE_TEST
 #define DECLARE_COPYIN
 int mult_copyin = 2;
-#include "acc_testsuite_declare.h"
 #include "acc_testsuite.h"
+#include "acc_testsuite_declare.h"
 
 #pragma acc declare copyin(fixed_size_array)
 #pragma acc declare copyin(scalar)

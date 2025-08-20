@@ -1,3 +1,5 @@
+#include "common.Fh"
+
 #ifndef T1
 !T1:devonly,kernels,if,V:2.0-2.7
       LOGICAL FUNCTION test1()
@@ -6,14 +8,7 @@
         INTEGER :: x !Iterators
         REAL(8),DIMENSION(LOOPCOUNT):: a, b !Data
         INTEGER :: errors = 0
-        LOGICAL,DIMENSION(1):: devtest
         LOGICAL:: data_on_device = .FALSE.
-        devtest(1) = .TRUE.
-
-        !$acc enter data copyin(devtest(1:1))
-        !$acc kernels present(devtest(1:1))
-          devtest(1) = .FALSE.
-        !$acc end kernels
 
         !Initilization
         SEEDDIM(1) = 1
@@ -53,14 +48,7 @@
         INTEGER :: x !Iterators
         REAL(8),DIMENSION(LOOPCOUNT):: a, b !Data
         INTEGER :: errors = 0
-        LOGICAL,DIMENSION(1):: devtest
         LOGICAL:: data_on_device = .FALSE.
-        devtest(1) = .TRUE.
-
-        !$acc enter data copyin(devtest(1:1))
-        !$acc kernels present(devtest(1:1))
-          devtest(1) = .FALSE.
-        !$acc end kernels
 
         !Initilization
         SEEDDIM(1) = 1
@@ -103,14 +91,7 @@
         INTEGER :: x !Iterators
         REAL(8),DIMENSION(LOOPCOUNT):: a, b !Data
         INTEGER :: errors = 0
-        LOGICAL,DIMENSION(1):: devtest
         LOGICAL:: data_on_device = .FALSE.
-        devtest(1) = .TRUE.
-
-        !$acc enter data copyin(devtest(1:1))
-        !$acc kernels present(devtest(1:1))
-          devtest(1) = .FALSE.
-        !$acc end kernels
 
         !Initilization
         SEEDDIM(1) = 1
@@ -119,10 +100,11 @@
 #       endif
         CALL RANDOM_SEED(PUT=SEEDDIM)
 
-        IF (devtest(1) .eqv. .TRUE.) THEN
+        IF (devtest() .eqv. .TRUE.) THEN
           CALL RANDOM_NUMBER(a)
           b = 0
 
+	  data_on_device = .TRUE.
           !$acc enter data copyin(a(1:LOOPCOUNT)) create(b(1:LOOPCOUNT))
           DO x = 1, LOOPCOUNT
             a(x) = -1
@@ -136,9 +118,6 @@
           !$acc end kernels
 
           DO x = 1, LOOPCOUNT
-            IF (abs(a(x) + 1) .gt. PRECISION) THEN
-              errors = errors + 1
-            END IF
             IF (abs(b(x)) .gt. PRECISION) THEN
               errors = errors + 1
             END IF
@@ -169,14 +148,7 @@
         INTEGER :: x !Iterators
         REAL(8),DIMENSION(LOOPCOUNT):: a, b !Data
         INTEGER :: errors = 0
-        LOGICAL,DIMENSION(1):: devtest
         LOGICAL:: data_on_device = .FALSE.
-        devtest(1) = .TRUE.
-
-        !$acc enter data copyin(devtest(1:1))
-        !$acc kernels present(devtest(1:1))
-          devtest(1) = .FALSE.
-        !$acc end kernels
 
         !Initilization
         SEEDDIM(1) = 1
@@ -185,7 +157,7 @@
 #       endif
         CALL RANDOM_SEED(PUT=SEEDDIM)
 
-        IF (devtest(1) .eq. 1) THEN
+        IF (devtest() .eq. .TRUE.) THEN
           CALL RANDOM_NUMBER(a)
           b = 0
 

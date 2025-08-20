@@ -1,0 +1,132 @@
+#ifndef COMMON_H
+#define COMMON_H
+LOGICAL FUNCTION devtest()
+  IMPLICIT NONE
+  LOGICAL,DIMENSION(1) :: test
+  devtest = .FALSE.
+  test(1) = .TRUE.
+  !$acc parallel copyin(test(1:1))
+  test(1) = .FALSE.
+  !$acc end parallel
+  IF (test(1)) THEN
+    devtest = .TRUE.
+  ENDIF
+END FUNCTION devtest
+
+#ifdef ATOMIC_CLAUSE
+! Verify the resultant sequence of atomic operation
+#ifndef ATOMIC_LIST
+FUNCTION VERIFY_ATOMIC_SEQUENCE(a, b, length, init, final, op) RESULT(POSSIBLE)
+#else
+FUNCTION VERIFY_ATOMIC_SEQUENCE(a, a2, b, length, init, final, op) RESULT(POSSIBLE)
+#endif
+  IMPLICIT NONE
+  REAL, PARAMETER :: PRECISION = 1.e-2
+  ATOMIC_TYPE, DIMENSION(length), INTENT(IN) :: a, b
+#ifdef ATOMIC_LIST
+  ATOMIC_TYPE, DIMENSION(length), INTENT(IN) :: a2
+#endif
+  INTEGER, INTENT(IN) :: length, op
+  ATOMIC_TYPE, INTENT(IN) :: init, final
+  LOGICAL, DIMENSION(length) :: done
+  INTEGER :: i, j
+  LOGICAL :: POSSIBLE
+  ATOMIC_TYPE :: current, tmp
+
+  POSSIBLE = .FALSE.
+  done = .FALSE.
+  current = init
+
+  outer: do i = 1, length
+    do j = 1, length
+#ifdef ATOMIC_ASSIGN_FIRST
+#ifdef ATOMIC_REAL
+      if (.NOT. done(j) .AND. abs(b(j) - current) .lt. PRECISION) then
+#elif defined(ATOMIC_INTEGER)
+      if (.NOT. done(j) .AND. b(j) .eq. current) then
+#elif defined(ATOMIC_LOGICAL)
+      if (.NOT. done(j) .AND. (b(j) .eqv. current)) then
+#endif
+        done(j) = .TRUE.
+#endif
+#ifndef ATOMIC_LIST
+        tmp = ATOMIC_OP(a(j), current)
+#else
+        tmp = ATOMIC_OP(a(j), a2(j), current)
+#endif
+#ifdef ATOMIC_ASSIGN_FIRST
+        current = tmp 
+        cycle outer
+      end if
+#else
+#ifdef ATOMIC_REAL
+      if (.NOT. done(j) .AND. abs(b(j) - tmp) .lt. PRECISION) then
+#elif defined(ATOMIC_INTEGER)
+      if (.NOT. done(j) .AND. b(j) .eq. tmp) then
+#elif defined(ATOMIC_LOGICAL)
+      if (.NOT. done(j) .AND. (b(j) .eqv. tmp)) then
+#endif
+        current = tmp
+        done(j) = .TRUE.
+        cycle outer
+      endif
+#endif
+    end do
+    return
+  end do outer
+
+#ifdef ATOMIC_REAL
+  if (abs(current - final) .lt. PRECISION) then
+#elif defined(ATOMIC_INTEGER)
+  if (current .eq. final) then
+#elif defined(ATOMIC_LOGICAL)
+  if (current .eqv. final) then
+#endif
+    POSSIBLE = .TRUE.
+  end if
+END FUNCTION
+
+#if defined(ATOMIC_REAL) || defined(ATOMIC_INTEGER)
+RECURSIVE FUNCTION IS_POSSIBLE(a, length, current, final, op) RESULT(POSSIBLE)
+  IMPLICIT NONE
+  REAL, PARAMETER :: PRECISION = 1.e-2
+  ATOMIC_TYPE, DIMENSION(length), INTENT(IN) :: a
+  INTEGER, INTENT(IN) :: length, op
+  ATOMIC_TYPE, INTENT(IN) :: current, final
+  ATOMIC_TYPE, ALLOCATABLE :: rest(:)
+  ATOMIC_TYPE :: tmp
+  LOGICAL :: POSSIBLE
+  INTEGER :: i, j
+
+  POSSIBLE = .FALSE.
+
+  IF (length .le. 0) THEN
+    IF (abs(current - final) .lt. PRECISION) THEN
+      POSSIBLE = .TRUE.
+    END IF
+    RETURN
+  ENDIF
+
+  ALLOCATE(rest(length - 1))
+
+  DO i = 1, length
+    DO j = 1, i - 1
+      rest(j) = a(j)
+    END DO
+    DO j = i + 1, length
+      rest(j - 1) = a(j)
+    END DO
+#ifndef ATOMIC_LIST
+    tmp = ATOMIC_OP(a(i), current)
+#endif
+    IF (IS_POSSIBLE(rest, length - 1, tmp, final, op)) THEN
+      POSSIBLE = .TRUE.
+      EXIT
+    END IF
+  END DO
+
+  DEALLOCATE(rest)
+END FUNCTION IS_POSSIBLE
+#endif
+#endif
+#endif

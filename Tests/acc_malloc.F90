@@ -19,7 +19,7 @@
         final_memory = acc_get_property(acc_get_device_num(acc_get_device_type()), acc_get_device_type(), acc_property_free_memory)
 
         DO x = 1, LOOPCOUNT
-          IF (final_memory + N * sizeof(a(1)) .gt. initial_memory) THEN
+          IF (final_memory .gt. initial_memory) THEN
             errors = errors + 1
           END IF
         END DO

@@ -4,7 +4,7 @@
   IMPLICIT NONE
   INCLUDE "acc_testsuite.Fh"
   REAL(8),DIMENSION(LOOPCOUNT):: a, b
-  REAL(8):: maxval, host_max
+  REAL(8):: maxval = 0.0, host_max = 0.0
   INTEGER:: errors, x
 
   SEEDDIM(1) = 1

@@ -1,7 +1,7 @@
 #include "acc_testsuite.h"
 #ifndef T1
 //#T1:parallel,data,data_region,V:3.0-3.2
-int Test1(){
+int test1(){
     int err=0;
     srand(SEED);
     real_t * a = new real_t[n];

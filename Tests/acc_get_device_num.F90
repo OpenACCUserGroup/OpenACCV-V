@@ -9,7 +9,7 @@
         errors = 0
 
         IF (acc_get_device_type() .ne. acc_device_none) THEN
-          DO x = 1, acc_get_num_devices(acc_get_device_type())
+          DO x = 0, acc_get_num_devices(acc_get_device_type())-1
             CALL acc_set_device_num(x, acc_get_device_type())
             IF (acc_get_device_num(acc_get_device_type()) .ne. x) THEN
               errors = errors + 1

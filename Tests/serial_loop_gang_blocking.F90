@@ -4,7 +4,7 @@
         IMPLICIT NONE
         INCLUDE "acc_testsuite.Fh"
         REAL(8),DIMENSION(LOOPCOUNT):: a, b, c
-        INTEGER:: multiplier
+        INTEGER:: multiplier = 1
         INTEGER:: x
         INTEGER:: errors
 

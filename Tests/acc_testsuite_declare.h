@@ -25,15 +25,13 @@
 
 /* General                                                */
 /**********************************************************/
-#define ARRAYSIZE   250
-long long n = ARRAYSIZE;
 #define PRECISION   1e-8
 typedef double real_t;
 
 #ifdef DECLARE_TEST
 int fixed_size_array[10] = {0, 1, 4, 9, 16, 25, 36, 49, 64, 81};
 real_t* datapointer;
-int scalar_extern = 10; //For global scalar tests
+int scalar = 10; //For global scalar tests
 #endif
 
 #ifdef DECLARE_COPYIN
@@ -118,15 +116,9 @@ class data_container{
 #define ARRAYSIZE_SMALL 10
 
 #define REPETITIONS 1
-#define LOOPCOUNT 1000
 /* following times are in seconds */
 #define SLEEPTIME        0.01
 #define SLEEPTIME_LONG   0.5
-
-typedef struct {
-  double real;
-  double imag;
-} dcomplex;
 
 
 #endif

@@ -9,13 +9,13 @@
 
         results = 0
 
-        !$acc kernels num_gangs(8)
+        !$acc kernels num_gangs(8) vector_length(1)
           !$acc loop gang reduction(+:results)
           DO x = 1, LOOPCOUNT
             results = 1
           END DO
         !$acc end kernels
-          
+
         IF (results .ne. 8) THEN
           errors = errors + 1
         END IF

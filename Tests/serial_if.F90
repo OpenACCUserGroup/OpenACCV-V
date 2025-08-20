@@ -1,3 +1,5 @@
+#include "common.Fh"
+
 #ifndef T1
 !T1:devonly,serial,if,V:2.6-2.7
       LOGICAL FUNCTION test1()
@@ -5,18 +7,11 @@
   INCLUDE "acc_testsuite.Fh"
   INTEGER:: errors
   REAL(8),DIMENSION(LOOPCOUNT):: a, b, c
-  LOGICAL,DIMENSION(1):: devtest
   LOGICAL:: host, device
   INTEGER:: x
   host = .FALSE.
   device = .TRUE.
   errors = 0
-
-  devtest(1) = .TRUE.
-  !$acc enter data copyin(devtest(1:1))
-  !$acc parallel present(devtest(1:1))
-    devtest(1) = .FALSE.
-  !$acc end parallel
 
   SEEDDIM(1) = 1
 # ifdef SEED
@@ -55,18 +50,11 @@
   INCLUDE "acc_testsuite.Fh"
   INTEGER:: errors
   REAL(8),DIMENSION(LOOPCOUNT):: a, b, c
-  LOGICAL,DIMENSION(1):: devtest
   LOGICAL:: host, device
   INTEGER:: x
   host = .FALSE.
   device = .TRUE.
   errors = 0
-
-  devtest(1) = .TRUE.
-  !$acc enter data copyin(devtest(1:1))
-  !$acc parallel present(devtest(1:1))
-    devtest(1) = .FALSE.
-  !$acc end parallel
 
   SEEDDIM(1) = 1
 # ifdef SEED
@@ -74,7 +62,7 @@
 # endif
   CALL RANDOM_SEED(PUT=SEEDDIM)
 
-  IF (devtest(1)) THEN
+  IF (devtest() .eq. .TRUE.) THEN
     CALL RANDOM_NUMBER(a)
     CALL RANDOM_NUMBER(b)
     c = a + b
@@ -109,18 +97,11 @@
   INCLUDE "acc_testsuite.Fh"
   INTEGER:: errors
   REAL(8),DIMENSION(LOOPCOUNT):: a, b, c
-  LOGICAL,DIMENSION(1):: devtest
   LOGICAL:: host, device
   INTEGER:: x
   host = .FALSE.
   device = .TRUE.
   errors = 0
-
-  devtest(1) = .TRUE.
-  !$acc enter data copyin(devtest(1:1))
-  !$acc parallel present(devtest(1:1))
-    devtest(1) = .FALSE.
-  !$acc end parallel
 
   SEEDDIM(1) = 1
 # ifdef SEED

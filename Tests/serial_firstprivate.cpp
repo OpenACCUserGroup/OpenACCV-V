@@ -21,7 +21,7 @@ int test1(){
     }
     #pragma acc data copyin(a[0:10*n], b[0:10*n]) copy(d[0:10*n])
     {
-        #pragma acc serial firstprivate(c[0:n])
+        #pragma acc serial firstprivate(c[0:10])
         {
             #pragma acc loop gang
             for (int x = 0; x < n; ++x){
@@ -67,7 +67,7 @@ int test2(){
 
     #pragma acc data copyin(a[0:10*n], b[0:10*n]) copy(d[0:10*n])
     {
-        #pragma acc serial firstprivate(c[0:n])
+        #pragma acc serial firstprivate(c[0:10])
         {
             #pragma acc loop gang independent
             for (int x = 0; x < n; ++x){

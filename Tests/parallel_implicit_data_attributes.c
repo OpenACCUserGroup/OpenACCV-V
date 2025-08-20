@@ -13,7 +13,7 @@ int test1(){
 	test += 1;
     }
 
-    if(fabs( test - host) >  PRECISION){
+    if(fabs( test - host - n) >  PRECISION){
 	err++;
     }
     
@@ -33,7 +33,7 @@ int test2(){
 		a += 1.0;
 	}
 
-	if( fabs( a - host) > PRECISION){
+	if( fabs( a - host - n) > PRECISION){
 		err++;
 	}
 	return err;

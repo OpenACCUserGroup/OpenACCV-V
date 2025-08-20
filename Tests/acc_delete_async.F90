@@ -1,3 +1,5 @@
+#include "common.Fh"
+
 #ifndef T1
 !T1:runtime,data,executable-data,async,construct-independent,V:2.5-2.7
       LOGICAL FUNCTION test1()
@@ -67,16 +69,9 @@
         INCLUDE "acc_testsuite.Fh"
         INTEGER :: x !Iterators
         REAL(8),DIMENSION(LOOPCOUNT):: a, b, c!Data
-        INTEGER,DIMENSION(1) :: devtest
         INTEGER :: errors = 0
 
-        devtest(1) = 1
-        !$acc enter data copyin(devtest(1:1))
-        !$acc parallel present(devtest(1:1))
-          devtest(1) = 0
-        !$acc end parallel
-
-        IF (devtest(1) == 1) THEN
+        IF (devtest() .eqv. .TRUE.) THEN
           CALL RANDOM_NUMBER(a)
           CALL RANDOM_NUMBER(b)
           c = 0

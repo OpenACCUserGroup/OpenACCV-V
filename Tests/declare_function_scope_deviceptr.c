@@ -83,6 +83,10 @@ int test2(){
 
     if (devtest[0] == 1){
         for (int x = 0; x < n; ++x){
+	    a[x] = (real_t *)malloc(n * sizeof(real_t));
+	    b[x] = (real_t *)malloc(n * sizeof(real_t));
+	    c[x] = (real_t *)malloc(n * sizeof(real_t));
+	    d[x] = (real_t *)malloc(n * sizeof(real_t));
             for (int y = 0; y < n; ++y){
                 a[x][y] = rand() / (real_t)(RAND_MAX / 10);
                 b[x][y] = rand() / (real_t)(RAND_MAX / 10);

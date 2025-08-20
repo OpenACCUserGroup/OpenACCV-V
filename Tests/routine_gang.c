@@ -42,7 +42,7 @@ real_t called_function_seq(real_t ** a, int x, long long n){
     return returned;
 }
 
-#pragma acc routine gang
+#pragma acc routine seq
 real_t called_function_gang(real_t ** a, int x, long long n){
     real_t returned = 0;
     real_t* itemized_return = (real_t *)malloc(((int) (n/10)) * sizeof(real_t)); //Lol

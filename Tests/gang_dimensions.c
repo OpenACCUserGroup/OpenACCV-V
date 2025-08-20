@@ -1,4 +1,5 @@
 #include "acc_testsuite.h"
+#pragma acc declare create(n)
 #ifndef T1
 //T1:parallel,gang,dim,V:3.3
 int test1(){
@@ -149,7 +150,7 @@ void inner_3D(real_t arr1, int n)
     }
 }
 
-#pragma acc_routine gang(dim:1)
+#pragma acc routine gang(dim:1)
 void middle(real_t arr1[n], int n)
 {
     #pragma acc loop gang(dim:1)
