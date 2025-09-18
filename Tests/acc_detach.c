@@ -16,16 +16,16 @@ int test1(){
 
     #pragma acc enter data copyin(data.a[0:n], data.b[0:n])
     #pragma acc enter data copyin(data)
-    acc_attach(&data.a);
-    acc_attach(&data.b);
+    acc_attach((void**)&data.a);
+    acc_attach((void**)&data.b);
 
     #pragma acc parallel loop default(present)
     for(int x = 0; x < n; ++x){
         data.a[x] = data.a[x] * 2;
     }
 
-    acc_detach(&data.a);
-    acc_detach(&data.b);
+    acc_detach((void**)&data.a);
+    acc_detach((void**)&data.b);
     #pragma acc exit data copyout(data.a[0:n], data.b[0:n])
     #pragma acc exit data copyout(data)
 
@@ -59,8 +59,8 @@ int test2(){
 
     #pragma acc enter data copyin(data.a[0:n], data.b[0:n])
     #pragma acc enter data copyin(data)
-    acc_attach(&data.a);
-    acc_attach(&data.b);
+    acc_attach((void**)&data.a);
+    acc_attach((void**)&data.b);
 
     #pragma acc parallel loop default(present)
     for(int x = 0; x < n; ++x){
