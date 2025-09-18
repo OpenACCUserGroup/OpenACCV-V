@@ -18,6 +18,7 @@
 
         final_memory = acc_get_property(acc_get_device_num(acc_get_device_type()), acc_get_device_type(), acc_property_free_memory)
 
+! This code is odd: 'x' not defined - but also the loop variable is not used inside the loop?
         DO x = 1, LOOPCOUNT
           IF (final_memory + N * sizeof(a(1)) .gt. initial_memory) THEN
             errors = errors + 1
