@@ -3,7 +3,7 @@
       LOGICAL FUNCTION test1()
         IMPLICIT NONE
         INCLUDE "acc_testsuite.Fh"
-        INTEGER :: x, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9 !Iterators
+        INTEGER :: x, x_0, x_1, x_2, x_3, x_4, x_5, x_6, x_7, x_8, x_9 !Iterators
         REAL(8),DIMENSION(1024):: a, b !Data
         INTEGER :: errors = 0
 
@@ -20,26 +20,27 @@
         !$acc data copyin(a(1:1024)) copyout(b(1:1024))
           !$acc kernels
             !$acc loop
-            DO _0 = 0, 1
+            DO x_0 = 0, 1
               !$acc loop
-              DO _1 = 0, 1
+              DO x_1 = 0, 1
                 !$acc loop
-                DO _2 = 0, 1
+                DO x_2 = 0, 1
                   !$acc loop
-                  DO _3 = 0, 1
+                  DO x_3 = 0, 1
                     !$acc loop
-                    DO _4 = 0, 1
+                    DO x_4 = 0, 1
                       !$acc loop
-                      DO _5 = 0, 1
+                      DO x_5 = 0, 1
                         !$acc loop
-                        DO _6 = 0, 1
+                        DO x_6 = 0, 1
                           !$acc loop
-                          DO _7 = 0, 1
+                          DO x_7 = 0, 1
                             !$acc loop
-                            DO _8 = 0, 1
+                            DO x_8 = 0, 1
                               !$acc loop
-                              DO _9 = 1, 2
-                                b(_0*512+_1*256+_2*128+_3*64+_4*32+_5*16+_6*8+_7*4+_8*2+_9)=a(_0*512+_1*256+_2*128+_3*64+_4*32+_5*16+_6*8+_7*4+_8*2+_9)
+                              DO x_9 = 1, 2
+                                b(x_0*512+x_1*256+x_2*128+x_3*64+x_4*32+x_5*16+x_6*8+x_7*4+x_8*2+x_9) &
+                                  = a(x_0*512+x_1*256+x_2*128+x_3*64+x_4*32+x_5*16+x_6*8+x_7*4+x_8*2+x_9)
                               END DO
                             END DO
                           END DO
