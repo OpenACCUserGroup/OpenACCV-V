@@ -70,6 +70,9 @@
 # endif
   CALL RANDOM_SEED(PUT=SEEDDIM)
 
+  CALL RANDOM_NUMBER(a)
+  b = a
+
   IF (hasDevice(1) .eq. 1) THEN
     !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
       !$acc serial copyout(b(1:LOOPCOUNT))
@@ -116,6 +119,9 @@
   SEEDDIM(1) = SEED
 # endif
   CALL RANDOM_SEED(PUT=SEEDDIM)
+
+  CALL RANDOM_NUMBER(a)
+  b = a
 
   !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
     !$acc serial copyout(b(1:LOOPCOUNT))
