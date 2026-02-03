@@ -1,55 +1,22 @@
+! Validates that Fortran integer constant expressions declared as PARAMETER are accepted in OpenACC clause arguments that require an integral-constant-expression.
+! Uses PARAMETER constants in collapse, tile, cache bounds/lengths, and gang(dim:) to ensure spec-conformant compile-time constants are handled correctly.
+! Confirms runtime correctness by executing device computations and verifying that results match expected values after returning to the host.
+
 #ifndef T1
 !T1:syntax,collapse-clause,runtime,loop,V:3.4-
       LOGICAL FUNCTION test1()
-        IMPLICIT NONE
-        INCLUDE "acc_testsuite.Fh"
-        INTEGER, PARAMETER :: M_T1 = 64, N_T1 = 16
-        INTEGER :: i, j, idx, errors
-        REAL(8), DIMENSION(M_T1*N_T1) :: a, b, c
-
-        errors = 0
-        DO idx = 1, M_T1*N_T1
-          a(idx) = DBLE(idx)
-          b(idx) = DBLE(2*idx)
-          c(idx) = 0.0D0
-        END DO
-
-        !$acc data copyin(a(1:M_T1*N_T1), b(1:M_T1*N_T1)) copy(c(1:M_T1*N_T1))
-          !$acc parallel loop collapse(2)
-          DO i = 1, M_T1
-            DO j = 1, N_T1
-              idx = (i-1)*N_T1 + j
-              c(idx) = a(idx) + b(idx)
-            END DO
-          END DO
-          !$acc end parallel loop
-        !$acc end data
-
-        DO idx = 1, M_T1*N_T1
-          IF (ABS(c(idx)-(a(idx)+b(idx))) .GT. PRECISION) errors = errors + 1
-        END DO
-        test1 = (errors .NE. 0)
-      END FUNCTION
-#endif
-
-
-#ifndef T2
-!T2:syntax,collapse-clause,runtime,loop,V:3.4-
-      LOGICAL FUNCTION test2()
         IMPLICIT NONE
         INCLUDE "acc_testsuite.Fh"
         INTEGER, PARAMETER :: COLL_T2 = 1 + 1
         INTEGER, PARAMETER :: M_T2 = 48, N_T2 = 12
         INTEGER :: i, j, idx, errors
         REAL(8), DIMENSION(M_T2*N_T2) :: a, b, c
-
         errors = 0
         DO idx = 1, M_T2*N_T2
           a(idx) = DBLE(idx+2)
           b(idx) = DBLE(idx-1)
           c(idx) = 0.0D0
         END DO
-
         !$acc data copyin(a(1:M_T2*N_T2), b(1:M_T2*N_T2)) copy(c(1:M_T2*N_T2))
           !$acc parallel loop collapse(COLL_T2)
           DO i = 1, M_T2
@@ -60,65 +27,56 @@
           END DO
           !$acc end parallel loop
         !$acc end data
-
         DO idx = 1, M_T2*N_T2
           IF (ABS(c(idx)-(a(idx)+b(idx))) .GT. PRECISION) errors = errors + 1
         END DO
-        test2 = (errors .NE. 0)
+        test1 = (errors .NE. 0)
       END FUNCTION
 #endif
-
-
-#ifndef T3
-!T3:syntax,tile-clause,runtime,loop,V:3.4-
-      LOGICAL FUNCTION test3()
+#ifndef T2
+!T2:syntax,tile-clause,runtime,loop,V:3.4-
+      LOGICAL FUNCTION test2()
         IMPLICIT NONE
         INCLUDE "acc_testsuite.Fh"
+        INTEGER, PARAMETER :: TILE_T2 = 1 + 1
         INTEGER, PARAMETER :: M_T3 = 256
         INTEGER :: i, errors
         REAL(8), DIMENSION(M_T3) :: a, c
-
         errors = 0
         DO i = 1, M_T3
           a(i) = DBLE(i)
           c(i) = 0.0D0
         END DO
-
         !$acc data copyin(a(1:M_T3)) copy(c(1:M_T3))
-          !$acc parallel loop tile(2)
+          !$acc parallel loop tile(TILE_T2)
           DO i = 1, M_T3
             c(i) = 2.0D0 * a(i)
           END DO
           !$acc end parallel loop
         !$acc end data
-
         DO i = 1, M_T3
           IF (ABS(c(i) - 2.0D0*a(i)) .GT. PRECISION) errors = errors + 1
         END DO
-        test3 = (errors .NE. 0)
+        test2 = (errors .NE. 0)
       END FUNCTION
 #endif
-
-
-#ifndef T4
-!T4:syntax,tile-clause,runtime,loop,V:3.4-
-      LOGICAL FUNCTION test4()
+#ifndef T3
+!T3:syntax,tile-clause,runtime,loop,V:3.4-
+      LOGICAL FUNCTION test3()
         IMPLICIT NONE
         INCLUDE "acc_testsuite.Fh"
-        INTEGER, PARAMETER :: TILE2_T4 = 2
+        INTEGER, PARAMETER :: TILE2_T4 = 1 + 1
         INTEGER, PARAMETER :: M_T4 = 64, N_T4 = 40
         INTEGER :: i, j, idx, errors
         REAL(8), DIMENSION(M_T4*N_T4) :: a, b, c
-
         errors = 0
         DO idx = 1, M_T4*N_T4
           a(idx) = DBLE(idx+1)
           b(idx) = DBLE(3*idx)
           c(idx) = 0.0D0
         END DO
-
         !$acc data copyin(a(1:M_T4*N_T4), b(1:M_T4*N_T4)) copy(c(1:M_T4*N_T4))
-          !$acc parallel loop tile(TILE2_T4, 2)
+          !$acc parallel loop tile(TILE2_T4, TILE2_T4)
           DO i = 1, M_T4
             DO j = 1, N_T4
               idx = (i-1)*N_T4 + j
@@ -127,17 +85,15 @@
           END DO
           !$acc end parallel loop
         !$acc end data
-
         DO idx = 1, M_T4*N_T4
           IF (ABS(c(idx)-(a(idx)+b(idx))) .GT. PRECISION) errors = errors + 1
         END DO
-        test4 = (errors .NE. 0)
+        test3 = (errors .NE. 0)
       END FUNCTION
 #endif
-
-#ifndef T5
-!T5:syntax,cache-directive,runtime,compute,V:3.4-
-      LOGICAL FUNCTION test5()
+#ifndef T4
+!T4:syntax,cache-directive,runtime,compute,V:3.4-
+      LOGICAL FUNCTION test4()
         IMPLICIT NONE
         INCLUDE "acc_testsuite.Fh"
         INTEGER, PARAMETER :: M_T5 = 1024
@@ -145,15 +101,12 @@
         INTEGER, PARAMETER :: LO_T5 = 32
         INTEGER :: i, errors
         REAL(8), DIMENSION(M_T5) :: p, cp
-
         errors = 0
         DO i = 1, M_T5
           p(i)  = DBLE(i)
           cp(i) = 0.0D0
         END DO
-
         !$acc data copyin(p(1:M_T5)) copy(cp(1:M_T5))
-
           ! One-iteration loop: satisfies gfortran "cache must be inside loop"
           ! and avoids Cray executing cache per-iteration in the real loop.
           !$acc parallel loop
@@ -162,25 +115,21 @@
             cp(1) = cp(1)  ! no-op
           END DO
           !$acc end parallel loop
-
           !$acc parallel loop
           DO i = 1, M_T5
             cp(i) = p(i) + 1.0D0
           END DO
           !$acc end parallel loop
-
         !$acc end data
-
         DO i = 1, M_T5
           IF (ABS(cp(i) - (p(i)+1.0D0)) .GT. PRECISION) errors = errors + 1
         END DO
-        test5 = (errors .NE. 0)
+        test4 = (errors .NE. 0)
       END FUNCTION
 #endif
-
-#ifndef T6
-!T6:syntax,cache-directive,runtime,compute,V:3.4-
-      LOGICAL FUNCTION test6()
+#ifndef T5
+!T5:syntax,cache-directive,runtime,compute,V:3.4-
+      LOGICAL FUNCTION test5()
         IMPLICIT NONE
         INCLUDE "acc_testsuite.Fh"
         INTEGER, PARAMETER :: M_T6 = 1024
@@ -189,55 +138,46 @@
         INTEGER, PARAMETER :: HI_T6 = LO_T6 + LEN_T6 - 1
         INTEGER :: i, errors
         REAL(8), DIMENSION(M_T6) :: q, cq
-
         errors = 0
         DO i = 1, M_T6
           q(i)  = DBLE(i)
           cq(i) = 0.0D0
         END DO
-
         !$acc data copyin(q(1:M_T6)) copy(cq(1:M_T6))
-
           !$acc parallel loop
           DO i = 1, 1
             !$acc cache(q(LO_T6:HI_T6))
             cq(1) = cq(1)  ! no-op
           END DO
           !$acc end parallel loop
-
           !$acc parallel loop
           DO i = 1, M_T6
             cq(i) = q(i) * 2.0D0
           END DO
           !$acc end parallel loop
-
         !$acc end data
-
         DO i = 1, M_T6
           IF (ABS(cq(i) - 2.0D0*q(i)) .GT. PRECISION) errors = errors + 1
         END DO
-        test6 = (errors .NE. 0)
+        test5 = (errors .NE. 0)
       END FUNCTION
 #endif
-
-#ifndef T7
-!T7:syntax,gang-clause,runtime,loop,V:3.4-
+#ifndef T6
+!T6:syntax,gang-clause,runtime,loop,V:3.4-
 ! gang(dim:DIM_T7) where dim is an integral constant expression (PARAMETER), must evaluate to 1..3
 ! NOTE: Some compilers may not support the 'dim:' keyword form yet; keep this as spec conformance coverage.
-      LOGICAL FUNCTION test7()
+      LOGICAL FUNCTION test6()
         IMPLICIT NONE
         INCLUDE "acc_testsuite.Fh"
         INTEGER, PARAMETER :: M_T7 = 512
         INTEGER, PARAMETER :: DIM_T7 = 2
         INTEGER :: i, errors
         REAL(8), DIMENSION(M_T7) :: a, c
-
         errors = 0
         DO i = 1, M_T7
           a(i) = DBLE(i)
           c(i) = 0.0D0
         END DO
-
         !$acc data copyin(a(1:M_T7)) copy(c(1:M_T7))
           !$acc parallel loop gang(dim:DIM_T7)
           DO i = 1, M_T7
@@ -245,15 +185,12 @@
           END DO
           !$acc end parallel loop
         !$acc end data
-
         DO i = 1, M_T7
           IF (ABS(c(i) - 2.0D0*a(i)) .GT. PRECISION) errors = errors + 1
         END DO
-
-        test7 = (errors .NE. 0)
+        test6 = (errors .NE. 0)
       END FUNCTION
 #endif
-
       PROGRAM main
         IMPLICIT NONE
         INCLUDE "acc_testsuite.Fh"
@@ -277,12 +214,7 @@
 #ifndef T6
         LOGICAL :: test6
 #endif
-#ifndef T7
-        LOGICAL :: test7
-#endif
-
         failcode = 0
-
 #ifndef T1
         failed = .FALSE.
         DO testrun = 1, NUM_TEST_CALLS
@@ -325,13 +257,5 @@
         END DO
         IF (failed) failcode = failcode + 2**5
 #endif
-#ifndef T7
-        failed = .FALSE.
-        DO testrun = 1, NUM_TEST_CALLS
-          failed = failed .OR. test7()
-        END DO
-        IF (failed) failcode = failcode + 2**6
-#endif
-
         CALL EXIT(failcode)
       END PROGRAM
