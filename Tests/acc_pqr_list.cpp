@@ -1,3 +1,13 @@
+// acc_pqr_list.cpp
+// Validates correct usage of OpenACC pqr-lists in C++ as clarified in OpenACC 3.4 Section 1.6.
+// Ensures that pqr-lists appearing in OpenACC clauses:
+//   - are non-empty
+//   - do not contain trailing commas
+// The tests cover both var-lists (copyin, copyout, present) and int-expr-lists (wait),
+// using single-item and multi-item lists in C++ compilation mode.
+// Device execution results are compared against expected host values to confirm
+// correct runtime behavior in addition to syntactic acceptance.
+
 #include "acc_testsuite.h"
 #include <cstdlib>
 #include <cmath>
