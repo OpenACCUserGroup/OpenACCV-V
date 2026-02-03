@@ -1,3 +1,14 @@
+! acc_pqr_list.F90
+! Validates correct usage of OpenACC pqr-lists in Fortran as clarified in OpenACC 3.4 Section 1.6.
+! Confirms that pqr-lists used in OpenACC directives:
+!   - contain one or more items
+!   - do not include trailing commas
+! The tests exercise valid var-list pqr-lists in data clauses (copyin, copy)
+! and valid int-expr-list pqr-lists in synchronization clauses (wait),
+! using both single-item and multi-item lists.
+! Correctness is verified at runtime by comparing device-computed results
+! with expected host values.
+
 #ifndef T1
 !T1:syntax,pqr-list,runtime,construct-independent,V:3.4-
 ! int-expr-list non-empty via wait(1)
