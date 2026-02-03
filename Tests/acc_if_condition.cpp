@@ -1,4 +1,21 @@
 // acc_if_condition.cpp
+// Validates OpenACC 3.4’s clarified definition of “condition” when used as an argument to the if clause,
+// and verifies that if(condition) correctly gates directive execution (OpenACC 3.4, Section 1.6).
+//
+// Test strategy:
+// 1) Behavior-verifiable data-directive gating (T1–T4):
+//    Uses enter data / exit data with if(true/false) and checks device presence via acc_is_present.
+//    This directly proves correct gating behavior: if(false) => no-op, if(true) => directive executes.
+//
+// 2) Condition-form coverage for compute constructs under C++ rules (T5–T6):
+//    In C++, a “condition” must be contextually convertible to bool. These tests confirm that OpenACC
+//    accepts C++-legal condition forms in if(...), including:
+//      - integer scalar expression (T5)
+//      - pointer condition, user-defined bool-convertible type (operator bool), and a floating-point
+//        comparison yielding bool (T6)
+//    Each compute region performs simple arithmetic and verifies results on the host.
+//
+
 #include "acc_testsuite.h"
 #include <openacc.h>
 #include <cstdlib>
