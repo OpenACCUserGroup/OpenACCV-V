@@ -23,7 +23,7 @@
 
         final_memory = acc_get_property(acc_get_device_num(acc_get_device_type()), acc_get_device_type(), acc_property_free_memory)
 
-        IF (initial_memory - final_memory > PRECISION) THEN
+        IF (initial_memory /= final_memory) THEN
             errors = errors + 1
         END IF
 
