@@ -71,7 +71,7 @@
   CALL RANDOM_SEED(PUT=SEEDDIM)
 
   CALL RANDOM_NUMBER(a)
-  b = a
+  b = 2 * a
 
   IF (hasDevice(1) .eq. 1) THEN
     !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
