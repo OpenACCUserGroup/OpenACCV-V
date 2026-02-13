@@ -1,6 +1,13 @@
-! Validates that Fortran integer constant expressions declared as PARAMETER are accepted in OpenACC clause arguments that require an integral-constant-expression.
-! Uses PARAMETER constants in collapse, tile, cache bounds/lengths, and gang(dim:) to ensure spec-conformant compile-time constants are handled correctly.
-! Confirms runtime correctness by executing device computations and verifying that results match expected values after returning to the host.
+! acc_integral_constant_expression.F90
+!
+! Feature under test (OpenACC 3.4, Section 1.6, Feb 2026):
+! - Clause arguments that require an integral-constant-expression accept
+!   Fortran integer constant expressions declared with PARAMETER.
+!
+! Notes:
+! - Uses PARAMETER constants in: collapse, tile, cache bounds/lengths,
+!   and gang(dim:) to validate compile-time constant handling.
+
 
 #ifndef T1
 !T1:syntax,collapse-clause,runtime,loop,V:3.4-
