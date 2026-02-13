@@ -1,19 +1,14 @@
 // acc_if_condition.c
-// Validates OpenACC 3.4’s clarified definition of “condition” when used as an argument to the if clause,
-// and verifies that if(condition) correctly gates directive execution (OpenACC 3.4, Section 1.6).
 //
-// Test strategy:
-// 1) Behavior-verifiable data-directive gating (T1–T4):
-//    Uses enter data / exit data with if(true/false) and checks device presence via acc_is_present.
-//    This directly proves that the runtime treats if(false) as a no-op and if(true) as executing the directive.
+// Feature under test (OpenACC 3.4, Section 1.6, Feb 2026):
+// - Clarified definition of "condition" when used as an argument to the if clause.
+// - The if(condition) clause must accept any valid C scalar condition expression.
+// - The if clause must correctly gate execution of data and compute directives.
 //
-// 2) Condition-form coverage for compute constructs (T5–T7):
-//    Confirms the compiler accepts the full set of C-valid “condition” forms in if(...):
-//      - integer scalar expression (T5)
-//      - floating-point scalar condition (T6)  (nonzero => true in C)
-//      - pointer scalar condition (T7)         (non-NULL => true in C)
-//    Each compute test performs a simple device computation and verifies results on the host.
-//
+// Notes:
+// - T1–T4 verify runtime gating behavior for enter data / exit data.
+// - T5–T7 verify valid C condition forms (integer, floating-point, pointer).
+
 
 #include "acc_testsuite.h"
 #include <openacc.h>
