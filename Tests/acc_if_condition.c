@@ -262,25 +262,67 @@ int main(void){
     int failcode = 0, failed;
 
 #ifndef T1
-    failed=0; for(int i=0;i<NUM_TEST_CALLS;++i) failed+=test1(); if(failed) failcode|=(1<<0);
+    failed=0; 
+    for(int i=0;i<NUM_TEST_CALLS;++i){
+        failed+=test1();
+    }
+    if(failed){
+        failcode|=(1<<0);
+    }
 #endif
 #ifndef T2
-    failed=0; for(int i=0;i<NUM_TEST_CALLS;++i) failed+=test2(); if(failed) failcode|=(1<<1);
+    failed=0; 
+    for(int i=0;i<NUM_TEST_CALLS;++i){
+        failed+=test2();
+    }
+    if(failed){
+        failcode|=(1<<1);
+    }
 #endif
 #ifndef T3
-    failed=0; for(int i=0;i<NUM_TEST_CALLS;++i) failed+=test3(); if(failed) failcode|=(1<<2);
+    failed=0;
+    for(int i=0;i<NUM_TEST_CALLS;++i){
+        failed+=test3();
+    }
+    if(failed){
+        failcode|=(1<<2);
+    }
 #endif
 #ifndef T4
-    failed=0; for(int i=0;i<NUM_TEST_CALLS;++i) failed+=test4(); if(failed) failcode|=(1<<3);
+    failed=0; 
+    for(int i=0;i<NUM_TEST_CALLS;++i){
+        failed+=test4();
+    }
+    if(failed){
+        failcode|=(1<<3);
+    }
 #endif
 #ifndef T5
-    failed=0; for(int i=0;i<NUM_TEST_CALLS;++i) failed+=test5(); if(failed) failcode|=(1<<4);
+    failed=0;
+    for(int i=0;i<NUM_TEST_CALLS;++i){
+        failed+=test5(); 
+    }
+    if(failed){
+        failcode|=(1<<4);
+    }
 #endif
 #ifndef T6
-    failed=0; for(int i=0;i<NUM_TEST_CALLS;++i) failed+=test6(); if(failed) failcode|=(1<<5);
+    failed=0;
+    for(int i=0;i<NUM_TEST_CALLS;++i){
+        failed+=test6();
+    }
+    if(failed){
+        failcode|=(1<<5);
+    }
 #endif
 #ifndef T7
-    failed=0; for(int i=0;i<NUM_TEST_CALLS;++i) failed+=test7(); if(failed) failcode|=(1<<6);
+    failed=0; 
+    for(int i=0;i<NUM_TEST_CALLS;++i){
+        failed+=test7();
+    }
+    if(failed){
+        failcode|=(1<<6);
+    }
 #endif
 
     return failcode;
