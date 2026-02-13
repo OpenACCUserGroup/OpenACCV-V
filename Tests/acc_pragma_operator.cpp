@@ -1,6 +1,14 @@
 // acc_pragma_operator.cpp
-// Validates that the C++ _Pragma operator form is supported for OpenACC directives.
-// Uses only _Pragma("acc ...") (no helper macros) and verifies correct runtime results.
+//
+// Feature under test (OpenACC 3.4, Section 2.1, February 2026):
+// - In C++, OpenACC directives may be expressed using either
+//   #pragma acc ... or the equivalent _Pragma("acc ...") operator form.
+//
+// Notes:
+// - These tests use only the _Pragma("acc ...") form.
+// - Structured (data/parallel/loop) and executable (enter/exit data)
+//   directives are exercised.
+
 
 #include "acc_testsuite.h"
 #include <openacc.h>
