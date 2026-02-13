@@ -114,19 +114,15 @@
           cp(i) = 0.0D0
         END DO
         !$acc data copyin(p(1:M_T5)) copy(cp(1:M_T5))
-          ! One-iteration loop: satisfies gfortran "cache must be inside loop"
-          ! and avoids Cray executing cache per-iteration in the real loop.
-          !$acc parallel loop
-          DO i = 1, 1
-            !$acc cache(p(LO_T5:LO_T5+L_T5-1))
-            cp(1) = cp(1)  ! no-op
-          END DO
-          !$acc end parallel loop
+
           !$acc parallel loop
           DO i = 1, M_T5
+            !$acc cache(p(LO_T5:LO_T5+L_T5-1))
             cp(i) = p(i) + 1.0D0
           END DO
           !$acc end parallel loop
+          
+
         !$acc end data
         DO i = 1, M_T5
           IF (ABS(cp(i) - (p(i)+1.0D0)) .GT. PRECISION) errors = errors + 1
@@ -151,17 +147,14 @@
           cq(i) = 0.0D0
         END DO
         !$acc data copyin(q(1:M_T6)) copy(cq(1:M_T6))
-          !$acc parallel loop
-          DO i = 1, 1
-            !$acc cache(q(LO_T6:HI_T6))
-            cq(1) = cq(1)  ! no-op
-          END DO
-          !$acc end parallel loop
+
           !$acc parallel loop
           DO i = 1, M_T6
+            !$acc cache(q(LO_T6:HI_T6))
             cq(i) = q(i) * 2.0D0
           END DO
           !$acc end parallel loop
+
         !$acc end data
         DO i = 1, M_T6
           IF (ABS(cq(i) - 2.0D0*q(i)) .GT. PRECISION) errors = errors + 1
