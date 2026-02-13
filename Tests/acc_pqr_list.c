@@ -1,6 +1,6 @@
 // acc_pqr_list.c
 //
-// Feature under test (OpenACC 3.4, Section 1.6):
+// Feature under test (OpenACC 3.4, Section 1.6, Feb 2026):
 // - A pqr-list must contain at least one item.
 // - A pqr-list must not have a trailing comma.
 //
