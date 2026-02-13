@@ -1,7 +1,13 @@
 // acc_integral_constant_expression.cpp
-// Validates that C++ integral constant expressions (constexpr values and enums) are accepted in OpenACC clause arguments where the spec requires an integral-constant-expression.
-// Exercises constant expressions in collapse, tile, cache indexing/slices, and gang(dim:) to confirm correct parsing and conformance to the spec’s compile-time constant requirement.
-// Tests check correctness by running device loops and comparing computed results against expected host values.
+//
+// Feature under test (OpenACC 3.4, Section 1.6, Feb 2026):
+// - Clause arguments that require an integral-constant-expression accept
+//   C++ integral constant expressions (constexpr values and enum values).
+//
+// Notes:
+// - Uses integral constant expressions in: collapse, tile, cache (index and slice),
+//   and gang(dim:) to validate compile-time constant handling.
+
 
 #include "acc_testsuite.h"
 #include <openacc.h>
