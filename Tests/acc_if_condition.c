@@ -22,12 +22,20 @@
 int test1(void){
     int err = 0;
     real_t *a = (real_t*)malloc(n * sizeof(real_t));
-    if (!a) return 1;
-    for (int i = 0; i < n; ++i) a[i] = (real_t)i;
+    
+    if (!a){
+        return 1;
+    }
+    
+    for (int i = 0; i < n; ++i){
+        a[i] = (real_t)i;
+    }
 
     #pragma acc enter data copyin(a[0:n]) if(0)
 
-    if (acc_is_present(a, (size_t)n * sizeof(real_t))) err++;
+    if (acc_is_present(a, (size_t)n * sizeof(real_t))){
+        err++;
+    }
 
     #pragma acc exit data delete(a[0:n]) if(1)
     free(a);
@@ -41,12 +49,20 @@ int test1(void){
 int test2(void){
     int err = 0;
     real_t *a = (real_t*)malloc(n * sizeof(real_t));
-    if (!a) return 1;
-    for (int i = 0; i < n; ++i) a[i] = (real_t)i;
+    
+    if (!a){
+        return 1;
+    }
+    
+    for (int i = 0; i < n; ++i){
+        a[i] = (real_t)i;
+    }
 
     #pragma acc enter data copyin(a[0:n]) if(1)
 
-    if (!acc_is_present(a, (size_t)n * sizeof(real_t))) err++;
+    if (!acc_is_present(a, (size_t)n * sizeof(real_t))){
+        err++;
+    }
 
     #pragma acc exit data delete(a[0:n]) if(1)
     free(a);
@@ -60,14 +76,24 @@ int test2(void){
 int test3(void){
     int err = 0;
     real_t *a = (real_t*)malloc(n * sizeof(real_t));
-    if (!a) return 1;
-    for (int i = 0; i < n; ++i) a[i] = (real_t)i;
+    
+    if (!a){
+        return 1;
+    }
+    
+    for (int i = 0; i < n; ++i){
+        a[i] = (real_t)i;
+    }
 
     #pragma acc enter data copyin(a[0:n]) if(1)
-    if (!acc_is_present(a, (size_t)n * sizeof(real_t))) err++;
+    if (!acc_is_present(a, (size_t)n * sizeof(real_t))){
+        err++;
+    }
 
     #pragma acc exit data delete(a[0:n]) if(0)
-    if (!acc_is_present(a, (size_t)n * sizeof(real_t))) err++;
+    if (!acc_is_present(a, (size_t)n * sizeof(real_t))){
+        err++;
+    }
 
     #pragma acc exit data delete(a[0:n]) if(1)
     free(a);
@@ -81,14 +107,24 @@ int test3(void){
 int test4(void){
     int err = 0;
     real_t *a = (real_t*)malloc(n * sizeof(real_t));
-    if (!a) return 1;
-    for (int i = 0; i < n; ++i) a[i] = (real_t)i;
+    
+    if (!a){
+        return 1;
+    }
+    
+    for (int i = 0; i < n; ++i){
+        a[i] = (real_t)i;
+    }
 
     #pragma acc enter data copyin(a[0:n]) if(1)
-    if (!acc_is_present(a, (size_t)n * sizeof(real_t))) err++;
+    if (!acc_is_present(a, (size_t)n * sizeof(real_t))){
+        err++;
+    }
 
     #pragma acc exit data delete(a[0:n]) if(1)
-    if (acc_is_present(a, (size_t)n * sizeof(real_t))) err++;
+    if (acc_is_present(a, (size_t)n * sizeof(real_t))){
+        err++;
+    }
 
     free(a);
     return err;
@@ -106,20 +142,38 @@ int test5(void){
     real_t *a = (real_t*)malloc(n*sizeof(real_t));
     real_t *b = (real_t*)malloc(n*sizeof(real_t));
     real_t *c = (real_t*)malloc(n*sizeof(real_t));
-    if (!a || !b || !c){ free(a); free(b); free(c); return 1; }
+    
+    if (!a || !b || !c){
+        free(a); 
+        free(b); 
+        free(c);
+        return 1; 
+    }
 
-    for (int i=0;i<n;++i){ a[i]=rand()/(real_t)(RAND_MAX/10); b[i]=rand()/(real_t)(RAND_MAX/10); c[i]=0; }
+    for (int i=0;i<n;++i){
+        a[i]=rand()/(real_t)(RAND_MAX/10); 
+        b[i]=rand()/(real_t)(RAND_MAX/10); 
+        c[i]=0; 
+    }
 
     int cond_int = (n > 0); // runtime scalar int condition
 
     #pragma acc data copyin(a[0:n],b[0:n]) copyout(c[0:n])
     {
         #pragma acc parallel loop present(a[0:n],b[0:n],c[0:n]) if(cond_int)
-        for (int i=0;i<n;++i) c[i]=a[i]+b[i];
+        for (int i=0;i<n;++i){
+            c[i]=a[i]+b[i];
+        }
     }
 
-    for (int i=0;i<n;++i) if (fabs(c[i]-(a[i]+b[i]))>PRECISION) err++;
-    free(a); free(b); free(c);
+    for (int i=0;i<n;++i){
+        if (fabs(c[i]-(a[i]+b[i]))>PRECISION){
+            err++;
+        }
+    }
+    free(a); 
+    free(b); 
+    free(c);
     return err;
 }
 #endif
@@ -132,20 +186,34 @@ int test6(void){
     srand(SEED);
     real_t *a = (real_t*)malloc(n*sizeof(real_t));
     real_t *c = (real_t*)malloc(n*sizeof(real_t));
-    if (!a || !c){ free(a); free(c); return 1; }
+    if (!a || !c){ 
+        free(a); 
+        free(c); 
+        return 1; 
+    }
 
-    for (int i=0;i<n;++i){ a[i]=rand()/(real_t)(RAND_MAX/10); c[i]=0; }
+    for (int i=0;i<n;++i){ 
+        a[i]=rand()/(real_t)(RAND_MAX/10); 
+        c[i]=0; 
+    }
 
     real_t cond_real = (real_t)1.0; // nonzero scalar => true in C
 
     #pragma acc data copyin(a[0:n]) copyout(c[0:n])
     {
         #pragma acc parallel loop present(a[0:n],c[0:n]) if(cond_real)
-        for (int i=0;i<n;++i) c[i]=a[i]*(real_t)2.0;
+        for (int i=0;i<n;++i){
+            c[i]=a[i]*(real_t)2.0;
+        }
     }
 
-    for (int i=0;i<n;++i) if (fabs(c[i]-(a[i]*(real_t)2.0))>PRECISION) err++;
-    free(a); free(c);
+    for (int i=0;i<n;++i){
+        if (fabs(c[i]-(a[i]*(real_t)2.0))>PRECISION){
+            err++;
+        }
+    }
+    free(a); 
+    free(c);
     return err;
 }
 #endif
@@ -158,20 +226,34 @@ int test7(void){
     srand(SEED);
     real_t *a = (real_t*)malloc(n*sizeof(real_t));
     real_t *c = (real_t*)malloc(n*sizeof(real_t));
-    if (!a || !c){ free(a); free(c); return 1; }
+    if (!a || !c){ 
+        free(a); 
+        free(c); 
+        return 1; 
+    }
 
-    for (int i=0;i<n;++i){ a[i]=rand()/(real_t)(RAND_MAX/10); c[i]=0; }
+    for (int i=0;i<n;++i){ 
+        a[i]=rand()/(real_t)(RAND_MAX/10); 
+        c[i]=0; 
+    }
 
     void* cond_ptr = (void*)a; // non-NULL pointer => true in C
 
     #pragma acc data copyin(a[0:n]) copyout(c[0:n])
     {
         #pragma acc parallel loop present(a[0:n],c[0:n]) if(cond_ptr)
-        for (int i=0;i<n;++i) c[i]=a[i]+(real_t)1.0;
+        for (int i=0;i<n;++i){
+            c[i]=a[i]+(real_t)1.0;
+        }
     }
 
-    for (int i=0;i<n;++i) if (fabs(c[i]-(a[i]+(real_t)1.0))>PRECISION) err++;
-    free(a); free(c);
+    for (int i=0;i<n;++i){
+        if (fabs(c[i]-(a[i]+(real_t)1.0))>PRECISION){
+            err++;
+        }
+    }
+    free(a); 
+    free(c);
     return err;
 }
 #endif
