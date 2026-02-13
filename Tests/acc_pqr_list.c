@@ -1,12 +1,14 @@
 // acc_pqr_list.c
-// Validates correct usage of OpenACC pqr-lists as clarified in OpenACC 3.4 Section 1.6.
-// Confirms that both var-lists and int-expr-lists used in OpenACC clauses:
-//   - contain at least one item
-//   - do not include trailing commas
-// The tests exercise valid pqr-list forms in data clauses (copyin, copyout, present)
-// and synchronization clauses (wait) using both single-item and multi-item lists.
-// Runtime checks verify correctness of device computations to ensure the directives
-// are parsed and applied as intended by the specification.
+//
+// Feature under test (OpenACC 3.4, Section 1.6):
+// - A pqr-list must contain at least one item.
+// - A pqr-list must not have a trailing comma.
+//
+// This test exercises valid pqr-list forms in:
+//   - var-lists (copyin, copyout, present)
+//   - int-expr-lists (wait)
+//
+// Only spec-compliant (non-empty, no trailing comma) forms are used.
 
 
 #include "acc_testsuite.h"
