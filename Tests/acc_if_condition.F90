@@ -28,7 +28,9 @@
 
         !$acc enter data copyin(a(1:LOOPCOUNT)) if(.FALSE.)
         present = acc_is_present(a)
-        IF (present) errors = errors + 1
+        IF (present) THEN
+          errors = errors + 1
+        END IF
 
         IF (present) THEN
           !$acc exit data delete(a(1:LOOPCOUNT)) if(.TRUE.)
@@ -54,7 +56,9 @@
 
         !$acc enter data copyin(a(1:LOOPCOUNT)) if(.TRUE.)
         present = acc_is_present(a)
-        IF (.NOT. present) errors = errors + 1
+        IF (.NOT. present) THEN
+          errors = errors + 1
+        END IF
 
         !$acc exit data delete(a(1:LOOPCOUNT)) if(.TRUE.)
         test2 = (errors .NE. 0)
@@ -78,11 +82,15 @@
 
         !$acc enter data copyin(a(1:LOOPCOUNT)) if(.TRUE.)
         present = acc_is_present(a)
-        IF (.NOT. present) errors = errors + 1
+        IF (.NOT. present) THEN
+          errors = errors + 1
+        END IF
 
         !$acc exit data delete(a(1:LOOPCOUNT)) if(.FALSE.)
         present = acc_is_present(a)
-        IF (.NOT. present) errors = errors + 1
+        IF (.NOT. present) THEN
+          errors = errors + 1
+        END IF
 
         !$acc exit data delete(a(1:LOOPCOUNT)) if(.TRUE.)
         test3 = (errors .NE. 0)
@@ -106,11 +114,15 @@
 
         !$acc enter data copyin(a(1:LOOPCOUNT)) if(.TRUE.)
         present = acc_is_present(a)
-        IF (.NOT. present) errors = errors + 1
+        IF (.NOT. present) THEN
+          errors = errors + 1
+        END IF
 
         !$acc exit data delete(a(1:LOOPCOUNT)) if(.TRUE.)
         present = acc_is_present(a)
-        IF (present) errors = errors + 1
+        IF (present) THEN
+          errors = errors + 1
+        END IF
 
         test4 = (errors .NE. 0)
       END FUNCTION
@@ -141,7 +153,9 @@
         !$acc end data
 
         DO i=1, LOOPCOUNT
-          IF (ABS(c(i) - 2.0D0*a(i)) .GT. PRECISION) errors = errors + 1
+          IF (ABS(c(i) - 2.0D0*a(i)) .GT. PRECISION) THEN
+            errors = errors + 1
+          END IF
         END DO
 
         test5 = (errors .NE. 0)
@@ -174,7 +188,9 @@
         !$acc end data
 
         DO i=1, LOOPCOUNT
-          IF (ABS(c(i) - (a(i)+1.0D0)) .GT. PRECISION) errors = errors + 1
+          IF (ABS(c(i) - (a(i)+1.0D0)) .GT. PRECISION) THEN
+            errors = errors + 1
+          END IF
         END DO
 
         test6 = (errors .NE. 0)
@@ -212,42 +228,54 @@
         DO testrun=1, NUM_TEST_CALLS
           failed = failed .OR. test1()
         END DO
-        IF (failed) failcode = failcode + 2**0
+        IF (failed) THEN
+          failcode = failcode + 2**0
+        END IF
 #endif
 #ifndef T2
         failed = .FALSE.
         DO testrun=1, NUM_TEST_CALLS
           failed = failed .OR. test2()
         END DO
-        IF (failed) failcode = failcode + 2**1
+        IF (failed) THEN
+          failcode = failcode + 2**1
+        END IF
 #endif
 #ifndef T3
         failed = .FALSE.
         DO testrun=1, NUM_TEST_CALLS
           failed = failed .OR. test3()
         END DO
-        IF (failed) failcode = failcode + 2**2
+        IF (failed) THEN
+          failcode = failcode + 2**2
+        END IF
 #endif
 #ifndef T4
         failed = .FALSE.
         DO testrun=1, NUM_TEST_CALLS
           failed = failed .OR. test4()
         END DO
-        IF (failed) failcode = failcode + 2**3
+        IF (failed) THEN
+          failcode = failcode + 2**3
+        END IF
 #endif
 #ifndef T5
         failed = .FALSE.
         DO testrun=1, NUM_TEST_CALLS
           failed = failed .OR. test5()
         END DO
-        IF (failed) failcode = failcode + 2**4
+        IF (failed) THEN
+          failcode = failcode + 2**4
+        END IF
 #endif
 #ifndef T6
         failed = .FALSE.
         DO testrun=1, NUM_TEST_CALLS
           failed = failed .OR. test6()
         END DO
-        IF (failed) failcode = failcode + 2**5
+        IF (failed) THEN
+          failcode = failcode + 2**5
+        END IF
 #endif
 
         CALL EXIT(failcode)
