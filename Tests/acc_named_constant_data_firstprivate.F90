@@ -1,14 +1,12 @@
-! acc_pqr_list.F90
+! acc_named_constant_data_firstprivate.F90
 !
 ! Feature under test (OpenACC 3.4, Section 1.6):
-! - A pqr-list must contain at least one item.
-! - A pqr-list must not have a trailing comma.
+! - A Fortran named constant (PARAMETER) is a valid "var" and is allowed
+!   in data clauses and firstprivate clauses.
 !
-! This test exercises valid pqr-list usage in:
-!   - var-lists (copyin, copy)
-!   - int-expr-lists (wait)
-!
-! Only spec-compliant (non-empty, no trailing comma) forms are used.
+! Notes:
+! - We only use named constants in read-only ways (copyin/create/firstprivate)
+!   and never in a way that would require writing back to the constant.
 
 
 #ifndef T1
