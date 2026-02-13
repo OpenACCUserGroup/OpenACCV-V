@@ -1,19 +1,13 @@
 ! acc_if_condition.F90
-! Validates OpenACC 3.4’s clarified definition of “condition” when used as an argument to the if clause,
-! and verifies that if(condition) correctly gates directive execution (OpenACC 3.4, Section 1.6).
 !
-! Test strategy:
-! 1) Behavior-verifiable data-directive gating (T1–T4):
-!    Uses enter data / exit data with if(.TRUE./.FALSE.) and checks device presence via acc_is_present.
-!    This directly verifies correct gating behavior for data directives in Fortran.
+! Feature under test (OpenACC 3.4, Section 1.6, Feb 2026):
+! - Clarified definition of "condition" when used as an argument to the if clause.
+! - In Fortran, the if clause argument must be a LOGICAL expression.
+! - The if clause must correctly gate execution of data and compute directives.
 !
-! 2) Condition-form coverage for compute constructs under Fortran rules (T5–T6):
-!    Fortran conditions must be LOGICAL. These tests confirm that OpenACC accepts valid Fortran LOGICAL
-!    conditions in if(...), including:
-!      - LOGICAL variable condition (T5)
-!      - LOGICAL expression condition (T6)
-!    Each compute test performs a simple computation and verifies results on the host.
-!
+! Notes:
+! - T1–T4 verify runtime gating behavior for enter data / exit data.
+! - T5–T6 verify valid Fortran LOGICAL variable and expression forms.
 
 ! Fortran conditions must be LOGICAL.
 
