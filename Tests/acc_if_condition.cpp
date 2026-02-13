@@ -26,11 +26,19 @@ struct BoolLike {
 int test1(){
     int err=0;
     real_t* a=(real_t*)std::malloc(n*sizeof(real_t));
-    if(!a) return 1;
-    for(int i=0;i<n;++i) a[i]=(real_t)i;
+    
+    if(!a){
+        return 1;
+    }
+    
+    for(int i=0;i<n;++i){
+        a[i]=(real_t)i;
+    }
 
     #pragma acc enter data copyin(a[0:n]) if(false)
-    if(acc_is_present(a, (size_t)n*sizeof(real_t))) err++;
+    if(acc_is_present(a, (size_t)n*sizeof(real_t))){
+        err++;
+    }
 
     #pragma acc exit data delete(a[0:n]) if(true)
     std::free(a);
@@ -43,11 +51,19 @@ int test1(){
 int test2(){
     int err=0;
     real_t* a=(real_t*)std::malloc(n*sizeof(real_t));
-    if(!a) return 1;
-    for(int i=0;i<n;++i) a[i]=(real_t)i;
+    
+    if(!a){
+        return 1;
+    }
+    
+    for(int i=0;i<n;++i){
+        a[i]=(real_t)i;
+    }
 
     #pragma acc enter data copyin(a[0:n]) if(true)
-    if(!acc_is_present(a, (size_t)n*sizeof(real_t))) err++;
+    if(!acc_is_present(a, (size_t)n*sizeof(real_t))){
+        err++;
+    }
 
     #pragma acc exit data delete(a[0:n]) if(true)
     std::free(a);
@@ -60,14 +76,24 @@ int test2(){
 int test3(){
     int err=0;
     real_t* a=(real_t*)std::malloc(n*sizeof(real_t));
-    if(!a) return 1;
-    for(int i=0;i<n;++i) a[i]=(real_t)i;
+    
+    if(!a){
+        return 1;
+    }
+    
+    for(int i=0;i<n;++i){
+        a[i]=(real_t)i;
+    }
 
     #pragma acc enter data copyin(a[0:n]) if(true)
-    if(!acc_is_present(a, (size_t)n*sizeof(real_t))) err++;
+    if(!acc_is_present(a, (size_t)n*sizeof(real_t))){
+        err++;
+    }
 
     #pragma acc exit data delete(a[0:n]) if(false)
-    if(!acc_is_present(a, (size_t)n*sizeof(real_t))) err++;
+    if(!acc_is_present(a, (size_t)n*sizeof(real_t))){
+        err++;
+    }
 
     #pragma acc exit data delete(a[0:n]) if(true)
     std::free(a);
@@ -80,14 +106,24 @@ int test3(){
 int test4(){
     int err=0;
     real_t* a=(real_t*)std::malloc(n*sizeof(real_t));
-    if(!a) return 1;
-    for(int i=0;i<n;++i) a[i]=(real_t)i;
+    
+    if(!a){
+        return 1;
+    }
+    
+    for(int i=0;i<n;++i){
+        a[i]=(real_t)i;
+    }
 
     #pragma acc enter data copyin(a[0:n]) if(true)
-    if(!acc_is_present(a, (size_t)n*sizeof(real_t))) err++;
+    if(!acc_is_present(a, (size_t)n*sizeof(real_t))){
+        err++;
+    }
 
     #pragma acc exit data delete(a[0:n]) if(true)
-    if(acc_is_present(a, (size_t)n*sizeof(real_t))) err++;
+    if(acc_is_present(a, (size_t)n*sizeof(real_t))){
+        err++;
+    }
 
     std::free(a);
     return err;
@@ -103,20 +139,38 @@ int test5(){
     real_t* a=(real_t*)std::malloc(n*sizeof(real_t));
     real_t* b=(real_t*)std::malloc(n*sizeof(real_t));
     real_t* c=(real_t*)std::malloc(n*sizeof(real_t));
-    if(!a||!b||!c){ std::free(a); std::free(b); std::free(c); return 1; }
+    if(!a||!b||!c){
+        std::free(a);
+        std::free(b);
+        std::free(c); 
+        return 1; 
+    }
 
-    for(int i=0;i<n;++i){ a[i]=std::rand()/(real_t)(RAND_MAX/10); b[i]=std::rand()/(real_t)(RAND_MAX/10); c[i]=0; }
+    for(int i=0;i<n;++i){
+        a[i]=std::rand()/(real_t)(RAND_MAX/10);
+        b[i]=std::rand()/(real_t)(RAND_MAX/10); 
+        c[i]=0; 
+    }
 
     int cond_int = (n > 0);
 
     #pragma acc data copyin(a[0:n],b[0:n]) copyout(c[0:n])
     {
         #pragma acc parallel loop present(a[0:n],b[0:n],c[0:n]) if(cond_int)
-        for(int i=0;i<n;++i) c[i]=a[i]+b[i];
+        for(int i=0;i<n;++i){
+            c[i]=a[i]+b[i];
+        }
     }
 
-    for(int i=0;i<n;++i) if(std::fabs(c[i]-(a[i]+b[i]))>PRECISION) err++;
-    std::free(a); std::free(b); std::free(c);
+    for(int i=0;i<n;++i){
+        if(std::fabs(c[i]-(a[i]+b[i]))>PRECISION){
+            err++;
+        }
+    }
+    
+    std::free(a);
+    std::free(b); 
+    std::free(c);
     return err;
 }
 #endif
@@ -129,9 +183,16 @@ int test6(){
     std::srand(SEED);
     real_t* a=(real_t*)std::malloc(n*sizeof(real_t));
     real_t* c=(real_t*)std::malloc(n*sizeof(real_t));
-    if(!a||!c){ std::free(a); std::free(c); return 1; }
+    if(!a||!c){
+        std::free(a);
+        std::free(c);
+        return 1; 
+    }
 
-    for(int i=0;i<n;++i){ a[i]=std::rand()/(real_t)(RAND_MAX/10); c[i]=0; }
+    for(int i=0;i<n;++i){
+        a[i]=std::rand()/(real_t)(RAND_MAX/10);
+        c[i]=0; 
+    }
 
     void*   cond_ptr = (void*)a;       // non-null pointer => true
     BoolLike cond_obj{1};              // operator bool() => true
@@ -141,21 +202,30 @@ int test6(){
     #pragma acc data copyin(a[0:n]) copyout(c[0:n])
     {
         #pragma acc parallel loop present(a[0:n],c[0:n]) if(cond_obj)
-        for(int i=0;i<n;++i) c[i]=a[i]*(real_t)2.0;
+        for(int i=0;i<n;++i){
+            c[i]=a[i]*(real_t)2.0;
+        }
 
         #pragma acc parallel loop present(a[0:n],c[0:n]) if(cond_ptr)
-        for(int i=0;i<n;++i) c[i]=c[i]+(real_t)1.0;
+        for(int i=0;i<n;++i){
+            c[i]=c[i]+(real_t)1.0;
+        }
 
         #pragma acc parallel loop present(a[0:n],c[0:n]) if(cond_fp)
-        for(int i=0;i<n;++i) c[i]=c[i]+(real_t)1.0;
+        for(int i=0;i<n;++i){
+            c[i]=c[i]+(real_t)1.0;
+        }
     }
 
     for(int i=0;i<n;++i){
         real_t expect = (a[i]*(real_t)2.0) + (real_t)2.0;
-        if(std::fabs(c[i]-expect)>PRECISION) err++;
+        if(std::fabs(c[i]-expect)>PRECISION){
+            err++;
+        }
     }
 
-    std::free(a); std::free(c);
+    std::free(a); 
+    std::free(c);
     return err;
 }
 #endif
