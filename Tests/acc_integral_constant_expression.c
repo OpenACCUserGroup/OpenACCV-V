@@ -1,7 +1,12 @@
 // acc_integral_constant_expression.c
-// Validates that C integral constant expressions (macros and enums) are accepted in OpenACC clause arguments where the spec requires an integral-constant-expression.
-// Uses constant expressions in clauses such as collapse, tile, cache indexing/slices, and gang(dim:) to ensure the compiler parses and applies them correctly.
-// Each test performs simple array computations on the device and verifies results on the host to confirm correct runtime behavior.
+//Feature under test (OpenACC 3.4, Section 1.6, Feb 2026):
+// - Clause arguments that require an integral-constant-expression accept
+//    C integral constant expressions (macros and enum values).
+// 
+//  Notes:
+//  - Uses integral constant expressions in: collapse, tile, cache (index and slice),
+//   and gang(dim:) to validate compile-time constant handling.
+
 
 #include "acc_testsuite.h"
 #include <openacc.h>
