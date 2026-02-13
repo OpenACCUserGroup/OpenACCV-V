@@ -1,6 +1,6 @@
 ! acc_named_constant_data_firstprivate.F90
 !
-! Feature under test (OpenACC 3.4, Section 1.6):
+! Feature under test (OpenACC 3.4, Section 1.6, Feb 2026):
 ! - A Fortran named constant (PARAMETER) is a valid "var" and is allowed
 !   in data clauses and firstprivate clauses.
 !
