@@ -4,18 +4,17 @@
 // - A pqr-list must contain at least one item.
 // - A pqr-list must not have a trailing comma.
 //
-// This test exercises valid pqr-list forms in:
-//   - var-lists (copyin, copyout, present)
-//   - int-expr-lists (wait)
+// Notes:
+//   T1: int-expr-list is non-empty (single-item list)
+//   T2: int-expr-list has no trailing comma (multi-item list)
+//   T3: var-list is non-empty (single-item list)
+//   T4: var-list has no trailing comma (multi-item list)
 //
-// Only spec-compliant (non-empty, no trailing comma) forms are used.
 
 
 #include "acc_testsuite.h"
 
 #ifndef T1
-//T1:syntax,pqr-list,runtime,construct-independent,V:3.4-
-// int-expr-list non-empty (single item) via wait(1)
 int test1(void){
     int err = 0;
     srand(SEED);
@@ -24,7 +23,9 @@ int test1(void){
     real_t *b = (real_t*)malloc(n * sizeof(real_t));
     real_t *c = (real_t*)malloc(n * sizeof(real_t));
     if (!a || !b || !c){
-        free(a); free(b); free(c);
+        free(a); 
+        free(b); 
+        free(c);
         return 1;
     }
 
@@ -41,22 +42,23 @@ int test1(void){
             c[i] = a[i] + b[i];
         }
 
-        // Valid int-expr-list (non-empty)
         #pragma acc wait(1)
     }
 
     for (int i = 0; i < n; ++i){
-        if (fabs(c[i] - (a[i] + b[i])) > PRECISION) err++;
+        if (fabs(c[i] - (a[i] + b[i])) > PRECISION){
+            err++;
+        }
     }
 
-    free(a); free(b); free(c);
+    free(a); 
+    free(b);
+    free(c);
     return err;
 }
 #endif
 
 #ifndef T2
-//T2:syntax,pqr-list,runtime,construct-independent,V:3.4-
-// int-expr-list no trailing comma (multi-item list) via wait(1,2)
 int test2(void){
     int err = 0;
     srand(SEED);
@@ -65,7 +67,9 @@ int test2(void){
     real_t *b = (real_t*)malloc(n * sizeof(real_t));
     real_t *c = (real_t*)malloc(n * sizeof(real_t));
     if (!a || !b || !c){
-        free(a); free(b); free(c);
+        free(a); 
+        free(b); 
+        free(c);
         return 1;
     }
 
@@ -82,13 +86,11 @@ int test2(void){
             c[i] = a[i] + b[i];
         }
 
-        // second async region to make queue 2 meaningful
         #pragma acc parallel loop present(c[0:n]) async(2)
         for (int i = 0; i < n; ++i){
             c[i] = c[i];
         }
 
-        // Valid multi-item int-expr-list with NO trailing comma
         #pragma acc wait(1,2)
     }
 
@@ -96,14 +98,14 @@ int test2(void){
         if (fabs(c[i] - (a[i] + b[i])) > PRECISION) err++;
     }
 
-    free(a); free(b); free(c);
+    free(a); 
+    free(b); 
+    free(c);
     return err;
 }
 #endif
 
 #ifndef T3
-//T3:syntax,pqr-list,runtime,construct-independent,V:3.4-
-// var-list non-empty (single item) via copyin(a[0:n])
 int test3(void){
     int err = 0;
     srand(SEED);
@@ -111,7 +113,8 @@ int test3(void){
     real_t *a = (real_t*)malloc(n * sizeof(real_t));
     real_t *c = (real_t*)malloc(n * sizeof(real_t));
     if (!a || !c){
-        free(a); free(c);
+        free(a); 
+        free(c);
         return 1;
     }
 
@@ -120,7 +123,6 @@ int test3(void){
         c[i] = 0;
     }
 
-    // Valid single-item var-list (non-empty)
     #pragma acc data copyin(a[0:n]) copyout(c[0:n])
     {
         #pragma acc parallel loop present(a[0:n], c[0:n])
@@ -130,17 +132,18 @@ int test3(void){
     }
 
     for (int i = 0; i < n; ++i){
-        if (fabs(c[i] - (a[i] * 2)) > PRECISION) err++;
+        if (fabs(c[i] - (a[i] * 2)) > PRECISION){
+            err++;
+        }
     }
 
-    free(a); free(c);
+    free(a); 
+    free(c);
     return err;
 }
 #endif
 
 #ifndef T4
-//T4:syntax,pqr-list,runtime,construct-independent,V:3.4-
-// var-list no trailing comma (multi-item) via copyin(a[0:n], b[0:n]) and present(a,b,c)
 int test4(void){
     int err = 0;
     srand(SEED);
@@ -149,7 +152,9 @@ int test4(void){
     real_t *b = (real_t*)malloc(n * sizeof(real_t));
     real_t *c = (real_t*)malloc(n * sizeof(real_t));
     if (!a || !b || !c){
-        free(a); free(b); free(c);
+        free(a); 
+        free(b); 
+        free(c);
         return 1;
     }
 
@@ -159,7 +164,6 @@ int test4(void){
         c[i] = 0;
     }
 
-    // Valid multi-item var-list with NO trailing comma
     #pragma acc data copyin(a[0:n], b[0:n]) copyout(c[0:n])
     {
         #pragma acc parallel loop present(a[0:n], b[0:n], c[0:n])
@@ -169,10 +173,14 @@ int test4(void){
     }
 
     for (int i = 0; i < n; ++i){
-        if (fabs(c[i] - (a[i] + b[i])) > PRECISION) err++;
+        if (fabs(c[i] - (a[i] + b[i])) > PRECISION){
+            err++;
+        }
     }
 
-    free(a); free(b); free(c);
+    free(a); 
+    free(b); 
+    free(c);
     return err;
 }
 #endif
@@ -183,23 +191,39 @@ int main(void){
 
 #ifndef T1
     failed = 0;
-    for (int i = 0; i < NUM_TEST_CALLS; ++i) failed += test1();
-    if (failed) failcode |= (1 << 0);
+    for (int i = 0; i < NUM_TEST_CALLS; ++i){
+        failed += test1();
+    }
+    if (failed){
+        failcode |= (1 << 0);
+    }
 #endif
 #ifndef T2
     failed = 0;
-    for (int i = 0; i < NUM_TEST_CALLS; ++i) failed += test2();
-    if (failed) failcode |= (1 << 1);
+    for (int i = 0; i < NUM_TEST_CALLS; ++i){
+        failed += test2();
+    }
+    if (failed){
+        failcode |= (1 << 1);
+    }
 #endif
 #ifndef T3
     failed = 0;
-    for (int i = 0; i < NUM_TEST_CALLS; ++i) failed += test3();
-    if (failed) failcode |= (1 << 2);
+    for (int i = 0; i < NUM_TEST_CALLS; ++i){
+        failed += test3();
+    }
+    if (failed){
+        failcode |= (1 << 2);
+    }
 #endif
 #ifndef T4
     failed = 0;
-    for (int i = 0; i < NUM_TEST_CALLS; ++i) failed += test4();
-    if (failed) failcode |= (1 << 3);
+    for (int i = 0; i < NUM_TEST_CALLS; ++i){
+        failed += test4();
+    }
+    if (failed){
+        failcode |= (1 << 3);
+    }
 #endif
 
     return failcode;
