@@ -4,11 +4,12 @@
 ! - A pqr-list must contain at least one item.
 ! - A pqr-list must not have a trailing comma.
 !
-! This test exercises valid pqr-list usage in:
-!   - var-lists (copyin, copy)
-!   - int-expr-lists (wait)
+! Notes:
+!   T1: int-expr-list is non-empty (single-item list)
+!   T2: int-expr-list has no trailing comma (multi-item list)
+!   T3: var-list is non-empty (single-item list)
+!   T4: var-list has no trailing comma (multi-item list)
 !
-! Only spec-compliant (non-empty, no trailing comma) forms are used.
 
 
 #ifndef T1
@@ -44,7 +45,9 @@
         !$acc end data
 
         DO i = 1, LOOPCOUNT
-          IF (ABS(c(i) - (a(i) + b(i))) .GT. PRECISION) errors = errors + 1
+          IF (ABS(c(i) - (a(i) + b(i))) .GT. PRECISION) THEN
+            errors = errors + 1
+          END IF
         END DO
 
         test1 = (errors .NE. 0)
@@ -91,7 +94,9 @@
         !$acc end data
 
         DO i = 1, LOOPCOUNT
-          IF (ABS(c(i) - (a(i) + b(i))) .GT. PRECISION) errors = errors + 1
+          IF (ABS(c(i) - (a(i) + b(i))) .GT. PRECISION) THEN
+            errors = errors + 1
+          END IF
         END DO
 
         test2 = (errors .NE. 0)
@@ -128,7 +133,9 @@
         !$acc end data
 
         DO i = 1, LOOPCOUNT
-          IF (ABS(c(i) - (2.0D0 * a(i))) .GT. PRECISION) errors = errors + 1
+          IF (ABS(c(i) - (2.0D0 * a(i))) .GT. PRECISION) THEN
+            errors = errors + 1
+          END IF
         END DO
 
         test3 = (errors .NE. 0)
@@ -166,7 +173,9 @@
         !$acc end data
 
         DO i = 1, LOOPCOUNT
-          IF (ABS(c(i) - (a(i) + b(i))) .GT. PRECISION) errors = errors + 1
+          IF (ABS(c(i) - (a(i) + b(i))) .GT. PRECISION) THEN
+            errors = errors + 1
+          END IF
         END DO
 
         test4 = (errors .NE. 0)
@@ -198,7 +207,9 @@
         DO testrun = 1, NUM_TEST_CALLS
           failed = failed .OR. test1()
         END DO
-        IF (failed) failcode = failcode + 2**0
+        IF (failed) THEN
+          failcode = failcode + 2**0
+        END IF
 #endif
 
 #ifndef T2
@@ -206,7 +217,9 @@
         DO testrun = 1, NUM_TEST_CALLS
           failed = failed .OR. test2()
         END DO
-        IF (failed) failcode = failcode + 2**1
+        IF (failed) THEN
+          failcode = failcode + 2**1
+        END IF
 #endif
 
 #ifndef T3
@@ -214,7 +227,9 @@
         DO testrun = 1, NUM_TEST_CALLS
           failed = failed .OR. test3()
         END DO
-        IF (failed) failcode = failcode + 2**2
+        IF (failed) THEN
+          failcode = failcode + 2**2
+        END IF
 #endif
 
 #ifndef T4
@@ -222,7 +237,9 @@
         DO testrun = 1, NUM_TEST_CALLS
           failed = failed .OR. test4()
         END DO
-        IF (failed) failcode = failcode + 2**3
+        IF (failed) THEN
+          failcode = failcode + 2**3
+        END IF
 #endif
 
         CALL EXIT(failcode)
