@@ -4,11 +4,12 @@
 // - A pqr-list must contain at least one item.
 // - A pqr-list must not have a trailing comma.
 //
-// This test exercises valid pqr-list forms in C++ compilation mode for:
-//   - var-lists (copyin, copyout, present)
-//   - int-expr-lists (wait)
+// Notes:
+//   T1: int-expr-list is non-empty (single-item list)
+//   T2: int-expr-list has no trailing comma (multi-item list)
+//   T3: var-list is non-empty (single-item list)
+//   T4: var-list has no trailing comma (multi-item list)
 //
-// All pqr-lists used are non-empty and contain no trailing commas.
 
 
 #include "acc_testsuite.h"
@@ -16,7 +17,6 @@
 #include <cmath>
 
 #ifndef T1
-//T1:syntax,pqr-list,runtime,construct-independent,V:3.4-
 int test1(){
     int err = 0;
     srand(SEED);
@@ -25,7 +25,9 @@ int test1(){
     real_t* b = (real_t*)malloc(n * sizeof(real_t));
     real_t* c = (real_t*)malloc(n * sizeof(real_t));
     if (!a || !b || !c){
-        free(a); free(b); free(c);
+        free(a); 
+        free(b); 
+        free(c);
         return 1;
     }
 
@@ -45,16 +47,19 @@ int test1(){
     }
 
     for (int i = 0; i < n; ++i){
-        if (fabs(c[i] - (a[i] + b[i])) > PRECISION) err++;
+        if (fabs(c[i] - (a[i] + b[i])) > PRECISION){
+            err++;
+        }
     }
 
-    free(a); free(b); free(c);
+    free(a); 
+    free(b); 
+    free(c);
     return err;
 }
 #endif
 
 #ifndef T2
-//T2:syntax,pqr-list,runtime,construct-independent,V:3.4-
 int test2(){
     int err = 0;
     srand(SEED);
@@ -63,7 +68,9 @@ int test2(){
     real_t* b = (real_t*)malloc(n * sizeof(real_t));
     real_t* c = (real_t*)malloc(n * sizeof(real_t));
     if (!a || !b || !c){
-        free(a); free(b); free(c);
+        free(a); 
+        free(b); 
+        free(c);
         return 1;
     }
 
@@ -87,16 +94,19 @@ int test2(){
     }
 
     for (int i = 0; i < n; ++i){
-        if (fabs(c[i] - (a[i] + b[i])) > PRECISION) err++;
+        if (fabs(c[i] - (a[i] + b[i])) > PRECISION){
+            err++;
+        }
     }
 
-    free(a); free(b); free(c);
+    free(a); 
+    free(b); 
+    free(c);
     return err;
 }
 #endif
 
 #ifndef T3
-//T3:syntax,pqr-list,runtime,construct-independent,V:3.4-
 int test3(){
     int err = 0;
     srand(SEED);
@@ -104,7 +114,8 @@ int test3(){
     real_t* a = (real_t*)malloc(n * sizeof(real_t));
     real_t* c = (real_t*)malloc(n * sizeof(real_t));
     if (!a || !c){
-        free(a); free(c);
+        free(a); 
+        free(c);
         return 1;
     }
 
@@ -122,16 +133,18 @@ int test3(){
     }
 
     for (int i = 0; i < n; ++i){
-        if (fabs(c[i] - (a[i] * 2)) > PRECISION) err++;
+        if (fabs(c[i] - (a[i] * 2)) > PRECISION){
+            err++;
+        }
     }
 
-    free(a); free(c);
+    free(a); 
+    free(c);
     return err;
 }
 #endif
 
 #ifndef T4
-//T4:syntax,pqr-list,runtime,construct-independent,V:3.4-
 int test4(){
     int err = 0;
     srand(SEED);
@@ -140,7 +153,9 @@ int test4(){
     real_t* b = (real_t*)malloc(n * sizeof(real_t));
     real_t* c = (real_t*)malloc(n * sizeof(real_t));
     if (!a || !b || !c){
-        free(a); free(b); free(c);
+        free(a); 
+        free(b); 
+        free(c);
         return 1;
     }
 
@@ -159,10 +174,14 @@ int test4(){
     }
 
     for (int i = 0; i < n; ++i){
-        if (fabs(c[i] - (a[i] + b[i])) > PRECISION) err++;
+        if (fabs(c[i] - (a[i] + b[i])) > PRECISION){
+            err++;
+        }
     }
 
-    free(a); free(b); free(c);
+    free(a); 
+    free(b); 
+    free(c);
     return err;
 }
 #endif
@@ -173,23 +192,39 @@ int main(){
 
 #ifndef T1
     failed = 0;
-    for (int i = 0; i < NUM_TEST_CALLS; ++i) failed += test1();
-    if (failed) failcode |= (1 << 0);
+    for (int i = 0; i < NUM_TEST_CALLS; ++i){
+        failed += test1();
+    }
+    if (failed){
+        failcode |= (1 << 0);
+    }
 #endif
 #ifndef T2
     failed = 0;
-    for (int i = 0; i < NUM_TEST_CALLS; ++i) failed += test2();
-    if (failed) failcode |= (1 << 1);
+    for (int i = 0; i < NUM_TEST_CALLS; ++i){
+        failed += test2();
+    }
+    if (failed){
+        failcode |= (1 << 1);
+    }
 #endif
 #ifndef T3
     failed = 0;
-    for (int i = 0; i < NUM_TEST_CALLS; ++i) failed += test3();
-    if (failed) failcode |= (1 << 2);
+    for (int i = 0; i < NUM_TEST_CALLS; ++i){
+        failed += test3();
+    }
+    if (failed){
+        failcode |= (1 << 2);
+    }
 #endif
 #ifndef T4
     failed = 0;
-    for (int i = 0; i < NUM_TEST_CALLS; ++i) failed += test4();
-    if (failed) failcode |= (1 << 3);
+    for (int i = 0; i < NUM_TEST_CALLS; ++i){
+        failed += test4();
+    }
+    if (failed){
+        failcode |= (1 << 3);
+    }
 #endif
 
     return failcode;
