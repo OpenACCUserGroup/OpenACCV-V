@@ -5,8 +5,26 @@
 !   in data clauses and firstprivate clauses.
 !
 ! Notes:
-! - We only use named constants in read-only ways (copyin/create/firstprivate)
-!   and never in a way that would require writing back to the constant.
+!  T1: A Fortran INTEGER PARAMETER can appear in a firstprivate clause.
+!   This test checks it is correctly available on the device.
+!
+!  T2: A Fortran REAL PARAMETER can appear in a firstprivate clause.
+!   This test checks it works correctly on the device.
+!
+!  T3: A Fortran PARAMETER can appear in a data clause (copyin).
+!   This test checks it is usable inside a device region.
+!
+!  T4: A PARAMETER array can appear in a firstprivate clause.
+!   This test checks correct device behavior.
+!
+!  T5: A PARAMETER array can appear in a data clause (copyin).
+!   This test checks it is accessible on the device.
+!
+!  T6: A PARAMETER can appear in a create clause.
+!   This test checks it can be used on the device.
+!
+!  T7: A PARAMETER can appear in present_or_copyin.
+!   This test checks correct device access.
 
 
 #ifndef T1
@@ -32,7 +50,9 @@
         !$acc end data
 
         DO i = 1, LOOPCOUNT
-          IF (ABS(c(i) - (a(i) + DBLE(K))) .GT. PRECISION) errors = errors + 1
+          IF (ABS(c(i) - (a(i) + DBLE(K))) .GT. PRECISION) THEN
+            errors = errors + 1
+          END IF
         END DO
 
         test1 = (errors .NE. 0)
@@ -62,7 +82,9 @@
         !$acc end data
 
         DO i = 1, LOOPCOUNT
-          IF (ABS(c(i) - (ALPHA * a(i))) .GT. PRECISION) errors = errors + 1
+          IF (ABS(c(i) - (ALPHA * a(i))) .GT. PRECISION) THEN
+            errors = errors + 1
+          END IF
         END DO
 
         test2 = (errors .NE. 0)
@@ -93,7 +115,9 @@
         !$acc end data
 
         DO i = 1, LOOPCOUNT
-          IF (ABS(c(i) - (a(i) + DBLE(SHIFT))) .GT. PRECISION) errors = errors + 1
+          IF (ABS(c(i) - (a(i) + DBLE(SHIFT))) .GT. PRECISION) THEN
+            errors = errors + 1
+          END IF
         END DO
 
         test3 = (errors .NE. 0)
@@ -123,7 +147,9 @@
         !$acc end data
 
         DO i = 1, LOOPCOUNT
-          IF (ABS(c(i) - (W(1) * a(i) + W(2))) .GT. PRECISION) errors = errors + 1
+          IF (ABS(c(i) - (W(1) * a(i) + W(2))) .GT. PRECISION) THEN
+            errors = errors + 1
+          END IF
         END DO
 
         test4 = (errors .NE. 0)
@@ -154,7 +180,9 @@
         !$acc end data
 
         DO i = 1, LOOPCOUNT
-          IF (ABS(c(i) - (BIAS(2) * a(i) + BIAS(1))) .GT. PRECISION) errors = errors + 1
+          IF (ABS(c(i) - (BIAS(2) * a(i) + BIAS(1))) .GT. PRECISION) THEN
+            errors = errors + 1
+          END IF
         END DO
 
         test5 = (errors .NE. 0)
@@ -184,7 +212,9 @@
         !$acc end data
 
         DO i = 1, LOOPCOUNT
-          IF (ABS(c(i) - (DBLE(MULT) * a(i))) .GT. PRECISION) errors = errors + 1
+          IF (ABS(c(i) - (DBLE(MULT) * a(i))) .GT. PRECISION) THEN
+            errors = errors + 1
+          END IF
         END DO
 
         test6 = (errors .NE. 0)
@@ -214,7 +244,9 @@
         !$acc end data
 
         DO i = 1, LOOPCOUNT
-          IF (ABS(c(i) - (a(i) + DBLE(OFF))) .GT. PRECISION) errors = errors + 1
+          IF (ABS(c(i) - (a(i) + DBLE(OFF))) .GT. PRECISION) THEN
+            errors = errors + 1
+          END IF
         END DO
 
         test7 = (errors .NE. 0)
@@ -255,49 +287,63 @@
         DO testrun = 1, NUM_TEST_CALLS
           failed = failed .OR. test1()
         END DO
-        IF (failed) failcode = failcode + 2**0
+        IF (failed) THEN
+          failcode = failcode + 2**0
+        END IF
 #endif
 #ifndef T2
         failed = .FALSE.
         DO testrun = 1, NUM_TEST_CALLS
           failed = failed .OR. test2()
         END DO
-        IF (failed) failcode = failcode + 2**1
+        IF (failed) THEN
+          failcode = failcode + 2**1
+        END IF
 #endif
 #ifndef T3
         failed = .FALSE.
         DO testrun = 1, NUM_TEST_CALLS
           failed = failed .OR. test3()
         END DO
-        IF (failed) failcode = failcode + 2**2
+        IF (failed) THEN
+          failcode = failcode + 2**2
+        END IF
 #endif
 #ifndef T4
         failed = .FALSE.
         DO testrun = 1, NUM_TEST_CALLS
           failed = failed .OR. test4()
         END DO
-        IF (failed) failcode = failcode + 2**3
+        IF (failed) THEN
+          failcode = failcode + 2**3
+        END IF
 #endif
 #ifndef T5
         failed = .FALSE.
         DO testrun = 1, NUM_TEST_CALLS
           failed = failed .OR. test5()
         END DO
-        IF (failed) failcode = failcode + 2**4
+        IF (failed) THEN
+          failcode = failcode + 2**4
+        END IF
 #endif
 #ifndef T6
         failed = .FALSE.
         DO testrun = 1, NUM_TEST_CALLS
           failed = failed .OR. test6()
         END DO
-        IF (failed) failcode = failcode + 2**5
+        IF (failed) THEN
+          failcode = failcode + 2**5
+        END IF
 #endif
 #ifndef T7
         failed = .FALSE.
         DO testrun = 1, NUM_TEST_CALLS
           failed = failed .OR. test7()
         END DO
-        IF (failed) failcode = failcode + 2**6
+        IF (failed) THEN
+          failcode = failcode + 2**6
+        END IF
 #endif
 
         CALL EXIT(failcode)
