@@ -4,10 +4,24 @@
 ! - Clause arguments that require an integral-constant-expression accept
 !   Fortran integer constant expressions declared with PARAMETER.
 !
-! Notes:
-! - Uses PARAMETER constants in: collapse, tile, cache bounds/lengths,
-!   and gang(dim:) to validate compile-time constant handling.
-
+!  T1: collapse() accepts an integral-constant-expression (ICE).
+!   This test uses a PARAMETER constant expression in collapse().
+!
+!  T2: tile() accepts an integral-constant-expression (ICE).
+!   This test uses a PARAMETER constant expression in tile().
+!
+!  T3: tile() accepts ICE values.
+!   This test uses PARAMETER ICE values in tile( , ).
+!
+!  T4: cache() slice bounds accept integral-constant-expressions (ICE).
+!   This test uses PARAMETER ICE values in cache(lower:upper).
+!
+!  T5:cache() slice bounds accept integral-constant-expressions (ICE).
+!   This test uses PARAMETER ICE values in cache(lower:upper).
+!
+!  T6: gang(dim:) accepts an integral-constant-expression (ICE) (must be 1..3).
+!   This test uses a PARAMETER ICE value in gang(dim:).
+!
 
 #ifndef T1
 !T1:syntax,collapse-clause,runtime,loop,V:3.4-
@@ -35,7 +49,9 @@
           !$acc end parallel loop
         !$acc end data
         DO idx = 1, M_T2*N_T2
-          IF (ABS(c(idx)-(a(idx)+b(idx))) .GT. PRECISION) errors = errors + 1
+          IF (ABS(c(idx)-(a(idx)+b(idx))) .GT. PRECISION) THEN
+            errors = errors + 1
+          END IF
         END DO
         test1 = (errors .NE. 0)
       END FUNCTION
@@ -62,7 +78,9 @@
           !$acc end parallel loop
         !$acc end data
         DO i = 1, M_T3
-          IF (ABS(c(i) - 2.0D0*a(i)) .GT. PRECISION) errors = errors + 1
+          IF (ABS(c(i) - 2.0D0*a(i)) .GT. PRECISION) THEN
+            errors = errors + 1
+          END IF
         END DO
         test2 = (errors .NE. 0)
       END FUNCTION
@@ -93,7 +111,9 @@
           !$acc end parallel loop
         !$acc end data
         DO idx = 1, M_T4*N_T4
-          IF (ABS(c(idx)-(a(idx)+b(idx))) .GT. PRECISION) errors = errors + 1
+          IF (ABS(c(idx)-(a(idx)+b(idx))) .GT. PRECISION) THEN
+            errors = errors + 1
+          END IF
         END DO
         test3 = (errors .NE. 0)
       END FUNCTION
@@ -125,7 +145,9 @@
 
         !$acc end data
         DO i = 1, M_T5
-          IF (ABS(cp(i) - (p(i)+1.0D0)) .GT. PRECISION) errors = errors + 1
+          IF (ABS(cp(i) - (p(i)+1.0D0)) .GT. PRECISION) THEN
+            errors = errors + 1
+          END IF
         END DO
         test4 = (errors .NE. 0)
       END FUNCTION
@@ -157,7 +179,9 @@
 
         !$acc end data
         DO i = 1, M_T6
-          IF (ABS(cq(i) - 2.0D0*q(i)) .GT. PRECISION) errors = errors + 1
+          IF (ABS(cq(i) - 2.0D0*q(i)) .GT. PRECISION) THEN 
+            errors = errors + 1
+          END IF
         END DO
         test5 = (errors .NE. 0)
       END FUNCTION
@@ -186,7 +210,9 @@
           !$acc end parallel loop
         !$acc end data
         DO i = 1, M_T7
-          IF (ABS(c(i) - 2.0D0*a(i)) .GT. PRECISION) errors = errors + 1
+          IF (ABS(c(i) - 2.0D0*a(i)) .GT. PRECISION) THEN
+            errors = errors + 1
+          END IF
         END DO
         test6 = (errors .NE. 0)
       END FUNCTION
@@ -220,42 +246,54 @@
         DO testrun = 1, NUM_TEST_CALLS
           failed = failed .OR. test1()
         END DO
-        IF (failed) failcode = failcode + 2**0
+        IF (failed) THEN
+            failcode = failcode + 2**0
+        END IF
 #endif
 #ifndef T2
         failed = .FALSE.
         DO testrun = 1, NUM_TEST_CALLS
           failed = failed .OR. test2()
         END DO
-        IF (failed) failcode = failcode + 2**1
+        IF (failed) THEN
+            failcode = failcode + 2**1
+        END IF
 #endif
 #ifndef T3
         failed = .FALSE.
         DO testrun = 1, NUM_TEST_CALLS
           failed = failed .OR. test3()
         END DO
-        IF (failed) failcode = failcode + 2**2
+        IF (failed) THEN
+            failcode = failcode + 2**2
+        END IF
 #endif
 #ifndef T4
         failed = .FALSE.
         DO testrun = 1, NUM_TEST_CALLS
           failed = failed .OR. test4()
         END DO
-        IF (failed) failcode = failcode + 2**3
+        IF (failed) THEN
+            failcode = failcode + 2**3
+        END IF
 #endif
 #ifndef T5
         failed = .FALSE.
         DO testrun = 1, NUM_TEST_CALLS
           failed = failed .OR. test5()
         END DO
-        IF (failed) failcode = failcode + 2**4
+        IF (failed) THEN
+            failcode = failcode + 2**4
+        END IF
 #endif
 #ifndef T6
         failed = .FALSE.
         DO testrun = 1, NUM_TEST_CALLS
           failed = failed .OR. test6()
         END DO
-        IF (failed) failcode = failcode + 2**5
+        IF (failed) THEN
+            failcode = failcode + 2**5
+        END IF
 #endif
         CALL EXIT(failcode)
       END PROGRAM
