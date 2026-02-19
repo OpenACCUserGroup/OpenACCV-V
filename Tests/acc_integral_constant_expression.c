@@ -4,26 +4,14 @@
 // - Clause arguments that require an integral-constant-expression accept
 //    C integral constant expressions (macros and enum values).
 // 
-//  Notes:
-//  T1: collapse() accepts an integral-constant-expression (ICE).
-//   This test uses a macro ICE in collapse() and checks runtime correctness.
-//  
-//  T2: tile() accepts an integral-constant-expression (ICE).
-//   This test uses a macro ICE in tile() and checks runtime correctness.
-//
-//  T3: tile() accepts ICE values (enums/macros).
-//   This test mixes enum + macro ICE in tile() and checks correctness.
-//
-//  T4: cache() indexing accepts an integral-constant-expression (ICE).
-//   This test uses an enum ICE as the cache element index.
-//
-//  T5: cache() subarray slices accept ICE values.
-//   This test uses enum/macro ICE for lower:length in cache().
-//
-//  T6: gang(dim:) accepts an integral-constant-expression (ICE) (valid range 1..3).
-//   This test uses an enum ICE in gang(dim:) and checks runtime correctness.
-// – Some compilers may not support the 'dim:' keyword form yet; keep this as spec conformance coverage.
-//
+// Notes:
+// - T1: collapse() uses a macro ICE.
+// - T2: tile() uses a macro ICE.
+// - T3: tile() mixes enum + macro ICE.
+// - T4: cache() element index uses an enum ICE.
+// - T5: cache() lower:length slice uses ICE values.
+// - T6: gang(dim:) uses an enum ICE (must be 1..3).
+//   Some compilers may not support gang(dim:) yet; keep for spec coverage.
 
 #include "acc_testsuite.h"
 #include <openacc.h>
