@@ -1,4 +1,5 @@
 // acc_expr_eval_directive_args.c
+//
 // Feature under test (OpenACC 3.4, Section 2.1, Feb 2026):
 // - Clarified user-visible behavior of evaluation of expressions in directive arguments.
 //   A program must not depend on the order/number of evaluations of expressions in
@@ -16,7 +17,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-/* Pure helpers: deterministic, no side effects */
 static int foo_pure(int x){
     return (x % 64) + 1;
 }
@@ -25,7 +25,6 @@ static int bar_pure(int x){
     return (x % 32) + 1;
 }
 
-/* Side-effecting helper used only to exercise "may be elided"; we never assert call count */
 static volatile int size_calls = 0;
 
 static int size_maybe_elided(int nval){
@@ -34,7 +33,6 @@ static int size_maybe_elided(int nval){
 }
 
 #ifndef T1
-//T1:syntax,expressions,runtime,construct-independent,V:3.4-
 int test1(){
     int err = 0;
     int cond = 0;
@@ -100,7 +98,6 @@ int test1(){
 #endif
 
 #ifndef T2
-//T2:syntax,expressions,runtime,construct-independent,V:3.4-
 int test2(){
     int err = 0;
 
@@ -113,18 +110,14 @@ int test2(){
         a[i] = (real_t)i;
     }
 
-    /* Ensure 'a' is NOT present on device: we do not enter/create any data for it. */
     size_calls = 0;
     #pragma acc update device(a[0:size_maybe_elided(n)]) if_present
 
-    /* User-visible behavior: no crash; host values unchanged. */
     for (int i = 0; i < n; ++i){
         if (fabs(a[i] - (real_t)i) > PRECISION){
             err = err + 1;
         }
     }
-
-    /* DO NOT assert anything about size_calls (may be 0, 1, or more). */
 
     free(a);
     return err;
@@ -132,7 +125,6 @@ int test2(){
 #endif
 
 #ifndef T3
-//T3:syntax,expressions,runtime,construct-independent,V:3.4-
 int test3(){
     int err = 0;
 
@@ -161,9 +153,6 @@ int test3(){
         c[k] = 0;
     }
 
-    /* Side-effecting expressions in directive arguments.
-       Per Section 2.1, evaluation order/number is unspecified.
-       We do NOT use i afterward (do not rely on side effects). */
     int i = 0;
 
     #pragma acc data copyin(a[0:n], b[0:n]) copy(c[0:n])
@@ -188,7 +177,6 @@ int test3(){
         }
     }
 
-    /* DO NOT assert anything about i. */
 
     free(a);
     free(b);
