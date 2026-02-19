@@ -4,9 +4,26 @@
 // - Clause arguments that require an integral-constant-expression accept
 //   C++ integral constant expressions (constexpr values and enum values).
 //
-// Notes:
-// - Uses integral constant expressions in: collapse, tile, cache (index and slice),
-//   and gang(dim:) to validate compile-time constant handling.
+//  Notes:
+//  T1: collapse() accepts an integral-constant-expression (ICE).
+//   This test uses a macro ICE in collapse() and checks runtime correctness.
+//  
+//  T2: tile() accepts an integral-constant-expression (ICE).
+//   This test uses a macro ICE in tile() and checks runtime correctness.
+//
+//  T3: tile() accepts ICE values (enums/macros).
+//   This test mixes enum + macro ICE in tile() and checks correctness.
+//
+//  T4: cache() indexing accepts an integral-constant-expression (ICE).
+//   This test uses an enum ICE as the cache element index.
+//
+//  T5: cache() subarray slices accept ICE values.
+//   This test uses enum/macro ICE for lower:length in cache().
+//
+//  T6: gang(dim:) accepts an integral-constant-expression (ICE) (valid range 1..3).
+//   This test uses an enum ICE in gang(dim:) and checks runtime correctness.
+// – Some compilers may not support the 'dim:' keyword form yet; keep this as spec conformance coverage.
+//
 
 
 #include "acc_testsuite.h"
@@ -35,7 +52,13 @@ int test1(){
         std::free(c);
         return 1;
     }
-    for(int i=0;i<MN;i++){ a[i]=(real_t)(i+2); b[i]=(real_t)(i-1); c[i]=0; }
+    
+    for(int i=0;i<MN;i++){ 
+        a[i]=(real_t)(i+2); 
+        b[i]=(real_t)(i-1);
+        c[i]=0;
+    }
+    
     #pragma acc data copyin(a[0:MN],b[0:MN]) copyout(c[0:MN])
     {
         #pragma acc parallel loop collapse(ICE_CONST2)
@@ -47,7 +70,9 @@ int test1(){
         }
     }
     for(int i=0;i<MN;i++){
-        if (std::fabs(c[i] - (a[i] + b[i])) > PRECISION) err++;
+        if (std::fabs(c[i] - (a[i] + b[i])) > PRECISION){
+            err++;
+        }
     }
     std::free(a);
     std::free(b);
@@ -68,7 +93,11 @@ int test2(){
         std::free(c);
         return 1;
     }
-    for(int i=0;i<M;i++){ a[i]=(real_t)i; c[i]=0; }
+    
+    for(int i=0;i<M;i++){
+        a[i]=(real_t)i; c[i]=0;
+    }
+    
     #pragma acc data copyin(a[0:M]) copyout(c[0:M])
     {
         #pragma acc parallel loop tile(ICE_CONST2)
@@ -76,8 +105,11 @@ int test2(){
             c[i] = a[i] * (real_t)2.0;
         }
     }
+    
     for(int i=0;i<M;i++){
-        if (std::fabs(c[i] - a[i]*(real_t)2.0) > PRECISION) err++;
+        if (std::fabs(c[i] - a[i]*(real_t)2.0) > PRECISION){
+            err++;
+        }
     }
     std::free(a);
     std::free(c);
@@ -99,7 +131,13 @@ int test3(){
         std::free(c);
         return 1;
     }
-    for(int i=0;i<MN;i++){ a[i]=(real_t)(i+1); b[i]=(real_t)(3*i); c[i]=0; }
+    
+    for(int i=0;i<MN;i++){
+        a[i]=(real_t)(i+1);
+        b[i]=(real_t)(3*i); 
+        c[i]=0; 
+    }
+    
     #pragma acc data copyin(a[0:MN],b[0:MN]) copyout(c[0:MN])
     {
         #pragma acc parallel loop tile(ICE_CONST2, (int)E2::V)
@@ -111,7 +149,9 @@ int test3(){
         }
     }
     for(int i=0;i<MN;i++){
-        if (std::fabs(c[i] - (a[i] + b[i])) > PRECISION) err++;
+        if (std::fabs(c[i] - (a[i] + b[i])) > PRECISION){
+            err++;
+        }
     }
     std::free(a);
     std::free(b);
@@ -132,7 +172,12 @@ int test4(){
         std::free(c);
         return 1;
     }
-    for(int i=0;i<M;i++){ a[i]=(real_t)i; c[i]=0; }
+    
+    for(int i=0;i<M;i++){
+        a[i]=(real_t)i;
+        c[i]=0; 
+    }
+    
     #pragma acc data copyin(a[0:M]) copyout(c[0:M])
     {
         #pragma acc parallel loop
@@ -141,9 +186,13 @@ int test4(){
             c[i] = a[i] + (real_t)1.0;
         }
     }
+    
     for(int i=0;i<M;i++){
-        if (std::fabs(c[i] - (a[i]+(real_t)1.0)) > PRECISION) err++;
+        if (std::fabs(c[i] - (a[i]+(real_t)1.0)) > PRECISION){
+            err++;
+        }
     }
+    
     std::free(a);
     std::free(c);
     return err;
@@ -162,7 +211,12 @@ int test5(){
         std::free(c);
         return 1;
     }
-    for(int i=0;i<M;i++){ a[i]=(real_t)i; c[i]=a[i]; }
+    
+    for(int i=0;i<M;i++){
+        a[i]=(real_t)i; 
+        c[i]=a[i]; 
+    }
+    
     #pragma acc data copyin(a[0:M]) copy(c[0:M])
     {
         #pragma acc parallel loop
@@ -171,9 +225,13 @@ int test5(){
             c[i] = c[i] + (real_t)2.0;
         }
     }
+    
     for(int i=0;i<M;i++){
-        if (std::fabs(c[i] - (a[i]+(real_t)2.0)) > PRECISION) err++;
+        if (std::fabs(c[i] - (a[i]+(real_t)2.0)) > PRECISION){
+            err++;
+        }
     }
+    
     std::free(a);
     std::free(c);
     return err;
@@ -193,7 +251,12 @@ int test6(){
         std::free(c);
         return 1;
     }
-    for(int i=0;i<M;i++){ a[i]=(real_t)i; c[i]=0; }
+    
+    for(int i=0;i<M;i++){
+        a[i]=(real_t)i;
+        c[i]=0; 
+    }
+    
     #pragma acc data copyin(a[0:M]) copyout(c[0:M])
     {
         #pragma acc parallel loop gang(dim:ICE_CONST2)
@@ -201,9 +264,13 @@ int test6(){
             c[i] = a[i] * (real_t)2.0;
         }
     }
+    
     for(int i=0;i<M;i++){
-        if (std::fabs(c[i] - a[i]*(real_t)2.0) > PRECISION) err++;
+        if (std::fabs(c[i] - a[i]*(real_t)2.0) > PRECISION){
+            err++;
+        }
     }
+    
     std::free(a);
     std::free(c);
     return err;
@@ -212,22 +279,58 @@ int test6(){
 int main(){
     int failcode=0, failed;
 #ifndef T1
-    failed=0; for(int i=0;i<NUM_TEST_CALLS;i++) failed+=test1(); if(failed) failcode|=(1<<0);
+    failed=0; 
+    for(int i=0;i<NUM_TEST_CALLS;i++){
+        failed+=test1(); 
+    }
+    if(failed){
+        failcode|=(1<<0);
+    }
 #endif
 #ifndef T2
-    failed=0; for(int i=0;i<NUM_TEST_CALLS;i++) failed+=test2(); if(failed) failcode|=(1<<1);
+    failed=0; 
+    for(int i=0;i<NUM_TEST_CALLS;i++){
+        failed+=test2(); 
+    }
+    if(failed){
+        failcode|=(1<<1);
+    }
 #endif
 #ifndef T3
-    failed=0; for(int i=0;i<NUM_TEST_CALLS;i++) failed+=test3(); if(failed) failcode|=(1<<2);
+    failed=0; 
+    for(int i=0;i<NUM_TEST_CALLS;i++){
+        failed+=test3(); 
+    }
+    if(failed){
+        failcode|=(1<<2);
+    }
 #endif
 #ifndef T4
-    failed=0; for(int i=0;i<NUM_TEST_CALLS;i++) failed+=test4(); if(failed) failcode|=(1<<3);
+    failed=0; 
+    for(int i=0;i<NUM_TEST_CALLS;i++){
+        failed+=test4(); 
+    }
+    if(failed){
+        failcode|=(1<<3);
+    }
 #endif
 #ifndef T5
-    failed=0; for(int i=0;i<NUM_TEST_CALLS;i++) failed+=test5(); if(failed) failcode|=(1<<4);
+    failed=0; 
+    for(int i=0;i<NUM_TEST_CALLS;i++){
+        failed+=test5(); 
+    }
+    if(failed){
+        failcode|=(1<<4);
+    }
 #endif
 #ifndef T6
-    failed=0; for(int i=0;i<NUM_TEST_CALLS;i++) failed+=test6(); if(failed) failcode|=(1<<5);
+    failed=0; 
+    for(int i=0;i<NUM_TEST_CALLS;i++){
+        failed+=test6();
+    }
+    if(failed){
+        failcode|=(1<<5);
+    }
 #endif
     return failcode;
 }
