@@ -5,9 +5,9 @@
 //   #pragma acc ... or the equivalent _Pragma("acc ...") operator form.
 //
 // Notes:
-// - These tests use only the _Pragma("acc ...") form.
-// - Structured (data/parallel/loop) and executable (enter/exit data)
-//   directives are exercised.
+// - T1: Uses _Pragma for data + parallel + loop and checks computation.
+// - T2: Uses _Pragma for enter data / exit data and checks computation.
+//
 
 
 #include "acc_testsuite.h"
@@ -107,7 +107,9 @@ int main(){
     for (int i = 0; i < NUM_TEST_CALLS; ++i){
         failed += test1();
     }
-    if (failed != 0) failcode |= (1 << 0);
+    if (failed != 0){
+        failcode |= (1 << 0);
+    }
 #endif
 
 #ifndef T2
@@ -115,7 +117,9 @@ int main(){
     for (int i = 0; i < NUM_TEST_CALLS; ++i){
         failed += test2();
     }
-    if (failed != 0) failcode |= (1 << 1);
+    if (failed != 0){
+        failcode |= (1 << 1);
+    }
 #endif
 
     return failcode;
