@@ -17,8 +17,6 @@
 #include <stddef.h>
 
 #ifndef T1
-//T1:syntax,if-clause,runtime,enter-data,V:3.4-
-// enter data if(0) => must be NO-OP (not present)
 int test1(void){
     int err = 0;
     real_t *a = (real_t*)malloc(n * sizeof(real_t));
@@ -44,8 +42,6 @@ int test1(void){
 #endif
 
 #ifndef T2
-//T2:syntax,if-clause,runtime,enter-data,V:3.4-
-// enter data if(1) => must happen (present)
 int test2(void){
     int err = 0;
     real_t *a = (real_t*)malloc(n * sizeof(real_t));
@@ -71,8 +67,6 @@ int test2(void){
 #endif
 
 #ifndef T3
-//T3:syntax,if-clause,runtime,exit-data,V:3.4-
-// exit data delete if(0) => must be NO-OP (still present)
 int test3(void){
     int err = 0;
     real_t *a = (real_t*)malloc(n * sizeof(real_t));
@@ -102,8 +96,6 @@ int test3(void){
 #endif
 
 #ifndef T4
-//T4:syntax,if-clause,runtime,exit-data,V:3.4-
-// exit data delete if(1) => must delete (not present)
 int test4(void){
     int err = 0;
     real_t *a = (real_t*)malloc(n * sizeof(real_t));
@@ -131,11 +123,8 @@ int test4(void){
 }
 #endif
 
-// ---------- compute-side condition FORM coverage (C rules: any scalar) ----------
 
 #ifndef T5
-//T5:syntax,if-clause,runtime,compute,V:3.4-
-// int scalar expression as condition
 int test5(void){
     int err = 0;
     srand(SEED);
@@ -156,7 +145,7 @@ int test5(void){
         c[i]=0; 
     }
 
-    int cond_int = (n > 0); // runtime scalar int condition
+    int cond_int = (n > 0); 
 
     #pragma acc data copyin(a[0:n],b[0:n]) copyout(c[0:n])
     {
@@ -179,8 +168,6 @@ int test5(void){
 #endif
 
 #ifndef T6
-//T6:syntax,if-clause,runtime,compute,V:3.4-
-// floating-point scalar as condition (C: nonzero => true)
 int test6(void){
     int err = 0;
     srand(SEED);
@@ -197,7 +184,7 @@ int test6(void){
         c[i]=0; 
     }
 
-    real_t cond_real = (real_t)1.0; // nonzero scalar => true in C
+    real_t cond_real = (real_t)1.0; 
 
     #pragma acc data copyin(a[0:n]) copyout(c[0:n])
     {
@@ -219,8 +206,6 @@ int test6(void){
 #endif
 
 #ifndef T7
-//T7:syntax,if-clause,runtime,compute,V:3.4-
-// pointer scalar as condition (C: non-NULL => true)
 int test7(void){
     int err = 0;
     srand(SEED);
@@ -237,7 +222,7 @@ int test7(void){
         c[i]=0; 
     }
 
-    void* cond_ptr = (void*)a; // non-NULL pointer => true in C
+    void* cond_ptr = (void*)a;
 
     #pragma acc data copyin(a[0:n]) copyout(c[0:n])
     {
