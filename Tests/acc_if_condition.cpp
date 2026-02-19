@@ -22,7 +22,6 @@ struct BoolLike {
 };
 
 #ifndef T1
-//T1:syntax,if-clause,runtime,enter-data,V:3.4-
 int test1(){
     int err=0;
     real_t* a=(real_t*)std::malloc(n*sizeof(real_t));
@@ -47,7 +46,6 @@ int test1(){
 #endif
 
 #ifndef T2
-//T2:syntax,if-clause,runtime,enter-data,V:3.4-
 int test2(){
     int err=0;
     real_t* a=(real_t*)std::malloc(n*sizeof(real_t));
@@ -72,7 +70,6 @@ int test2(){
 #endif
 
 #ifndef T3
-//T3:syntax,if-clause,runtime,exit-data,V:3.4-
 int test3(){
     int err=0;
     real_t* a=(real_t*)std::malloc(n*sizeof(real_t));
@@ -102,7 +99,6 @@ int test3(){
 #endif
 
 #ifndef T4
-//T4:syntax,if-clause,runtime,exit-data,V:3.4-
 int test4(){
     int err=0;
     real_t* a=(real_t*)std::malloc(n*sizeof(real_t));
@@ -131,8 +127,6 @@ int test4(){
 #endif
 
 #ifndef T5
-//T5:syntax,if-clause,runtime,compute,V:3.4-
-// int expression condition (valid C++)
 int test5(){
     int err=0;
     std::srand(SEED);
@@ -176,8 +170,6 @@ int test5(){
 #endif
 
 #ifndef T6
-//T6:syntax,if-clause,runtime,compute,V:3.4-
-// C++ condition forms: pointer + user-defined bool-convertible type + fp comparison->bool
 int test6(){
     int err=0;
     std::srand(SEED);
@@ -194,10 +186,10 @@ int test6(){
         c[i]=0; 
     }
 
-    void*   cond_ptr = (void*)a;       // non-null pointer => true
-    BoolLike cond_obj{1};              // operator bool() => true
+    void*   cond_ptr = (void*)a;     
+    BoolLike cond_obj{1};            
     double  x = 1.0;
-    bool    cond_fp = (x != 0.0);      // C++-correct “float-based” condition
+    bool    cond_fp = (x != 0.0);   
 
     #pragma acc data copyin(a[0:n]) copyout(c[0:n])
     {
