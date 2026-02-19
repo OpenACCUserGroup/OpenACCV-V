@@ -15,8 +15,6 @@
 #include <math.h>
 
 #ifndef T1
-//T1:runtime,syntax,pragma,construct-independent,V:3.4-
-// Use _Pragma form for data/parallel/loop and verify computation
 int test1(void){
     int err = 0;
     srand(SEED);
@@ -56,8 +54,6 @@ int test1(void){
 #endif
 
 #ifndef T2
-//T2:runtime,syntax,pragma,construct-independent,V:3.4-
-// Use _Pragma form for enter/exit data directives
 int test2(void){
     int err = 0;
     srand(SEED);
