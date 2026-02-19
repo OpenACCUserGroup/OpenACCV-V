@@ -27,8 +27,6 @@ enum class E2 : int { V = 2 };
 static constexpr int ICE_LOWER = 3;
 
 #ifndef T1
-//T1:syntax,collapse-clause,runtime,loop,V:3.4-
-// collapse(ICE_CONST2) constexpr ICE
 int test1(){
     int err = 0;
     const int M = 48, N = 12, MN = M*N;
@@ -70,8 +68,6 @@ int test1(){
 }
 #endif
 #ifndef T2
-//T2:syntax,tile-clause,runtime,loop,V:3.4-
-// tile(ICE_CONST2) constexpr ICE
 int test2(){
     int err = 0;
     const int M = 256;
@@ -106,8 +102,6 @@ int test2(){
 }
 #endif
 #ifndef T3
-//T3:syntax,tile-clause,runtime,loop,V:3.4-
-// tile(ICE_CONST2, int(E2::V)) constexpr + enum-class ICE
 int test3(){
     int err = 0;
     const int M = 64, N = 40, MN = M*N;
@@ -149,8 +143,6 @@ int test3(){
 }
 #endif
 #ifndef T4
-//T4:syntax,cache-directive,runtime,loop,V:3.4-
-// cache element index uses constexpr ICE
 int test4(){
     int err = 0;
     const int M = 512;
@@ -188,8 +180,6 @@ int test4(){
 }
 #endif
 #ifndef T5
-//T5:syntax,cache-directive,runtime,loop,V:3.4-
-// cache lower:length uses ICE lower + ICE length
 int test5(){
     int err = 0;
     const int M = 512;
@@ -227,9 +217,6 @@ int test5(){
 }
 #endif
 #ifndef T6
-//T6:syntax,gang-clause,runtime,loop,V:3.4-
-// gang(dim:ICE_CONST2) where dim is an integral constant expression (constexpr), must evaluate to 1..3
-// NOTE: Some compilers may not support the 'dim:' keyword form yet; keep this as spec conformance coverage.
 int test6(){
     int err = 0;
     const int M = 512;
