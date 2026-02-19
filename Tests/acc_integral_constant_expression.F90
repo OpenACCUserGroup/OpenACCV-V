@@ -4,23 +4,14 @@
 ! - Clause arguments that require an integral-constant-expression accept
 !   Fortran integer constant expressions declared with PARAMETER.
 !
-!  T1: collapse() accepts an integral-constant-expression (ICE).
-!   This test uses a PARAMETER constant expression in collapse().
-!
-!  T2: tile() accepts an integral-constant-expression (ICE).
-!   This test uses a PARAMETER constant expression in tile().
-!
-!  T3: tile() accepts ICE values.
-!   This test uses PARAMETER ICE values in tile( , ).
-!
-!  T4: cache() slice bounds accept integral-constant-expressions (ICE).
-!   This test uses PARAMETER ICE values in cache(lower:upper).
-!
-!  T5:cache() slice bounds accept integral-constant-expressions (ICE).
-!   This test uses PARAMETER ICE values in cache(lower:upper).
-!
-!  T6: gang(dim:) accepts an integral-constant-expression (ICE) (must be 1..3).
-!   This test uses a PARAMETER ICE value in gang(dim:).
+! Notes:
+! - T1: collapse() uses a PARAMETER ICE.
+! - T2: tile() uses a PARAMETER ICE.
+! - T3: tile() uses PARAMETER ICE values in tile( , ).
+! - T4: cache() slice bounds use PARAMETER ICE values.
+! - T5: cache() slice bounds use PARAMETER ICE values.
+! - T6: gang(dim:) uses a PARAMETER ICE (must be 1..3).
+!   Some compilers may not support gang(dim:) yet; keep for spec coverage.
 !
 
 #ifndef T1
