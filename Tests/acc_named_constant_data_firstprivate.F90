@@ -6,25 +6,13 @@
 !
 ! Notes:
 !  T1: A Fortran INTEGER PARAMETER can appear in a firstprivate clause.
-!   This test checks it is correctly available on the device.
-!
 !  T2: A Fortran REAL PARAMETER can appear in a firstprivate clause.
-!   This test checks it works correctly on the device.
-!
 !  T3: A Fortran PARAMETER can appear in a data clause (copyin).
-!   This test checks it is usable inside a device region.
-!
 !  T4: A PARAMETER array can appear in a firstprivate clause.
-!   This test checks correct device behavior.
-!
 !  T5: A PARAMETER array can appear in a data clause (copyin).
-!   This test checks it is accessible on the device.
-!
 !  T6: A PARAMETER can appear in a create clause.
-!   This test checks it can be used on the device.
-!
 !  T7: A PARAMETER can appear in present_or_copyin.
-!   This test checks correct device access.
+!
 
 
 #ifndef T1
