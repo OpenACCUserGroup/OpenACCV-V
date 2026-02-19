@@ -1,4 +1,5 @@
 // acc_expr_eval_directive_args.cpp
+//
 // Feature under test (OpenACC 3.4, Section 2.1, Feb 2026):
 // - Clarified user-visible behavior of evaluation of expressions in directive arguments.
 //   A program must not depend on the order/number of evaluations of expressions in
@@ -32,7 +33,6 @@ static int size_maybe_elided(int nval){
 }
 
 #ifndef T1
-//T1:syntax,expressions,runtime,construct-independent,V:3.4-
 int test1(){
     int err = 0;
     int cond = 0;
@@ -98,7 +98,6 @@ int test1(){
 #endif
 
 #ifndef T2
-//T2:syntax,expressions,runtime,construct-independent,V:3.4-
 int test2(){
     int err = 0;
 
@@ -111,18 +110,15 @@ int test2(){
         a[i] = (real_t)i;
     }
 
-    // Ensure 'a' is NOT present on device: do NOT enter/create any data.
     size_calls = 0;
     #pragma acc update device(a[0:size_maybe_elided(n)]) if_present
 
-    // User-visible behavior: no crash; host values unchanged.
     for (int i = 0; i < n; ++i){
         if (std::fabs(a[i] - (real_t)i) > PRECISION){
             err = err + 1;
         }
     }
 
-    // DO NOT assert anything about size_calls (may be 0, 1, or more).
 
     std::free(a);
     return err;
@@ -130,7 +126,6 @@ int test2(){
 #endif
 
 #ifndef T3
-//T3:syntax,expressions,runtime,construct-independent,V:3.4-
 int test3(){
     int err = 0;
 
@@ -159,9 +154,6 @@ int test3(){
         c[k] = 0;
     }
 
-    // Side-effecting expressions in directive arguments.
-    // Per Section 2.1, evaluation order/number is unspecified.
-    // We do NOT use i afterward (do not rely on side effects).
     int i = 0;
 
     #pragma acc data copyin(a[0:n], b[0:n]) copy(c[0:n])
@@ -186,7 +178,6 @@ int test3(){
         }
     }
 
-    // DO NOT assert anything about i.
 
     std::free(a);
     std::free(b);
