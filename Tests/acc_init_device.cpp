@@ -1,14 +1,14 @@
 #include "acc_testsuite.h"
-#include <stdlib.h>
-#include <math.h>
+#include <cstdlib>
+#include <cmath>
 
 #ifndef T1
-//T1:runtime,devonly,shutdown,V:2.0-2.7
+//T1:routine,init,runtime,V:3.2-3.3
 int test1(){
     int err = 0;
 
     if (acc_get_device_type() != acc_device_none){
-        acc_shutdown(acc_get_device_type());
+        acc_init_device(0, acc_get_device_type());
     }
 
     return err;
@@ -16,32 +16,34 @@ int test1(){
 #endif
 
 #ifndef T2
-//T2:runtime,devonly,shutdown,compute,V:2.0-2.7
+//T2:routine,init,runtime,V:3.2-3.3
 int test2(){
     int err = 0;
-    int n = 1000;
-    real_t *a = (real_t *)malloc(n * sizeof(real_t));
-    
-    for (int i = 0; i < n; i++) {
-        a[i] = (real_t)i;
+    real_t* a = new real_t[n];
+    real_t* b = new real_t[n];
+    for (int x = 0; x < n; ++x){
+        a[x] = rand() / (real_t)(RAND_MAX / 10);
+        b[x] = a[x] * 2;
     }
 
     if (acc_get_device_type() != acc_device_none){
-        #pragma acc parallel loop copy(a[0:n])
-        for (int i = 0; i < n; i++) {
-            a[i] = a[i] * 2.0;
-        }
-
-        acc_shutdown(acc_get_device_type());
+        acc_init_device(0, acc_get_device_type());
     }
 
-    for (int i = 0; i < n; i++) {
-        if (fabs(a[i] - ((real_t)i * 2.0)) > PRECISION) {
-            err++;
+    #pragma acc parallel loop copy(a[0:n])
+    for(int x = 0; x < n; x++) {
+        a[x] *= 2;
+    }
+
+    for (int x = 0; x < n; ++x){
+        if (std::fabs(a[x] - b[x]) > PRECISION){
+            err += 1;
         }
     }
 
-    free(a);
+    delete[] a;
+    delete[] b;
+
     return err;
 }
 #endif
