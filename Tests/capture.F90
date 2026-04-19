@@ -1,3 +1,23 @@
+! capture.c
+!
+! Feature under test (OpenACC 3.4, Sections 2.7.4, 2.7.9, and 2.7.10, April 2026):
+! The capture modifier was added to data clauses to specify that a variable
+! requires a discrete device-accessible copy, even when the implementation
+! might otherwise use shared memory between the host and device.
+!
+! Tests:
+! T1 – copy(capture:...): Verifies that a captured copy is created at the
+!      start of a data region. The host modifies the variable after entry,
+!      and the device computation must use the original captured values.
+! T2 – copyout(capture:...): Verifies that a captured device copy is used
+!      during execution and that results are correctly copied back to the
+!      host at region exit. Host-side modifications after capture must not
+!      affect device computation.
+! T3 – create(capture:...): Verifies that a captured device-only copy is
+!      created and used across compute regions. The host version of the
+!      variable is modified after capture, and the device must use its own
+!      independent copy while the host value remains unchanged.
+
 #ifndef T1
 !T1:data,structured-data,construct-independent,capture-modifier,V:3.4
       LOGICAL FUNCTION test1()
@@ -8,7 +28,7 @@
         INTEGER :: errors = 0
         REAL(8), DIMENSION(LOOPCOUNT) :: x
 
-        x = 0
+        x = 2
 
         !$acc data copy(capture:x(1:LOOPCOUNT))
           x = 1
@@ -20,7 +40,7 @@
         !$acc end data
 
         DO i = 1, LOOPCOUNT
-          IF (abs(x(i) - 1) .gt. PRECISION) THEN
+          IF (abs(x(i) - 3.0D0) .gt. PRECISION) THEN
             errors = errors + 1
           END IF
         END DO
@@ -46,14 +66,23 @@
         a = -1
 
         !$acc data copyout(capture:a(1:LOOPCOUNT))
-          !$acc parallel loop copyout(a(1:LOOPCOUNT))
+          !$acc parallel loop present(a(1:LOOPCOUNT))
           DO i = 1, LOOPCOUNT
-            a(i) = i
+            a(i) = 0
+          END DO
+
+          DO i = 1, LOOPCOUNT
+            a(i) = 5
+          END DO
+
+          !$acc parallel loop present(a(1:LOOPCOUNT))
+          DO i = 1, LOOPCOUNT
+            a(i) = a(i) + 1
           END DO
         !$acc end data
 
         DO i = 1, LOOPCOUNT
-          IF (abs(a(i) - real(i,8)) .gt. PRECISION) THEN
+          IF (abs(a(i) - 1.0D0) .gt. PRECISION) THEN
             errors = errors + 1
           END IF
         END DO
@@ -83,12 +112,11 @@
         CALL RANDOM_SEED(PUT=SEEDDIM)
         CALL RANDOM_NUMBER(a)
         a_ref = a
-        b = -1
+        b = 0
 
         !$acc data copy(a(1:LOOPCOUNT)) create(capture:b(1:LOOPCOUNT))
-          !$acc parallel loop present(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
           DO i = 1, LOOPCOUNT
-            b(i) = 1
+            b(i) = 5
           END DO
 
           !$acc parallel loop present(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
@@ -98,10 +126,10 @@
         !$acc end data
 
         DO i = 1, LOOPCOUNT
-          IF (abs(a(i) - (a_ref(i) + 1)) .gt. PRECISION) THEN
+          IF (abs(a(i) - a_ref(i)) .gt. PRECISION) THEN
             errors = errors + 1
           END IF
-          IF (abs(b(i) - (-1.0D0)) .gt. PRECISION) THEN
+          IF (abs(b(i) - 5.0D0) .gt. PRECISION) THEN
             errors = errors + 1
           END IF
         END DO
