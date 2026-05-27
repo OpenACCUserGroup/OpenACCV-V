@@ -44,7 +44,7 @@
     DO x = 1, LOOPCOUNT
       temp = temp + (a(x, y) + b(x, y))
     END DO
-    IF (abs(d(x) - temp) .gt. (2 * PRECISION * LOOPCOUNT)) THEN
+    IF (abs(d(y) - temp) .gt. (2 * PRECISION * LOOPCOUNT)) THEN
       errors = errors + 1
     END IF
   END DO
