@@ -52,7 +52,7 @@ int test2(){
       dev_test[0] = 0;
     }
 
-    if (devtest[0] != 0){
+    if (dev_test[0] != 0){
         for (int x = 0; x < n;  ++x){
             a[x] = rand() / (real_t)(RAND_MAX / 10);
             b[x] = rand() / (real_t)(RAND_MAX / 10);

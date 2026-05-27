@@ -11,9 +11,9 @@
 
         !Initilization
         SEEDDIM(1) = 1
-        #ifdef SEED
+#       ifdef SEED
             SEEDDIM(1) = SEED
-        #endif
+#       endif
         CALL RANDOM_SEED(PUT=SEEDDIM)
 
         CALL RANDOM_NUMBER(a)
