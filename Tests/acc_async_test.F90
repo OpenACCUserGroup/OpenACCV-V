@@ -115,7 +115,6 @@
         INTEGER :: x, y
         REAL(8),DIMENSION(LOOPCOUNT):: a, b, c, d, e
         INTEGER :: errors, async_val
-        INTEGER :: acc_get_default_async
         async_val = acc_get_default_async()
         errors = 0
 
