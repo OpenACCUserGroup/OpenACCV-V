@@ -185,7 +185,7 @@
 #       endif
         CALL RANDOM_SEED(PUT=SEEDDIM)
 
-        IF (devtest(1) .eq. 1) THEN
+        IF (devtest(1)) THEN
           CALL RANDOM_NUMBER(a)
           b = 0
 
