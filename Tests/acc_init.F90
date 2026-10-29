@@ -18,11 +18,11 @@
         USE OPENACC
         IMPLICIT NONE
         INCLUDE "acc_testsuite.Fh"
-        REAL(8), DIMENSION(n) :: a
+        REAL(8), DIMENSION(LOOPCOUNT) :: a
         INTEGER :: i, errors
         
         errors = 0
-        DO i = 1, n
+        DO i = 1, LOOPCOUNT
           a(i) = REAL(i - 1, 8)
         END DO
 
@@ -31,11 +31,11 @@
         END IF
 
         !$acc parallel loop copy(a)
-        DO i = 1, n
+        DO i = 1, LOOPCOUNT
           a(i) = a(i) * 2.0d0
         END DO
 
-        DO i = 1, n
+        DO i = 1, LOOPCOUNT
           IF (ABS(a(i) - (2.0d0 * (i - 1))) > PRECISION) THEN
             errors = errors + 1
           END IF

@@ -21,7 +21,7 @@
 
         CALL RANDOM_NUMBER(randoms)
         CALL RANDOM_NUMBER(randoms2)
-        false_margin = exp(log(.5)/n)
+        false_margin = exp(log(.5)/LOOPCOUNT)
         b = FLOOR(6*randoms2)
         b_copy = b
         DO x = 0, 9
