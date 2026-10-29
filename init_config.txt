@@ -178,4 +178,10 @@
 
 !This can be used to test host-fallback on gcc for example with RuntimePrefix:ACC_DEVICE_TYPE=None
 
+!Some tests are marked with !UStack or //UStack. Their local arrays do not
+!fit in the default stack. Set UStack to a size in kilobytes, or to
+!unlimited, and the harness runs those tests with ulimit -s.
+
+!UStack:unlimited
+
 !RunAllTests:True

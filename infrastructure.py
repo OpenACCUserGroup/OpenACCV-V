@@ -724,6 +724,18 @@ class test:
         self.run_post_compile_commands(' '.join(args), result, out, err)
         return result
 
+    def runtime_command(self):
+        args = []
+        if self.needs_ustack and g_config.ustack:
+            args.extend(["ulimit", "-s", g_config.ustack, "&&"])
+        elif self.needs_ustack:
+            print(self.name + " needs a larger stack. Set UStack in the configuration.")
+        prefix = g_config.runtime_prefix.strip()
+        if prefix:
+            args.extend(prefix.split(" "))
+        args.append(self.executable_path)
+        return args
+
     def run(self):
         if g_verbose['info']:
             print("Running: " + self.name)
@@ -750,7 +762,7 @@ class test:
                 result = self.comp([])
                 if result == 0:
                     self.run_pre_run_commands(0)
-                    [result, out, err, runtime] = g_shell.runCommand(g_config.runtime_prefix.split(" ") + [self.executable_path], self.build_dir)
+                    [result, out, err, runtime] = g_shell.runCommand(self.runtime_command(), self.build_dir)
                     g_results.submit_runtime(self.name, result, out, err, runtime)
                     if g_config.keep_policy == "off" or (g_config.keep_policy == "on-error" and (result == 0 and len(err) == 0)):
                         [result, out, err, runtime] = g_shell.runCommand(['rm', self.executable_path], self.build_dir)
@@ -775,7 +787,7 @@ class test:
                     result = self.comp(skipped_tests)
                     if result == 0:
                         self.run_pre_run_commands(self.compile_attempt_count)
-                        [result, out, err, runtime] = g_shell.runCommand(g_config.runtime_prefix.split(" ") + [self.executable_path], self.build_dir)
+                        [result, out, err, runtime] = g_shell.runCommand(self.runtime_command(), self.build_dir)
                         g_results.submit_runtime(self.name, result, out, err, runtime)
                         if g_config.keep_policy == 'off' or (g_config.keep_policy == 'on-error' and (result == 0 and len(err) == 0)):
                             [result, out, err, runtime] = g_shell.runCommand(['rm', self.executable_path], self.build_dir)
@@ -800,7 +812,7 @@ class test:
                     result = self.comp(skipped_tests)
                     if result == 0:
                         self.run_pre_run_commands(self.compile_attempt_count)
-                        [result, out, err, runtime] = g_shell.runCommand(g_config.runtime_prefix.split(" ") + [self.executable_path], self.build_dir)
+                        [result, out, err, runtime] = g_shell.runCommand(self.runtime_command(), self.build_dir)
                         g_results.submit_runtime(self.name, result, out, err, runtime)
                         if g_config.keep_policy == "off" or (g_config.keep_policy == "on-error" and (result == 0 and len(err) == 0)):
                             [result, out, err, runtime] = g_shell.runCommand(['rm', self.executable_path], self.build_dir)
@@ -824,7 +836,7 @@ class test:
                 result = self.comp(skipped_tests)
                 if result == 0:
                     self.run_pre_run_commands(self.compile_attempt_count)
-                    [result, out, err, runtime] = g_shell.runCommand(g_config.runtime_prefix.split(" ") + [self.executable_path], self.build_dir)
+                    [result, out, err, runtime] = g_shell.runCommand(self.runtime_command(), self.build_dir)
                     g_results.submit_runtime(self.name, result, out, err, runtime)
                     if g_config.keep_policy == "off" or (g_config.keep_policy == "on-error" and (result == 0 and len(err) == 0)):
                         [result, out, err, runtime] = g_shell.runCommand(['rm', self.executable_path], self.build_dir)
@@ -840,6 +852,13 @@ class test:
     def build_tags(self):
         fil = open(self.path)
         data = fil.readlines()
+        fil.close()
+        self.needs_ustack = False
+        ustack_marker = "!USTACK" if isFortran(self.path) else "//USTACK"
+        for line in data:
+            if line.strip().upper() == ustack_marker:
+                self.needs_ustack = True
+                break
         tags = {}
         versions = {}
         regular_expression = re.compile('^#ifndef T[0-9]*')
@@ -1500,6 +1519,7 @@ class config:
         self.PostRunCommands = []  # type: List[str]
 
         self.runtime_prefix = ""  # type: str
+        self.ustack = None  # type: Optional[str]
         self.system_name = None  # type: Optional[str]
 
         self.config_id = -1  # type: int
@@ -1573,6 +1593,10 @@ class config:
         returned += "Pre-Run Commands = " + ', '.join(self.PreRunCommands) + '\n'
         returned += "Post-Run Commands = " + ', '.join(self.PostRunCommands) + '\n'
         returned += "Runtime Prefix = " + self.runtime_prefix + '\n'
+        if self.ustack is None:
+            returned += "UStack = NONE\n"
+        else:
+            returned += "UStack = " + self.ustack + '\n'
         returned += "System Name = " + self.system_name + '\n'
         returned += "Timeout = " + str(self.timeout)
         return returned
@@ -1767,6 +1791,13 @@ class config:
                     self.FC_ACC_Version = x.split(":")[-1].strip()
                 if x.startswith("RuntimePrefix:"):
                     self.runtime_prefix = x.split(":")[-1].strip()
+                if x.upper().startswith("USTACK:"):
+                    ustack = x.split(":")[-1].strip()
+                    if ustack.upper() == "UNLIMITED" or (ustack.isdigit() and int(ustack) > 0):
+                        self.ustack = ustack
+                    else:
+                        print("UStack must be a positive number of kilobytes, or unlimited")
+                        sys.exit(1)
                 if x.startswith("Fast:"):
                     if x.split(":")[-1].strip().upper() == "TRUE":
                         self.fast = True
