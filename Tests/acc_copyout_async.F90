@@ -37,9 +37,9 @@
               f(x) = d(x) + e(x)
             END DO
           !$acc end parallel
-          CALL acc_copyout_async(c(1:LOOPCOUNT), 1)
-          CALL acc_copyout_async(f(1:LOOPCOUNT), 2)
         !$acc end data
+        CALL acc_copyout_async(c(1:LOOPCOUNT), 1)
+        CALL acc_copyout_async(f(1:LOOPCOUNT), 2)
         !$acc wait
         DO x = 1, LOOPCOUNT
           IF (abs(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN
