@@ -45,6 +45,11 @@
           !$acc end parallel
         !$acc end data
 
+        ! Ensure that all mapped data is removed otherwise other tests
+        ! in this file may reuse the local's addresses and not get
+        ! correct behavior.
+        !$acc exit data delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
+
         DO x = 1, LOOPCOUNT
           IF (abs(c(x) - (a_host(x)*a_host(x) + b_host(x)*b_host(x))) .gt. 4*PRECISION) THEN
             errors = errors + 1
