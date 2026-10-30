@@ -1,4 +1,4 @@
-FUNCTION create_test(a, b, c, d, LOOPCOUNT)
+SUBROUTINE create_test(a, b, c, d, LOOPCOUNT)
   REAL(8),DIMENSION(LOOPCOUNT),INTENT(IN) :: a, b
   REAL(8),DIMENSION(LOOPCOUNT),INTENT(INOUT) :: c, d
   INTEGER,INTENT(IN) :: LOOPCOUNT
@@ -15,9 +15,9 @@ FUNCTION create_test(a, b, c, d, LOOPCOUNT)
       d(x) = c(x) * a(x)
     END DO
   !$acc end parallel
-END FUNCTION function_test
+END SUBROUTINE create_test
 
-FUNCTION create_as_present(a, b, c, d, LOOPCOUNT)
+SUBROUTINE create_as_present(a, b, c, d, LOOPCOUNT)
   REAL(8),DIMENSION(LOOPCOUNT),INTENT(IN) :: a, b
   REAL(8),DIMENSION(LOOPCOUNT),INTENT(INOUT) :: c, d
   INTEGER,INTENT(IN) :: LOOPCOUNT
@@ -34,7 +34,7 @@ FUNCTION create_as_present(a, b, c, d, LOOPCOUNT)
       d(x) = c(x) * a(x)
     END DO
   !$acc end parallel
-END FUNCTION function_test_dev_only
+END SUBROUTINE create_as_present
 
 #ifndef T1
 !T1:devonly,construct-independent,declare,V:2.0-2.7

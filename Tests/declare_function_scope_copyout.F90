@@ -1,4 +1,4 @@
-FUNCTION copyout_test(a, b, c, LOOPCOUNT)
+SUBROUTINE copyout_test(a, b, c, LOOPCOUNT)
   REAL(8),DIMENSION(LOOPCOUNT),INTENT(IN) :: a, b
   REAL(8),DIMENSION(LOOPCOUNT),INTENT(INOUT) :: c
   INTEGER,INTENT(IN) :: LOOPCOUNT
@@ -11,7 +11,7 @@ FUNCTION copyout_test(a, b, c, LOOPCOUNT)
       c(x) = a(x) + b(x)
     END DO
   !$acc end parallel
-END FUNCTION copyout_test
+END SUBROUTINE copyout_test
 
 #ifndef T1
 !T1:devonly,construct-independent,declare,V:2.0-2.7
