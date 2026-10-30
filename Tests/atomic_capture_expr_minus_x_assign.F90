@@ -16,7 +16,7 @@
         POSSIBLE = .FALSE.
 
         DO x = 1, length
-          IF (abs(b(x) - (a(x) - init)) .GT. ((10 - length) * PRECISION)) THEN
+          IF (abs(b(x) - (a(x) - init)) .lt. PRECISION) THEN
             DO y = 1, x - 1
               passed_a(y) = a(y)
               passed_b(y) = b(y)
@@ -45,7 +45,7 @@
         IF (length .gt. 0) THEN
           ALLOCATE(passed(length - 1))
         ELSE
-          IF (abs(init - destination) .gt. PRECISION) THEN
+          IF (abs(init - destination) .lt. PRECISION) THEN
             POSSIBLE = .TRUE.
           ELSE
             POSSIBLE = .FALSE.
@@ -110,7 +110,7 @@
           DO y = 1, 10
             passed_a(y) = a(x, y)
           END DO
-          IF (IS_POSSIBLE(passed_a, totals(x), 10, 0) .eqv. .FALSE.) THEN
+          IF (IS_POSSIBLE(passed_a, totals(x), 10, 0.0d0) .eqv. .FALSE.) THEN
             errors = errors + 1
           END IF
         END DO
