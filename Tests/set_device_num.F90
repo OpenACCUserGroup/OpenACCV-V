@@ -10,6 +10,7 @@
         REAL(8) :: RAND
         INTEGER :: errors = 0
         INTEGER :: temp
+        INTEGER :: ndev
 
         SEEDDIM(1) = 1
 #       ifdef SEED
@@ -17,18 +18,19 @@
 #       endif
         CALL RANDOM_SEED(PUT=SEEDDIM)
 
-        ALLOCATE(host_copy(acc_get_num_devices(acc_get_device_type()), LOOPCOUNT))
+        ndev = acc_get_num_devices(acc_get_device_type())
+        ALLOCATE(host_copy(0:ndev-1, LOOPCOUNT))
 
         IF (acc_get_device_type() .ne. acc_device_none) THEN
-          !host_copy(acc_get_num_devices(acc_get_device_type()), LOOPCOUNT)
-          DO x = 1, acc_get_num_devices(acc_get_device_type())
+          !host_copy(0:acc_get_num_devices(acc_get_device_type())-1, LOOPCOUNT)
+          DO x = 0, ndev - 1
             CALL RANDOM_NUMBER(a)
             host_copy(x, :) = a
             !$acc set device_num(x)
             !$acc enter data copyin(a(1:LOOPCOUNT))
           END DO
 
-          DO x = 1, acc_get_num_devices(acc_get_device_type())
+          DO x = 0, ndev - 1
             !$acc set device_num(x)
             !$acc data present(a(1:LOOPCOUNT))
               !$acc parallel
@@ -40,7 +42,7 @@
             !$acc end data
           END DO
 
-          DO x = 1, acc_get_num_devices(acc_get_device_type())
+          DO x = 0, ndev - 1
             !$acc set device_num(x)
             !$acc exit data copyout(a(1:LOOPCOUNT))
             temp = errors
