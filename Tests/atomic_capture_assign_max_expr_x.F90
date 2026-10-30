@@ -1,4 +1,5 @@
 RECURSIVE FUNCTION IS_POSSIBLE(a, b, length, init) RESULT(POSSIBLE)
+        INCLUDE "acc_testsuite.Fh"
   INTEGER, INTENT(IN) :: length
   REAL(8), INTENT(IN) :: init
   REAL(8),DIMENSION(length), INTENT(IN) :: a
