@@ -17,6 +17,7 @@
   CALL RANDOM_SEED(PUT=SEEDDIM)
 
   CALL RANDOM_NUMBER(randoms)
+  a = 0
 
   DO x = 1, LOOPCOUNT
     DO y = 1, 16
@@ -26,6 +27,8 @@
     END DO
   END DO
 
+  host_b = 0
+  b = 0
   DO x = 1, LOOPCOUNT
     host_b = ior(host_b, a(x))
   END DO

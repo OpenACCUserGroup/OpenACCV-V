@@ -20,6 +20,7 @@
   CALL RANDOM_SEED(PUT=SEEDDIM)
 
   CALL RANDOM_NUMBER(randoms)
+  a = 0
 
   DO x = 1, LOOPCOUNT
     DO y = 1, 16

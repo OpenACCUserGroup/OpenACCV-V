@@ -17,6 +17,7 @@
   CALL RANDOM_NUMBER(a)
   CALL RANDOM_NUMBER(b)
   c = 0
+  multiplier = 1
 
   !$acc data copyin(a(1:LOOPCOUNT), b(1:LOOPCOUNT)) copyout(c(1:LOOPCOUNT))
     !$acc serial
