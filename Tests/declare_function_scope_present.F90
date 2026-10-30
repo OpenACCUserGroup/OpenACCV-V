@@ -1,4 +1,4 @@
-FUNCTION present(a, b, c, d, LOOPCOUNT)
+SUBROUTINE present(a, b, c, d, LOOPCOUNT)
   REAL(8),DIMENSION(LOOPCOUNT),INTENT(IN) :: a, b
   REAL(8),DIMENSION(LOOPCOUNT),INTENT(INOUT) :: c, d
   INTEGER,INTENT(IN) :: LOOPCOUNT
@@ -15,7 +15,7 @@ FUNCTION present(a, b, c, d, LOOPCOUNT)
       d(x) = c(x) * a(x)
     END DO
   !$acc end parallel
-END FUNCTION function_test
+END SUBROUTINE present
 
 #ifndef T1
 !T1:devonly,construct-independent,declare,V:2.0-2.7

@@ -1,4 +1,4 @@
-FUNCTION function_test(a, b, c, LOOPCOUNT)
+SUBROUTINE function_test(a, b, c, LOOPCOUNT)
   REAL(8),DIMENSION(LOOPCOUNT),INTENT(IN) :: a, b
   REAL(8),DIMENSION(LOOPCOUNT),INTENT(INOUT) :: c
   INTEGER,INTENT(IN) :: LOOPCOUNT
@@ -11,9 +11,9 @@ FUNCTION function_test(a, b, c, LOOPCOUNT)
       c(x) = c(x) + a(x) + b(x)
     END DO
   !$acc end parallel
-END FUNCTION function_test
+END SUBROUTINE function_test
 
-FUNCTION function_test_dev_only(a, b, c, LOOPCOUNT)
+SUBROUTINE function_test_dev_only(a, b, c, LOOPCOUNT)
   REAL(8),DIMENSION(LOOPCOUNT),INTENT(INOUT) :: a, b
   REAL(8),DIMENSION(LOOPCOUNT),INTENT(INOUT) :: c
   INTEGER,INTENT(IN) :: LOOPCOUNT
@@ -28,7 +28,7 @@ FUNCTION function_test_dev_only(a, b, c, LOOPCOUNT)
       b(x) = -1
     END DO
   !$acc end parallel
-END FUNCTION function_test_dev_only
+END SUBROUTINE function_test_dev_only
 
 #ifndef T1
 !T1:devonly,construct-independent,declare,V:2.0-2.7
