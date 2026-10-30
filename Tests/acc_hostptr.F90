@@ -1,15 +1,22 @@
 #ifndef T1
 !T1:runtime,data,V:3.3
     LOGICAL FUNCTION test1()
+        USE ISO_C_BINDING
         USE OPENACC
         IMPLICIT NONE
         INCLUDE "acc_testsuite.Fh"
         REAL,  DIMENSION(LOOPCOUNT) :: a !Data
+        REAL, POINTER, DIMENSION(:) :: a_ptr
+        TYPE(C_PTR) :: a_devptr, a_hostptr
         INTEGER :: err = 0
 
+        a = 1
         CALL acc_create(a)
 
-        IF (a /= acc_hostptr(a)) THEN
+        a_devptr = acc_deviceptr(a)
+        a_hostptr = acc_hostptr(a_devptr)
+        CALL C_F_POINTER(a_hostptr, a_ptr, [LOOPCOUNT])
+        IF (ANY(a /= a_ptr)) THEN
                 err = err + 1
         END IF
 

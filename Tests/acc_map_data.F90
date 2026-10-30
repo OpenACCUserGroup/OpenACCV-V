@@ -1,10 +1,13 @@
 #ifndef T1
 !T1:runtime,data,executable-data,construct-independent,V:3.3
     LOGICAL FUNCTION test1()
+        USE ISO_C_BINDING
         USE OPENACC
         IMPLICIT NONE
         INCLUDE "acc_testsuite.Fh"
-        REAL(8),DIMENSION(LOOPCOUNT):: a, b, c, d, e !Data
+        REAL(8),DIMENSION(LOOPCOUNT):: a, b, c !Data
+        TYPE(C_PTR) :: d
+        INTEGER(C_SIZE_T) :: bytes
         INTEGER :: errors = 0
         INTEGER :: x,i
         !Initilization
@@ -17,7 +20,9 @@
         CALL RANDOM_NUMBER(a)
         CALL RANDOM_NUMBER(b)
 
-        CALL acc_map_data(C_LOC(c), C_LOC(d), LOOPCOUNT)
+        bytes = LOOPCOUNT * C_SIZEOF(c(1))
+        d = acc_malloc(bytes)
+        CALL acc_map_data(c, d, bytes)
 
         !$acc data copyin(a, b) present(c)
             !$acc parallel
