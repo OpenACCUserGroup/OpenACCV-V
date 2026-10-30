@@ -17,6 +17,8 @@
   CALL RANDOM_NUMBER(b)
 
   errors = 0
+  host_max = 0
+  maxval = 0
 
   DO x = 1, LOOPCOUNT
     host_max = max(host_max, a(x) * b(x))

@@ -20,6 +20,7 @@
 
         CALL RANDOM_NUMBER(randoms)
         false_margin = exp(log(.5)/n)
+        a = 0
         DO x = 1, LOOPCOUNT
           DO y = 0, 15
             IF (randoms(y * LOOPCOUNT + x) .lt. false_margin) THEN
