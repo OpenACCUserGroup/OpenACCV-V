@@ -7,7 +7,7 @@
         LOGICAL,DIMENSION(LOOPCOUNT):: a !Data
         LOGICAL :: results = .FALSE.
         LOGICAL :: temp = .FALSE.
-        REAL(8) :: false_margin = exp(log(.5) / n)
+        REAL(8) :: false_margin = exp(log(.5) / LOOPCOUNT)
         REAL(8),DIMENSION(LOOPCOUNT):: random
         INTEGER :: errors = 0
 

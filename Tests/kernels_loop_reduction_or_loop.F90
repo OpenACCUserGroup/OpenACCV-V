@@ -8,7 +8,7 @@
         LOGICAL,DIMENSION(10) :: results
         LOGICAL :: temp = .FALSE.
         REAL(8),DIMENSION(10 * LOOPCOUNT) :: random
-        REAL(8) :: false_margin = exp(log(.5) / n)
+        REAL(8) :: false_margin = exp(log(.5) / LOOPCOUNT)
         INTEGER :: errors = 0
 
         SEEDDIM(1) = 1
