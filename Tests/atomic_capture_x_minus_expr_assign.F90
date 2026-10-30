@@ -1,4 +1,5 @@
 RECURSIVE FUNCTION IS_POSSIBLE_2(a, b, length, init) RESULT(POSSIBLE)
+        INCLUDE "acc_testsuite.Fh"
   INTEGER, INTENT(IN) :: length
   REAL(8), INTENT(IN) :: init
   REAL(8),DIMENSION(length), INTENT(IN) :: a
@@ -35,6 +36,7 @@ RECURSIVE FUNCTION IS_POSSIBLE_2(a, b, length, init) RESULT(POSSIBLE)
 END FUNCTION IS_POSSIBLE_2
 
 RECURSIVE FUNCTION IS_POSSIBLE(subset, destination, length, init) RESULT(POSSIBLE)
+  INCLUDE "acc_testsuite.Fh"
   INTEGER, INTENT(IN) :: length
   REAL(8),DIMENSION(length), INTENT(IN) :: subset
   REAL(8), INTENT(IN) :: destination
