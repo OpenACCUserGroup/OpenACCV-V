@@ -1,12 +1,27 @@
-!$acc routine vector
-FUNCTION multiplyData(a)
-  REAL(8),DIMENSION(LOOPCOUNT), INTENT(INOUT) :: a
+INCLUDE "declare_copyin_mod.F90"
+
+SUBROUTINE multiplyData(a)
+  !$acc routine vector
+  INCLUDE "acc_testsuite.Fh"
+  REAL(8), DIMENSION(LOOPCOUNT), INTENT(INOUT) :: a
   INTEGER :: x
   !$acc loop vector
   DO x = 1, LOOPCOUNT
     a(x) = a(x) * 2
   END DO
-END FUNCTION multiplyData
+END SUBROUTINE multiplyData
+
+SUBROUTINE externMultiplyData(a, ncount)
+  !$acc routine vector
+  INCLUDE "acc_testsuite.Fh"
+  REAL(8), DIMENSION(LOOPCOUNT), INTENT(INOUT) :: a
+  INTEGER, INTENT(IN) :: ncount
+  INTEGER :: x
+  !$acc loop vector
+  DO x = 1, ncount
+    a(x) = a(x) * 2
+  END DO
+END SUBROUTINE externMultiplyData
 
 #ifndef T1
 !T1:construct-independent,declare,V:2.0-2.7
@@ -60,6 +75,7 @@ END FUNCTION multiplyData
   INCLUDE "acc_testsuite.Fh"
   INTEGER :: errors = 0
   INTEGER :: mult = 2
+  INTEGER :: x
   REAL(8),DIMENSION(LOOPCOUNT) :: a, b
 
   SEEDDIM(1) = 1
@@ -102,6 +118,7 @@ END FUNCTION multiplyData
   INCLUDE "acc_testsuite.Fh"
   INTEGER :: errors = 0
   INTEGER :: mult = 2
+  INTEGER :: x
   REAL(8),DIMENSION(LOOPCOUNT) :: a, b
 
   SEEDDIM(1) = 1
@@ -144,6 +161,7 @@ END FUNCTION multiplyData
   INCLUDE "acc_testsuite.Fh"
   INTEGER :: errors = 0
   INTEGER :: mult = 2
+  INTEGER :: x
   REAL(8),DIMENSION(LOOPCOUNT) :: a, b
 
   SEEDDIM(1) = 1
