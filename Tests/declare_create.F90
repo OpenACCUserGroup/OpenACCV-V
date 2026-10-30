@@ -1,23 +1,42 @@
-!$acc declare create(fixed_size_array)
-!$acc declare create(scalar)
-!$acc declare create(LOOPCOUNT)
+MODULE DECLARE_CREATE_MOD
+  INTEGER, DIMENSION(0:9) :: fixed_size_array
+  INTEGER :: scalar
+  !$acc declare create(fixed_size_array, scalar)
+CONTAINS
+  SUBROUTINE multiplyData(a)
+    INCLUDE "acc_testsuite.Fh"
+    REAL(8), DIMENSION(LOOPCOUNT), INTENT(INOUT) :: a
+    INTEGER :: x
+    !$acc routine vector
+    !$acc loop vector
+    DO x = 1, LOOPCOUNT
+      a(x) = a(x) * 2
+    END DO
+  END SUBROUTINE multiplyData
 
-FUNCTION multiplyData(a)
-  REAL(8),DIMENSION(LOOPCOUNT), INTENT(INOUT) :: a
-  !$acc loop vector
-  DO x = 1, LOOPCOUNT
-    a(x) = a(x) * 2
-  END DO
-END FUNCTION multiplyData
+  SUBROUTINE externMultiplyData(a, ncount)
+    INCLUDE "acc_testsuite.Fh"
+    REAL(8), DIMENSION(LOOPCOUNT), INTENT(INOUT) :: a
+    INTEGER, INTENT(IN) :: ncount
+    INTEGER :: x
+    !$acc routine vector
+    !$acc loop vector
+    DO x = 1, ncount
+      a(x) = a(x) * 2
+    END DO
+  END SUBROUTINE externMultiplyData
+END MODULE DECLARE_CREATE_MOD
 
 #ifndef T1
 !T1:construct-independent,declare,update,V:2.0-2.7
       LOGICAL FUNCTION test1()
   USE OPENACC
+  USE DECLARE_CREATE_MOD
   IMPLICIT NONE
   INCLUDE "acc_testsuite.Fh"
   INTEGER :: errors = 0
   INTEGER :: mult = 2
+  INTEGER :: x
   REAL(8),DIMENSION(LOOPCOUNT) :: a, b
 
   SEEDDIM(1) = 1
@@ -28,11 +47,10 @@ END FUNCTION multiplyData
 
   CALL RANDOM_NUMBER(a)
   b = 0
-  !$acc update device(n)
   !$acc data copyin(a(1:LOOPCOUNT)) copyout(b(1:LOOPCOUNT)) present(fixed_size_array)
     !$acc parallel
       !$acc loop
-      DO x = 1, 10
+      DO x = 0, 9
         fixed_size_array(x) = x * x
       END DO
     !$acc end parallel
@@ -61,10 +79,12 @@ END FUNCTION multiplyData
 !T2:construct-independent,declare,update,V:2.0-2.7
       LOGICAL FUNCTION test2()
   USE OPENACC
+  USE DECLARE_CREATE_MOD
   IMPLICIT NONE
   INCLUDE "acc_testsuite.Fh"
   INTEGER :: errors = 0
   INTEGER :: mult = 2
+  INTEGER :: x
   REAL(8),DIMENSION(LOOPCOUNT) :: a, b
 
   SEEDDIM(1) = 1
@@ -103,10 +123,12 @@ END FUNCTION multiplyData
 !T3:construct-independent,declare,V:2.0-2.7
       LOGICAL FUNCTION test3()
   USE OPENACC
+  USE DECLARE_CREATE_MOD
   IMPLICIT NONE
   INCLUDE "acc_testsuite.Fh"
   INTEGER :: errors = 0
   INTEGER :: mult = 2
+  INTEGER :: x
   REAL(8),DIMENSION(LOOPCOUNT) :: a, b
 
   SEEDDIM(1) = 1
@@ -117,7 +139,6 @@ END FUNCTION multiplyData
 
   CALL RANDOM_NUMBER(a)
   b = a
-  !$acc update
   !$acc data copy(a(1:LOOPCOUNT))
     !$acc parallel
       !$acc loop
@@ -144,10 +165,12 @@ END FUNCTION multiplyData
 !T4:construct-independent,declare,V:2.0-2.7
       LOGICAL FUNCTION test4()
   USE OPENACC
+  USE DECLARE_CREATE_MOD
   IMPLICIT NONE
   INCLUDE "acc_testsuite.Fh"
   INTEGER :: errors = 0
   INTEGER :: mult = 2
+  INTEGER :: x
   REAL(8),DIMENSION(LOOPCOUNT) :: a, b
 
   SEEDDIM(1) = 1
