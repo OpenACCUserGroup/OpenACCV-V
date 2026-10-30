@@ -48,8 +48,8 @@ END FUNCTION function_test
 
   !$acc data copyin(a(1:LOOPCOUNT, 1:LOOPCOUNT), b(1:LOOPCOUNT, 1:LOOPCOUNT)) copyout(d(1:LOOPCOUNT, 1:LOOPCOUNT))
     DO x = 1, LOOPCOUNT
-      !$acc data copy(c(x:x, 1:LOOPCOUNT))
-        CALL present(a(x), b(x), c(x), d(x), LOOPCOUNT)
+      !$acc data copy(c(1:LOOPCOUNT, x:x))
+        CALL present(a(:,x), b(:,x), c(:,x), d(:,x), LOOPCOUNT)
       !$acc end data
     END DO
   !$acc end data
@@ -103,14 +103,14 @@ END FUNCTION function_test
 
     !$acc data copyin(a(1:LOOPCOUNT, 1:LOOPCOUNT), b(1:LOOPCOUNT, 1:LOOPCOUNT))
       DO x = 1, LOOPCOUNT
-        !$acc data copyin(c(x:x, 1:LOOPCOUNT)) copyout(d(x:x, 1:LOOPCOUNT))
-          CALL present(a(x), b(x), c(x), d(x), LOOPCOUNT)
+        !$acc data copyin(c(1:LOOPCOUNT, x:x)) copyout(d(1:LOOPCOUNT, x:x))
+          CALL present(a(:,x), b(:,x), c(:,x), d(:,x), LOOPCOUNT)
         !$acc end data
         DO y = 1, LOOPCOUNT
-          IF (abs(c(x, y) - 3) .gt. PRECISION) THEN
+          IF (abs(c(y, x) - 3) .gt. PRECISION) THEN
             errors = errors + 1
           END IF
-          IF (abs(d(x, y) - (a(x, y) * (3 + a(x, y) + b(x, y)))) .gt. PRECISION * 2) THEN
+          IF (abs(d(y, x) - (a(y, x) * (3 + a(y, x) + b(y, x)))) .gt. PRECISION * 2) THEN
             errors = errors + 1
           END IF
         END DO
