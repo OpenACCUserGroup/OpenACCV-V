@@ -9,7 +9,7 @@
         IF (length .gt. 0) THEN
           ALLOCATE(passed(length - 1))
         ELSE
-          IF (abs(init - destination) .gt. PRECISION) THEN
+          IF (abs(init - destination) .lt. PRECISION) THEN
             POSSIBLE = .TRUE.
           ELSE
             POSSIBLE = .FALSE.
@@ -72,7 +72,7 @@
           DO y = 1, 10
             passed(y) = a(x, y)
           END DO
-          IF (IS_POSSIBLE(passed, totals(x), 10, 1) .eqv. .FALSE.) THEN
+          IF (IS_POSSIBLE(passed, totals(x), 10, 1.0d0) .eqv. .FALSE.) THEN
             errors = errors + 1
           END IF
         END DO

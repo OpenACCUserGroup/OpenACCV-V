@@ -16,7 +16,7 @@
         POSSIBLE = .FALSE.
 
         DO x = 1, length
-          IF (abs(b(x) - (init + a(x))) .GT. ((10 - length) * PRECISION)) THEN
+          IF (abs(b(x) - (init + a(x))) .lt. PRECISION) THEN
             DO y = 1, x - 1
               passed_a(y) = a(y)
               passed_b(y) = b(y)
