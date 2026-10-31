@@ -43,6 +43,11 @@
           CONTINUE
         END DO
 
+        ! Ensure that all mapped data is removed otherwise other tests
+        ! in this file may reuse the local's addresses and not get
+        ! correct behavior.
+        !$acc exit data delete(a(1:LOOPCOUNT,1:10), b(1:LOOPCOUNT,1:10), c(1:LOOPCOUNT,1:10), d(1:LOOPCOUNT,1:10), e(1:LOOPCOUNT,1:10))
+
         DO y = 1, 10
           DO x = 1, LOOPCOUNT
             IF (abs(e(x, y) - (a(x, y) + b(x, y) + d(x, y))) .GT. PRECISION) THEN
