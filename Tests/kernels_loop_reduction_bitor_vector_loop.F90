@@ -19,7 +19,7 @@
         CALL RANDOM_SEED(PUT=SEEDDIM)
 
         CALL RANDOM_NUMBER(randoms)
-        false_margin = exp(log(.5) / n)
+        false_margin = exp(log(.5) / LOOPCOUNT)
         DO x = 1, 10 * LOOPCOUNT
           DO y = 1, 16
             IF (randoms(y * 10 * LOOPCOUNT + y - 1) .gt. false_margin) THEN
