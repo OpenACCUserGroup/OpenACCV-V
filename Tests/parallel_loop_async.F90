@@ -20,6 +20,7 @@
         c = 0
         d = a + b
 				errors = 0
+				errors_array = 0
 
         !$acc data copyin(a(1:10*LOOPCOUNT), b(1:10*LOOPCOUNT), c(1:10*LOOPCOUNT), d(1:10*LOOPCOUNT)) copy(errors_array(1:10))
           DO x = 0, 9
@@ -27,11 +28,11 @@
             DO y = 1, LOOPCOUNT
               c(x * LOOPCOUNT + y) = a(x * LOOPCOUNT + y) + b(x * LOOPCOUNT + y)
             END DO
-            !$acc parallel loop async(x) reduction(+:errors_array(x))
+            !$acc parallel loop async(x) reduction(+:errors_array(x + 1))
             DO y = 1, LOOPCOUNT
               IF (c(x * LOOPCOUNT + y) - d(x * LOOPCOUNT + y) .gt.  PRECISION .OR. &
                 d(x * LOOPCOUNT + y) - c(x * LOOPCOUNT + y) .gt. PRECISION) THEN
-                errors_array(x) = errors_array(x) + 1
+                errors_array(x + 1) = errors_array(x + 1) + 1
               END IF
             END DO
           END DO

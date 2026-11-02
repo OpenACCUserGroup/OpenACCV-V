@@ -1,4 +1,4 @@
-FUNCTION function_test(a, b, c, LOOPCOUNT)
+SUBROUTINE function_test(a, b, c, LOOPCOUNT)
   REAL(8),DIMENSION(LOOPCOUNT),INTENT(IN) :: a, b
   REAL(8),DIMENSION(LOOPCOUNT),INTENT(INOUT) :: c
   INTEGER,INTENT(IN) :: LOOPCOUNT
@@ -11,9 +11,9 @@ FUNCTION function_test(a, b, c, LOOPCOUNT)
       c(x) = c(x) + a(x) + b(x)
     END DO
   !$acc end parallel
-END FUNCTION function_test
+END SUBROUTINE function_test
 
-FUNCTION function_test_dev_only(a, b, c, LOOPCOUNT)
+SUBROUTINE function_test_dev_only(a, b, c, LOOPCOUNT)
   REAL(8),DIMENSION(LOOPCOUNT),INTENT(INOUT) :: a, b
   REAL(8),DIMENSION(LOOPCOUNT),INTENT(INOUT) :: c
   INTEGER,INTENT(IN) :: LOOPCOUNT
@@ -28,7 +28,7 @@ FUNCTION function_test_dev_only(a, b, c, LOOPCOUNT)
       b(x) = -1
     END DO
   !$acc end parallel
-END FUNCTION function_test_dev_only
+END SUBROUTINE function_test_dev_only
 
 #ifndef T1
 !T1:devonly,construct-independent,declare,V:2.0-2.7
@@ -72,6 +72,11 @@ END FUNCTION function_test_dev_only
       END IF
     END DO
   END DO
+
+        ! Ensure that all mapped data is removed otherwise other tests
+        ! in this file may reuse the local's addresses and not get
+        ! correct behavior.
+        !$acc exit data delete(devtest(1:1))
 
         IF (errors .eq. 0) THEN
           test1 = .FALSE.
@@ -135,6 +140,11 @@ END FUNCTION function_test_dev_only
     END DO
   END IF
 
+        ! Ensure that all mapped data is removed otherwise other tests
+        ! in this file may reuse the local's addresses and not get
+        ! correct behavior.
+        !$acc exit data delete(devtest(1:1))
+
         IF (errors .eq. 0) THEN
           test2 = .FALSE.
         ELSE
@@ -196,6 +206,11 @@ END FUNCTION function_test_dev_only
       END DO
     END DO
   END IF
+
+        ! Ensure that all mapped data is removed otherwise other tests
+        ! in this file may reuse the local's addresses and not get
+        ! correct behavior.
+        !$acc exit data delete(devtest(1:1))
 
         IF (errors .eq. 0) THEN
           test3 = .FALSE.

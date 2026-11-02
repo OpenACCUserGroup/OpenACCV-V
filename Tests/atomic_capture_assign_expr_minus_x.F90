@@ -1,4 +1,5 @@
       RECURSIVE FUNCTION IS_POSSIBLE_2(a, b, length, init) RESULT(POSSIBLE)
+        INCLUDE "acc_testsuite.Fh"
         INTEGER, INTENT(IN) :: length
         REAL(8), INTENT(IN) :: init
         REAL(8),DIMENSION(length), INTENT(IN) :: a
@@ -16,7 +17,7 @@
         POSSIBLE = .FALSE.
 
         DO x = 1, length
-          IF (abs(b(x) - init) .GT. ((10 - length) * PRECISION)) THEN
+          IF (abs(b(x) - init) .lt. PRECISION) THEN
             DO y = 1, x - 1
               passed_a(y) = a(y)
               passed_b(y) = b(y)
@@ -35,6 +36,7 @@
       END FUNCTION IS_POSSIBLE_2
 
       RECURSIVE FUNCTION IS_POSSIBLE(subset, destination, length, init) RESULT(POSSIBLE)
+        INCLUDE "acc_testsuite.Fh"
         INTEGER, INTENT(IN) :: length
         REAL(8),DIMENSION(length), INTENT(IN) :: subset
         REAL(8), INTENT(IN) :: destination
@@ -45,7 +47,7 @@
         IF (length .gt. 0) THEN
           ALLOCATE(passed(length - 1))
         ELSE
-          IF (abs(init - destination) .gt. PRECISION) THEN
+          IF (abs(init - destination) .lt. PRECISION) THEN
             POSSIBLE = .TRUE.
           ELSE
             POSSIBLE = .FALSE.
@@ -110,7 +112,7 @@
           DO y = 1, 10
             passed_a(y) = a(x, y)
           END DO
-          IF (IS_POSSIBLE(passed_a, totals(x), 10, 0) .eqv. .FALSE.) THEN
+          IF (IS_POSSIBLE(passed_a, totals(x), 10, 0.0d0) .eqv. .FALSE.) THEN
             errors = errors + 1
           END IF
         END DO

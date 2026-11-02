@@ -1,4 +1,5 @@
 RECURSIVE FUNCTION IS_POSSIBLE_2(a, b, length, init) RESULT(POSSIBLE)
+        INCLUDE "acc_testsuite.Fh"
   INTEGER, INTENT(IN) :: length
   REAL(8), INTENT(IN) :: init
   REAL(8),DIMENSION(length), INTENT(IN) :: a
@@ -19,7 +20,7 @@ RECURSIVE FUNCTION IS_POSSIBLE_2(a, b, length, init) RESULT(POSSIBLE)
   POSSIBLE = .FALSE.
 
   DO x = 1, length
-    IF (abs(b(x) - (init / a(x))) .lt. (100 - length) * PRECISION) THEN
+    IF (abs(b(x) - (init / a(x))) .lt. PRECISION) THEN
       DO y = 1, x - 1
         passed_a(y) = a(y)
         passed_b(y) = b(y)
@@ -38,6 +39,7 @@ RECURSIVE FUNCTION IS_POSSIBLE_2(a, b, length, init) RESULT(POSSIBLE)
 END FUNCTION IS_POSSIBLE_2
 
 RECURSIVE FUNCTION IS_POSSIBLE(subset, destination, length, init) RESULT(POSSIBLE)
+  INCLUDE "acc_testsuite.Fh"
   INTEGER, INTENT(IN) :: length
   REAL(8),DIMENSION(length), INTENT(IN) :: subset
   REAL(8), INTENT(IN) :: destination
@@ -49,7 +51,7 @@ RECURSIVE FUNCTION IS_POSSIBLE(subset, destination, length, init) RESULT(POSSIBL
   IF (length .gt. 0) THEN
     ALLOCATE(passed(length - 1))
   ELSE
-    IF (abs(init - destination) .lt. (10 - length) * PRECISION) THEN
+    IF (abs(init - destination) .lt. PRECISION) THEN
       POSSIBLE = .TRUE.
     ELSE
       POSSIBLE = .FALSE.

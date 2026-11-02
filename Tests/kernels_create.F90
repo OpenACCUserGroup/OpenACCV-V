@@ -40,6 +40,11 @@
           END DO
         END IF
 
+        ! Ensure that all mapped data is removed otherwise other tests
+        ! in this file may reuse the local's addresses and not get
+        ! correct behavior.
+        !$acc exit data delete(devtest(1:1))
+
         IF (errors .eq. 0) THEN
           test1 = .FALSE.
         ELSE
@@ -85,6 +90,11 @@
             errors = errors + 1
           END IF
         END DO
+
+        ! Ensure that all mapped data is removed otherwise other tests
+        ! in this file may reuse the local's addresses and not get
+        ! correct behavior.
+        !$acc exit data delete(devtest(1:1))
 
         IF (errors .eq. 0) THEN
           test2 = .FALSE.
@@ -137,6 +147,11 @@
             errors = errors + 1
           END IF
         END DO
+
+        ! Ensure that all mapped data is removed otherwise other tests
+        ! in this file may reuse the local's addresses and not get
+        ! correct behavior.
+        !$acc exit data delete(devtest(1:1))
 
         IF (errors .eq. 0) THEN
           test3 = .FALSE.

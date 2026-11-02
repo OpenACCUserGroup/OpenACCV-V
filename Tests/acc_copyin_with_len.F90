@@ -296,7 +296,7 @@
         !$acc exit data delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
 
         DO x = 1, LOOPCOUNT
-          IF (abs(c(x) + (a(x) + b(x))) .gt. PRECISION) THEN
+          IF (abs(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN
             errors = errors + 1
           END IF
         END DO
@@ -342,6 +342,9 @@
           CALL acc_copyin(a(1), LOOPCOUNT*8)
           CALL acc_copyin(b(1), LOOPCOUNT*8)
 
+          ! Clear the host `a` and `b` to exercise that a recopy of already
+          ! present data does not actually update the device version (it should
+          ! only increment reference counter).
           a = 0
           b = 0
 
@@ -361,7 +364,9 @@
           !$acc exit data delete(a(1:LOOPCOUNT), b(1:LOOPCOUNT))
 
           DO x = 1, LOOPCOUNT
-            IF (abs(c(x) - (a(x) + b(x))) .gt. PRECISION) THEN
+            ! The host `a` and `b` were cleared so use their cached copy
+            ! for the comparison.
+            IF (abs(c(x) - (a_copy(x) + b_copy(x))) .gt. PRECISION) THEN
               errors = errors + 1
             END IF
           END DO

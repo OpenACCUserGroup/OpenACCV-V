@@ -139,7 +139,7 @@
             IF (abs(a(x) + 1) .gt. PRECISION) THEN
               errors = errors + 1
             END IF
-            IF (abs(b(x)) .gt. PRECISION) THEN
+            IF (abs(b(x) + 1) .gt. PRECISION) THEN
               errors = errors + 1
             END IF
           END DO
@@ -148,7 +148,7 @@
           data_on_device = .FALSE.
 
           DO x = 1, LOOPCOUNT
-            IF (abs(a(x) - b(x)) .gt. PRECISION) THEN
+            IF (abs(a(x) + 1) .lt. PRECISION) THEN
               errors = errors + 1
             END IF
           END DO
@@ -185,7 +185,7 @@
 #       endif
         CALL RANDOM_SEED(PUT=SEEDDIM)
 
-        IF (devtest(1)) THEN
+        IF (devtest(1) .eqv. .TRUE.) THEN
           CALL RANDOM_NUMBER(a)
           b = 0
 
