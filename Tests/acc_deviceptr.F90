@@ -6,7 +6,7 @@
         IMPLICIT NONE
         INCLUDE "acc_testsuite.Fh"
         REAL(8), DIMENSION(LOOPCOUNT) :: a, b, c  !Data
-        REAL(8), POINTER, DIMENSION(:) :: a_ptr, b_ptr, d_ptr
+        REAL(8), POINTER, CONTIGUOUS, DIMENSION(:) :: a_ptr, b_ptr, d_ptr
         TYPE(C_PTR) :: a_devptr, b_devptr, d_devptr
         INTEGER :: errors = 0
         INTEGER :: x, i
@@ -34,15 +34,7 @@
         CALL C_F_POINTER(b_devptr, b_ptr, [LOOPCOUNT])
         CALL C_F_POINTER(d_devptr, d_ptr, [LOOPCOUNT])
 
-        !$acc data deviceptr(a_ptr, b_ptr, d_ptr)
-            !$acc parallel
-                !$acc loop
-                DO x = 1, LOOPCOUNT
-                    d_ptr(x) = a_ptr(x) + b_ptr(x)
-                END DO
-                !$acc end loop
-            !$acc end parallel
-        !$acc end data
+        CALL device_add(a_ptr, b_ptr, d_ptr, LOOPCOUNT)
 
         !$acc exit data copyout(c) delete(a, b)
 
@@ -57,6 +49,22 @@
         ELSE
             test1 = .TRUE.
         END IF
+
+    CONTAINS
+        ! deviceptr only accepts dummy arguments without the POINTER attribute
+        ! (OpenACC 3.4 Section 2.7.5), so the device addresses come in here.
+        SUBROUTINE device_add(x_a, x_b, x_d, length)
+            INTEGER, INTENT(IN) :: length
+            REAL(8), DIMENSION(length) :: x_a, x_b, x_d
+            INTEGER :: x
+
+            !$acc data deviceptr(x_a, x_b, x_d)
+                !$acc parallel loop
+                DO x = 1, length
+                    x_d(x) = x_a(x) + x_b(x)
+                END DO
+            !$acc end data
+        END SUBROUTINE device_add
     END
 #endif
 
