@@ -7,11 +7,11 @@
   REAL(8):: maxval, host_max
   INTEGER:: errors, x
 
-  SEEDDIM(1) = 1
 # ifdef SEED
-  SEEDDIM(1) = SEED
-# endif
+  CALL RANDOM_SEED(PUT=[SEED, SEEDDIM(2:)])
+# else
   CALL RANDOM_SEED(PUT=SEEDDIM)
+# endif
 
   CALL RANDOM_NUMBER(a)
   CALL RANDOM_NUMBER(b)

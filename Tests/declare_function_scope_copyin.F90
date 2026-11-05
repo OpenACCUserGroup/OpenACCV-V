@@ -48,11 +48,11 @@ END SUBROUTINE function_test_dev_only
     devtest(1) = 0
   !$acc end parallel
 
-  SEEDDIM(1) = 1
 # ifdef SEED
-  SEEDDIM(1) = SEED
-# endif
+  CALL RANDOM_SEED(PUT=[SEED, SEEDDIM(2:)])
+# else
   CALL RANDOM_SEED(PUT=SEEDDIM)
+# endif
 
   CALL RANDOM_NUMBER(a)
   CALL RANDOM_NUMBER(b)
@@ -103,11 +103,11 @@ END SUBROUTINE function_test_dev_only
     devtest(1) = 0
   !$acc end parallel
 
-  SEEDDIM(1) = 1
 # ifdef SEED
-  SEEDDIM(1) = SEED
-# endif
+  CALL RANDOM_SEED(PUT=[SEED, SEEDDIM(2:)])
+# else
   CALL RANDOM_SEED(PUT=SEEDDIM)
+# endif
 
   IF (devtest(1) .eq. 1) THEN
     CALL RANDOM_NUMBER(a)
@@ -170,11 +170,11 @@ END SUBROUTINE function_test_dev_only
     devtest(1) = 0
   !$acc end parallel
 
-  SEEDDIM(1) = 1
 # ifdef SEED
-  SEEDDIM(1) = SEED
-# endif
+  CALL RANDOM_SEED(PUT=[SEED, SEEDDIM(2:)])
+# else
   CALL RANDOM_SEED(PUT=SEEDDIM)
+# endif
 
   IF (devtest(1) .eq. 1) THEN
     CALL RANDOM_NUMBER(a)

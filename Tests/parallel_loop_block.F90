@@ -9,11 +9,11 @@
 
         !Initilization
         a = 0
-        SEEDDIM(1) = 1
 #       ifdef SEED
-        SEEDDIM(1) = SEED
-#       endif
+        CALL RANDOM_SEED(PUT=[SEED, SEEDDIM(2:)])
+#       else
         CALL RANDOM_SEED(PUT=SEEDDIM)
+#       endif
 
         !$acc data copy(a(1:LOOPCOUNT))
           block
@@ -48,11 +48,11 @@
 
         !Initilization
         a = 0
-        SEEDDIM(1) = 1
 #       ifdef SEED
-        SEEDDIM(1) = SEED
-#       endif
+        CALL RANDOM_SEED(PUT=[SEED, SEEDDIM(2:)])
+#       else
         CALL RANDOM_SEED(PUT=SEEDDIM)
+#       endif
 
         CALL RANDOM_NUMBER(b)
         CALL RANDOM_NUMBER(c)

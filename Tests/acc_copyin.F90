@@ -8,11 +8,11 @@
         REAL(8),DIMENSION(LOOPCOUNT):: a, b, c !Data
         INTEGER :: errors = 0
 
-        SEEDDIM(1) = 1
 #       ifdef SEED
-        SEEDDIM(1) = SEED
-#       endif
+        CALL RANDOM_SEED(PUT=[SEED, SEEDDIM(2:)])
+#       else
         CALL RANDOM_SEED(PUT=SEEDDIM)
+#       endif
         CALL RANDOM_NUMBER(a)
         CALL RANDOM_NUMBER(b)
         c = 0
@@ -55,11 +55,11 @@
         REAL(8),DIMENSION(LOOPCOUNT):: a, b, c !Data
         INTEGER :: errors = 0
 
-        SEEDDIM(1) = 1
 #       ifdef SEED
-        SEEDDIM(1) = SEED
-#       endif
+        CALL RANDOM_SEED(PUT=[SEED, SEEDDIM(2:)])
+#       else
         CALL RANDOM_SEED(PUT=SEEDDIM)
+#       endif
         CALL RANDOM_NUMBER(a)
         CALL RANDOM_NUMBER(b)
         c = 1
@@ -111,11 +111,11 @@
         !$acc end parallel
 
         IF (devtest(1) .eqv. .TRUE.) THEN
-          SEEDDIM(1) = 1
 #         ifdef SEED
-          SEEDDIM(1) = SEED
-#         endif
+          CALL RANDOM_SEED(PUT=[SEED, SEEDDIM(2:)])
+#         else
           CALL RANDOM_SEED(PUT=SEEDDIM)
+#         endif
           CALL RANDOM_NUMBER(a)
           a_copy(:) = a(:)
           CALL RANDOM_NUMBER(b)
@@ -171,11 +171,11 @@
         INTEGER :: errors = 0
 
         !Initialization
-        SEEDDIM(1) = 1
 #       ifdef SEED
-        SEEDDIM(1) = SEED
-#       endif
+        CALL RANDOM_SEED(PUT=[SEED, SEEDDIM(2:)])
+#       else
         CALL RANDOM_SEED(PUT=SEEDDIM)
+#       endif
         CALL RANDOM_NUMBER(a)
         CALL RANDOM_NUMBER(b)
         c = 0
@@ -219,11 +219,11 @@
         INTEGER :: errors = 0
 
         !Initialization
-        SEEDDIM(1) = 1
 #       ifdef SEED
-        SEEDDIM(1) = SEED
-#       endif
+        CALL RANDOM_SEED(PUT=[SEED, SEEDDIM(2:)])
+#       else
         CALL RANDOM_SEED(PUT=SEEDDIM)
+#       endif
         CALL RANDOM_NUMBER(a)
         CALL RANDOM_NUMBER(b)
         c = 0
@@ -267,11 +267,11 @@
         INTEGER :: errors = 0
 
         !Initialization
-        SEEDDIM(1) = 1
 #       ifdef SEED
-        SEEDDIM(1) = SEED
-#       endif
+        CALL RANDOM_SEED(PUT=[SEED, SEEDDIM(2:)])
+#       else
         CALL RANDOM_SEED(PUT=SEEDDIM)
+#       endif
         CALL RANDOM_NUMBER(a)
         CALL RANDOM_NUMBER(b)
         c = 0
@@ -326,11 +326,11 @@
 
         IF (devtest(1) .eqv. .TRUE.) THEN
           !Initialization
-          SEEDDIM(1) = 1
 #         ifdef SEED
-          SEEDDIM(1) = SEED
-#         endif
+          CALL RANDOM_SEED(PUT=[SEED, SEEDDIM(2:)])
+#         else
           CALL RANDOM_SEED(PUT=SEEDDIM)
+#         endif
           CALL RANDOM_NUMBER(a)
           CALL RANDOM_NUMBER(b)
           c = 0

@@ -12,11 +12,11 @@
         INTEGER :: temp
         INTEGER :: ndev
 
-        SEEDDIM(1) = 1
 #       ifdef SEED
-        SEEDDIM(1) = SEED
-#       endif
+        CALL RANDOM_SEED(PUT=[SEED, SEEDDIM(2:)])
+#       else
         CALL RANDOM_SEED(PUT=SEEDDIM)
+#       endif
 
         ndev = acc_get_num_devices(acc_get_device_type())
         ALLOCATE(host_copy(0:ndev-1, LOOPCOUNT))
