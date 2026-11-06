@@ -1794,7 +1794,7 @@ class config:
                 if x.upper().startswith("USTACK:"):
                     ustack = x.split(":")[-1].strip()
                     if ustack.upper() == "UNLIMITED" or (ustack.isdigit() and int(ustack) > 0):
-                        self.ustack = ustack
+                        self.ustack = ustack.lower()
                     else:
                         print("UStack must be a positive number of kilobytes, or unlimited")
                         sys.exit(1)
